@@ -48,7 +48,7 @@ def main():
         _LOG('error input')
         time.sleep(5)
         return None
-        
+
     wait_m = 10
     user_list = [i for i in USER_DATA if i['uid']>=10050]
     host = '25wx.kkyoo.com'
@@ -77,6 +77,13 @@ def main():
     for i in range(wait_m):
         _LOG('...')
         time.sleep(60)
+
+    for item in driver_list:
+        try:
+            item.close()
+            item.quit()
+        except:
+            pass
     _LOG('end')
 
 def _LOG(msg_in, time_now=True, new_line=True):

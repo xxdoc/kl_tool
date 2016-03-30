@@ -25,6 +25,13 @@ def main():
     for i in range(wait_m):
         _LOG('...')
         time.sleep(60)
+
+    for item in driver_list:
+        try:
+            item.close()
+            item.quit()
+        except:
+            pass
     _LOG('end')
 
 def _LOG(msg_in, time_now=True, new_line=True):
