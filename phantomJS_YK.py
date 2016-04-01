@@ -5,6 +5,7 @@ import datetime
 
 def main():
     try:
+        host_key = raw_input('host_key:')
         channelId = int(raw_input('channelId:'))
         nums = int(raw_input('nums:'))
     except ValueError as ex:
@@ -13,7 +14,9 @@ def main():
         return None
 
     wait_m = 10
-    host = '25wx.kkyoo.com'
+    host = host_key + '.kkyoo.com'
+    host = host_key + '.kkyoo.com'
+
     url = 'http://%s/dev_wx/wsp/index.php?r=web/livestream&id=%s' % (host, channelId)
     driver_list = []
     for i in range(nums):
