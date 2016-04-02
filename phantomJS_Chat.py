@@ -3,12 +3,13 @@ import os
 from selenium import webdriver
 import time
 import json
+import urllib
 import random
 from tool import encrypt, decrypt, load_json, dump_json, chat_msg, _LOG
 
 BASE_MSG_DICT = {u'你好，很高兴见到你':1, u'我想去旅游':1,u'你会下围棋吗':1,u'给我讲个笑话吧':1,
                 u'我只是来打个酱油':1,u'最近有什么好看的电影':1,u'推荐几本好看的小说':1}
-BASE_MSG_DICT = load_json('msg_dict_9344.obj')
+
 NEED_KEY = set(['adminUin','adminWxNick','adminWxOpenId','adminWxUid','ava','key','nick','openid','uid','unionid'])
 
 
@@ -32,7 +33,7 @@ def main():
     url = 'http://%s/dev_wx/wsp/index.php?r=web/livestream&id=%s' % (host, channelId)
     driver_list = []
     for i in range(nums):
-        uid = user_list[i]['uid']
+        uid, nick = user_list[i]['uid'], urllib.unquote(str(user_list[i]['nick'])).decode('utf-8')
         time_s = int(time.mktime(time.localtime())) + 3600
         my_cookies = {   'domain': '.%s' % (host,),
                          'expires': time.ctime(time_s),
@@ -49,12 +50,20 @@ def main():
         tmp.get(url)
         send_msg(tmp, uid)
         driver_list.append( (tmp, uid) )
-        _LOG('add %s<%s>' % (user_list[i]['nick'], uid))
+        _LOG('add %s<%s>' % (nick, uid))
 
     _LOG('wait')
-    for i in range(wait_m*60):
-        for (item, uid) in driver_list:
-            send_msg(item, uid)
+    try:
+        for i in range(wait_m*60):
+            for (item, uid) in driver_list:
+                send_msg(item, uid)
+    except:
+        pass
+    finally:
+        save_file = 'msg_dict_%d.obj'% (os.getpid())
+        print "MAIN END SAVE FILE:", save_file
+        with open(save_file, 'w') as wf:
+            json.dump(BASE_MSG_DICT, wf)
 
     for (item, uid) in driver_list:
         try:
@@ -73,12 +82,10 @@ def send_msg(drv, uid):
     send_btn = _first(drv.find_elements_by_class_name('send_btn'))
     if not chat_input or not send_btn:
         return None
-    list_tmp = [i.text for i in drv.find_elements_by_class_name('message-content')]
-    for i in list_tmp:
-        BASE_MSG_DICT[i] = BASE_MSG_DICT.get(i, 1) + 1
 
-    _LOG('...<%d>' % (len(BASE_MSG_DICT)))
-    tmp_msg = random.choice(BASE_MSG_DICT.keys())
+    all_cunt = len(BASE_MSG_DICT)
+    tmp_list = minTopK(BASE_MSG_DICT.items(), 10)
+    tmp_msg, cunt = random.choice(tmp_list)
     try:
         my_msg = chat_msg(uid, tmp_msg)
     except Exception as ex:
@@ -86,15 +93,27 @@ def send_msg(drv, uid):
         return None
 
     if my_msg:
-        BASE_MSG_DICT[my_msg] = BASE_MSG_DICT.get(my_msg, 1) + 1
+        _LOG( '%d...%s <%d>{%d} (%d)' % (uid, tmp_msg, BASE_MSG_DICT[tmp_msg], len(tmp_list), len(BASE_MSG_DICT)) )
+        BASE_MSG_DICT[tmp_msg] += 1
+        BASE_MSG_DICT[my_msg] = BASE_MSG_DICT.get(my_msg, -1) + 1
+        _LOG( '%d>>>%s <%d> (%d)' % (uid, my_msg, BASE_MSG_DICT[my_msg], len(BASE_MSG_DICT)) )
         chat_input.send_keys(my_msg)
         send_btn.click()
         return my_msg
 
+def minTopK(ll_in, nums):
+    nums = int(nums)+1
+    ll_in.sort(key=lambda e:e[1])
+    tmp = ll_in[:nums]
+    if tmp:
+        tmp.extend([ii for ii in ll_in[nums:] if ii[1]== tmp[-1][1] ])
+    return tmp
+
 if __name__ == '__main__':
-    try:
-        main()
-    finally:
-        obj_file = 'msg_dict_%d.obj'% (os.getpid())
-        dump_json(BASE_MSG_DICT, obj_file)
+    print "MAIN RUN PID:", os.getpid()
+    read_file = 'msg_dict_7528.obj'
+    print "MAIN START READ FILE:", read_file
+    BASE_MSG_DICT = load_json(read_file)
+    main()
+
 

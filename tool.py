@@ -20,7 +20,7 @@ ALL_ERROR = Exception
 def chat_msg(uid, msg, _loc='杭州市', _key="3b8f3f656692f998f6625a0a8d50270e"):
     api_doc = {100000:'文本类', 200000:'链接类', 302000:'新闻类',
                 308000:'菜谱类', 313000:'（儿童版）儿歌类', 314000:'（儿童版）'}
-    msg = msg.encode('utf-8')
+    msg = msg.encode('utf-8', 'ignore') if isinstance(msg, unicode) else msg
     args = {'key':_key, 'info':msg, 'loc':_loc, 'userid':uid}
     url = r"http://www.tuling123.com/openapi/api?" + urllib.urlencode(args)
     obj = get_json(url)
