@@ -77,8 +77,11 @@ def main():
     _LOG('end')
 
 def del_elements_by_class_name(tmp, del_list):
-    js_str = ';'.join(["$('.%s').remove()" % (cls_str,) for cls_str in del_list]) + ';'
-    tmp.execute_script( js_str )
+    try:
+        js_str = ';'.join(["$('.%s').remove()" % (cls_str,) for cls_str in del_list]) + ';'
+        tmp.execute_script( js_str )
+    except:
+        pass
 
 def send_msg(drv, uid):
     global BASE_MSG_DICT
