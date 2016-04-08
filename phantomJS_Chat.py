@@ -20,7 +20,7 @@ COOKIE_KEY = 'WPD_USER_LOGIN_TOKEN'
 def main():
     host_key = 'xc2'
     channelId = 3658
-    nums = 10
+    nums = 3
 
     host = host_key + '.kkyoo.com'
     user_json = '%s_binduid.json' % (host_key,)
@@ -56,24 +56,15 @@ def main():
     _LOG('wait')
 
     for i in range(wait_m*60):
-        save_file = 'msg_dict_%d.obj'% (os.getpid())
-        print "MAIN END SAVE FILE:", save_file
-        with open(save_file, 'w') as wf:
-            json.dump(BASE_MSG_DICT, wf)
+        for (item, uid) in driver_list:
+            send_msg(item, uid)
 
+    for (item, uid) in driver_list:
         try:
-            for (item, uid) in driver_list:
-                send_msg(item, uid)
-                del_elements_by_class_name(tmp, del_list)
-        except Exception as ex:
-            _LOG('send_msg Exception:%r' % (ex,))
-        finally:
-            for (item, uid) in driver_list:
-                try:
-                    item.close()
-                    item.quit()
-                except:
-                    pass
+            item.close()
+            item.quit()
+        except:
+            pass
     _LOG('end')
 
 def del_elements_by_class_name(tmp, del_list):
@@ -101,6 +92,7 @@ def send_msg(drv, uid):
         _LOG( "chat_msg Error %r:%s.\nmsg:%s" % (ex, ex, tmp_msg) )
         return None
 
+    my_msg = my_msg if my_msg else tmp_msg
     if my_msg:
         _LOG( '%d...%s <%d>{%d} (%d)' % (uid, tmp_msg, BASE_MSG_DICT[tmp_msg], len(tmp_list), len(BASE_MSG_DICT)) )
         BASE_MSG_DICT[tmp_msg] += 1
