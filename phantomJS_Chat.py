@@ -18,8 +18,8 @@ COOKIE_KEY = 'WPD_USER_LOGIN_TOKEN'
 
 
 def main():
-    host_key = '25wx'
-    channelId = 3931
+    host_key = 'xc2'
+    channelId = 3658
     nums = 10
 
     host = host_key + '.kkyoo.com'
@@ -29,7 +29,7 @@ def main():
     wait_m = 10
     user_list = [i for i in USER_DATA if i['uid']>=10050]
 
-
+    del_list = ['content_left', 'content_middle', 'live_bottom', 'paycenter', 'login', 'sitebar']
     url = 'http://%s/dev_wx/wsp/index.php?r=web/livestream&id=%s' % (host, channelId)
     driver_list = []
     for i in range(nums):
@@ -49,30 +49,36 @@ def main():
         tmp.add_cookie(my_cookies)
         tmp.get(url)
         send_msg(tmp, uid)
+        del_elements_by_class_name(tmp, del_list)
         driver_list.append( (tmp, uid) )
         _LOG('add %s<%s>' % (nick, uid))
 
     _LOG('wait')
-    try:
-        for i in range(wait_m*60):
-            for (item, uid) in driver_list:
-                send_msg(item, uid)
-    except:
-        pass
-    finally:
+
+    for i in range(wait_m*60):
         save_file = 'msg_dict_%d.obj'% (os.getpid())
         print "MAIN END SAVE FILE:", save_file
         with open(save_file, 'w') as wf:
             json.dump(BASE_MSG_DICT, wf)
 
-    for (item, uid) in driver_list:
         try:
-            item.close()
-            item.quit()
-        except:
-            pass
+            for (item, uid) in driver_list:
+                send_msg(item, uid)
+                del_elements_by_class_name(tmp, del_list)
+        except Exception as ex:
+            _LOG('send_msg Exception:%r' % (ex,))
+        finally:
+            for (item, uid) in driver_list:
+                try:
+                    item.close()
+                    item.quit()
+                except:
+                    pass
     _LOG('end')
 
+def del_elements_by_class_name(tmp, del_list):
+    js_str = ';'.join(["$('.%s').remove()" % (cls_str,) for cls_str in del_list]) + ';'
+    tmp.execute_script( js_str )
 
 def send_msg(drv, uid):
     global BASE_MSG_DICT
@@ -111,7 +117,7 @@ def minTopK(ll_in, nums):
 
 if __name__ == '__main__':
     print "MAIN RUN PID:", os.getpid()
-    read_file = 'msg_dict_7528.obj'
+    read_file = 'msg_dict_8956.obj'
     print "MAIN START READ FILE:", read_file
     BASE_MSG_DICT = load_json(read_file)
     main()
