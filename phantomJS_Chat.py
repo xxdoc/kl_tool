@@ -54,8 +54,10 @@ def main():
         _LOG('add %s<%s>' % (nick, uid))
 
     _LOG('wait')
-
+    save_file = 'msg_dict_%d.obj'% (os.getpid())
     for i in range(wait_m*60):
+        with open(save_file, 'w') as wf:
+            json.dump(BASE_MSG_DICT, wf)
         for (item, uid) in driver_list:
             send_msg(item, uid)
 
