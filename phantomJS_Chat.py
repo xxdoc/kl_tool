@@ -18,9 +18,9 @@ COOKIE_KEY = 'WPD_USER_LOGIN_TOKEN'
 
 
 def main():
-    host_key = 'xc2'
-    channelId = 3658
-    nums = 3
+    host_key = '25wx'
+    channelId = 3359
+    nums = 10
 
     host = host_key + '.kkyoo.com'
     user_json = '%s_binduid.json' % (host_key,)
