@@ -18,15 +18,15 @@ COOKIE_KEY = 'WPD_USER_LOGIN_TOKEN'
 
 
 def main():
-    host_key = '25wx'
-    channelId = 3359
-    nums = 10
+    host_key = 'xc2'
+    channelId = 3658
+    nums = 2
 
     host = host_key + '.kkyoo.com'
     user_json = '%s_binduid.json' % (host_key,)
     USER_DATA = [{k:v for k,v in item.items() if k in NEED_KEY} for item in load_json(user_json)]
 
-    wait_m = 10
+    wait_m = 100
     user_list = [i for i in USER_DATA if i['uid']>=10050]
 
     del_list = ['content_left', 'content_middle', 'live_bottom', 'paycenter', 'login', 'sitebar']
@@ -114,7 +114,7 @@ def minTopK(ll_in, nums):
 
 if __name__ == '__main__':
     print "MAIN RUN PID:", os.getpid()
-    read_file = 'msg_dict_8956.obj'
+    read_file = 'msg_dict_13308.obj'
     print "MAIN START READ FILE:", read_file
     BASE_MSG_DICT = load_json(read_file)
     main()
