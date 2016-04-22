@@ -5,7 +5,7 @@ import time
 import json
 import urllib
 import random
-from tool import encrypt, decrypt, load_json, dump_json, chat_msg, _LOG
+from tool import encrypt, decrypt, load_json, dump_json, chat_msg, _LOG, get_dir_file
 
 BASE_MSG_DICT = {u'你好，很高兴见到你':1, u'我想去旅游':1,u'你会下围棋吗':1,u'给我讲个笑话吧':1,
                 u'我只是来打个酱油':1,u'最近有什么好看的电影':1,u'推荐几本好看的小说':1}
@@ -18,16 +18,16 @@ COOKIE_KEY = 'WPD_USER_LOGIN_TOKEN'
 
 
 def main():
-    host_key = 'xc2'
-    channelId = 3658
-    nums = 2
+    host_key = '25wx'
+    channelId = 3757
+    nums = 5
 
     host = host_key + '.kkyoo.com'
     user_json = '%s_binduid.json' % (host_key,)
     USER_DATA = [{k:v for k,v in item.items() if k in NEED_KEY} for item in load_json(user_json)]
 
     wait_m = 100
-    user_list = [i for i in USER_DATA if i['uid']>=10050]
+    user_list = [i for i in USER_DATA if i['uid']>=10060]
 
     del_list = ['content_left', 'content_middle', 'live_bottom', 'paycenter', 'login', 'sitebar']
     url = 'http://%s/dev_wx/wsp/index.php?r=web/livestream&id=%s' % (host, channelId)
@@ -51,9 +51,9 @@ def main():
         send_msg(tmp, uid)
         del_elements_by_class_name(tmp, del_list)
         driver_list.append( (tmp, uid) )
-        _LOG('add %s<%s>' % (nick, uid))
+        _LOG(u'add %s<%s>' % (nick, uid))
 
-    _LOG('wait')
+    _LOG(u'wait')
     save_file = 'msg_dict_%d.obj'% (os.getpid())
     for i in range(wait_m*60):
         with open(save_file, 'w') as wf:
@@ -67,7 +67,7 @@ def main():
             item.quit()
         except:
             pass
-    _LOG('end')
+    _LOG(u'end')
 
 def del_elements_by_class_name(tmp, del_list):
     try:
@@ -91,15 +91,15 @@ def send_msg(drv, uid):
     try:
         my_msg = chat_msg(uid, tmp_msg)
     except Exception as ex:
-        _LOG( "chat_msg Error %r:%s.\nmsg:%s" % (ex, ex, tmp_msg) )
+        _LOG( u"chat_msg Error %r:%s.\nmsg:%s" % (ex, ex, tmp_msg) )
         return None
 
     my_msg = my_msg if my_msg else tmp_msg
     if my_msg:
-        _LOG( '%d...%s <%d>{%d} (%d)' % (uid, tmp_msg, BASE_MSG_DICT[tmp_msg], len(tmp_list), len(BASE_MSG_DICT)) )
+        _LOG( u'%d...%s <%d>{%d} (%d)' % (uid, tmp_msg, BASE_MSG_DICT[tmp_msg], len(tmp_list), len(BASE_MSG_DICT)) )
         BASE_MSG_DICT[tmp_msg] += 1
         BASE_MSG_DICT[my_msg] = BASE_MSG_DICT.get(my_msg, -1) + 1
-        _LOG( '%d>>>%s <%d> (%d)' % (uid, my_msg, BASE_MSG_DICT[my_msg], len(BASE_MSG_DICT)) )
+        _LOG( u'%d>>>%s <%d> (%d)' % (uid, my_msg, BASE_MSG_DICT[my_msg], len(BASE_MSG_DICT)) )
         chat_input.send_keys(my_msg)
         send_btn.click()
         return my_msg
@@ -114,7 +114,8 @@ def minTopK(ll_in, nums):
 
 if __name__ == '__main__':
     print "MAIN RUN PID:", os.getpid()
-    read_file = 'msg_dict_13308.obj'
+    obj_list = get_dir_file(os.getcwd(), is_ok=lambda x:x.endswith('.obj'), key=lambda x:x[1]['size'])
+    read_file = obj_list[-1][0]
     print "MAIN START READ FILE:", read_file
     BASE_MSG_DICT = load_json(read_file)
     main()

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import urllib2
+import os
 import gzip
 import StringIO
 import datetime
@@ -121,6 +122,16 @@ def get_json(url, add_h=None):
     except ALL_ERROR as ex:
         _LOG( "get_json Error %r:%s.\nURL:%s" % (ex, ex, url) )
 
+
+def get_dir_file(p, is_ok, key):
+    f = lambda p, x :os.path.join(p,x)
+    info = lambda ff:{'ctime': os.path.getctime(ff), \
+                        'size':os.path.getsize(ff), \
+                        'mtime':os.path.getmtime(ff), \
+                        'atime':os.path.getatime(ff)}
+    tmp = [(f(p,x), info(f(p,x))) for x in os.listdir(p) if os.path.isfile(f(p,x)) and is_ok(x)]
+    tmp.sort(key=key)
+    return tmp
 #================================================
 #=====================DOC LOG====================
 #================================================
@@ -128,15 +139,18 @@ def get_json(url, add_h=None):
 def _LOG(msg_in, time_now=True, new_line=True):
     if time_now:
         time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
-        msg = '%s => %s' % (time_str, msg_in)
+        msg_in = u'%s => %s' % (time_str, msg_in)
     if getattr(_LOG, 'log_file', None):
-        _LOG.log_file.write(msg+'\n')
+        _LOG.log_file.write(msg_in+'\n')
         _LOG.log_file.flush()
 
+    if isinstance(msg_in, unicode):
+        msg_in = msg_in.encode('gbk', 'ignore')
+
     if new_line:
-        print msg
+        print msg_in
     else:
-        print msg,
+        print msg_in,
 
 def func_doc(g):
     if inspect.isfunction(g):
