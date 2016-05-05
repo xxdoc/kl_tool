@@ -1,49 +1,64 @@
 # -*- coding: utf-8 -*-
 import requests
-import base64
+import hashlib
 import json
 
+def md5str(str_in):
+    m2 = hashlib.md5()
+    m2.update(str_in)
+    return m2.hexdigest()
+
 def main():
-    wx25_wsp = {'wspKey':"6c9887da7c41952c406d82e377f7bc65",}
-    add_key = '&'.join(['%s=%s' % (key,val) for key,val in wx25_wsp.items()])
+    host = '25wx.kkyoo.com'  # 修改为需要测试的域名
+    wsp_test = {'wspKey':"6c9887da7c41952c406d82e377f7bc65",}  # 修改为需要测试的wspKey
+
+    api = 'http://' + host + '/dev_wx/wpd/index.php?r=console/mqApi&api=%s'
     add_header = {
-                'Authorization': 'wsp ' + base64.encodestring(add_key),
-                'Content-Type': 'application/json',}
+                'User-Agent': ('Mozilla/5.0 (Windows NT 6.1)'
+                                ' AppleWebKit/537.36 (KHTML, like Gecko)'
+                                ' Chrome/45.0.2454.101 Safari/537.36'),
+                'Authorization': md5str('wsp_' + wsp_test['wspKey']),
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                'Accept':'application/json'}
 
-    def get(url):
-        res = requests.get(url, headers=add_header)
+    def log(res, key, params):
+        obj = {}
+        print key,'>>',
         if res.ok:
-            return res.json()
+            try: obj = res.json()
+            except ValueError as ex: pass
+            print 'OK:' if obj and obj.get('Flag', 0)==100 else 'Error:',  obj.get('FlagString', '') if obj else ''
+            print json.dumps(obj, indent=2) if obj else res.content, '\n'
         else:
-            print res
-            return res.content
+            print res, '\n'
 
-    def post(url, data):
-        res = requests.post(url, headers=add_header, data=data)
-        if res.ok:
-            return res.json()
-        else:
-            return res.content
+    def get(key, params):
+        res = requests.get(api % (key,), params=params, headers=add_header)
+        return log(res, key, params)
 
-    gaps_list = 'http://api.wx.aodianyun.com:8800/v3/channels/3757/gaps'
-    is_gaps = 'http://api.wx.aodianyun.com:8800/v3/channels/3757/gaps/1000001104'
+    def post(key, params):
+        res = requests.post(api % (key,), data=params, headers=add_header)
+        return log(res, key, params)
 
-    print get(gaps_list)
-    print get(is_gaps)
 
-    add_gaps = 'http://api.wx.aodianyun.com:8800/v3/channels/3757/gaps/1000001104'
+    """
+    $public_api = array('channellist');
+    $private_api = array( 'newchannel');
+    $action_api = array( 'channelinfo', 'getgaps', 'addgaps', 'deletegaps', 'getblacklists', 'addblacklists', 'deleteblacklists' );
+    """
+    get('channellist', {'page':1, 'p_num':2})
 
-    print post(add_gaps, json.dumps({'nick':'test123','uid':'1000001104'}))
+    get('newchannel', {'uid':10097, 'state':1, 'viewlimit':100, 'real_name':'我是测试', 'qq':123456, 'tel':1212})
+
+    get('channelinfo', {'channelId':2688})
+    get('getgaps', {'channelId':3757})
+    get('getblacklists', {'channelId':3757})
+    post('addgaps', {'channelId':3757, 'uid':10020})
+    post('deletegaps', {'channelId':3757, 'uid':10021})
+    post('addblacklists', {'channelId':3757, 'uid':10031})
+    post('deleteblacklists', {'channelId':3757, 'uid':10050})
 
 
 if __name__ == '__main__':
     main()
 
-
-"""
-use dms
-db.peidui.ensureIndex({"topic":1})
-db.peidui.ensureIndex({"time":1})
-db.peidui.ensureIndex({"msg":1})
-db.peidui.getIndexes()
-"""
