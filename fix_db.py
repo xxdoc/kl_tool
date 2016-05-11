@@ -12,22 +12,6 @@ class _Obj(object):
     def __init__(self, data):
         self.__dict__.update(data)
 
-def log(res, key, params):
-    obj = {}
-    print key,'>>',
-    if res.ok:
-        try: obj = res.json()
-        except ValueError as ex: raise ValueError('api:%s@%s result not json!' % (key, params))
-        flag = obj.get('Flag', 'no-flag')
-        print 'OK(%s):' % (flag,) if obj and flag==100 else 'Error(%s):' % (flag,),  \
-              obj.get('FlagString', '') if obj else '', '  args:', params
-        print json.dumps(obj, indent=2) if obj else res.content, '\n'
-    else:
-        print res, '\n'
-    return _Obj(obj)
-
-
-
 def main():
     host = '25wx.kkyoo.com'  # 修改为需要测试的域名
     wsp_test = {'wspKey':"6c9887da7c41952c406d82e377f7bc65",}  # 修改为需要测试的wspKey
@@ -40,6 +24,20 @@ def main():
                 'Authorization': md5str('wsp_' + wsp_test['wspKey']),
                 "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                 'Accept':'application/json'}
+
+    def log(res, key, params):
+        obj = {}
+        print key,'>>',
+        if res.ok:
+            try: obj = res.json()
+            except ValueError as ex: raise ValueError('api:%s@%s result not json!' % (key, params))
+            flag = obj.get('Flag', 'no-flag')
+            print 'OK(%s):' % (flag,) if obj and flag==100 else 'Error(%s):' % (flag,),  \
+                  obj.get('FlagString', '') if obj else '', '  args:', params
+            print json.dumps(obj, indent=2) if obj else res.content, '\n'
+        else:
+            print res, '\n'
+        return _Obj(obj)
 
     def get(key, params, auth=add_header):
         res = requests.get(api % (key,), params=params, headers=auth)

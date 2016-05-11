@@ -14,12 +14,12 @@ def main():
 ##        return None
 
     host_key = '25wx'
-    channelId = 3931
+    channelId = 3757
     nums = 10
 
     wait_m = 10
     host = host_key + '.kkyoo.com'
-    url = 'http://%s/dev_wx/wsp/index.php?r=web/livestream&id=%s' % (host, channelId)
+    url = 'http://%s/dev_wx/web/livestream/%d' % (host, channelId)
     driver_list = []
     for i in range(nums):
         tmp = webdriver.PhantomJS()

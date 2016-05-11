@@ -20,7 +20,7 @@ COOKIE_KEY = 'WPD_USER_LOGIN_TOKEN'
 def main():
     host_key = '25wx'
     channelId = 3757
-    nums = 5
+    nums = 10
 
     host = host_key + '.kkyoo.com'
     user_json = '%s_binduid.json' % (host_key,)
@@ -33,7 +33,8 @@ def main():
     url = 'http://%s/dev_wx/wsp/index.php?r=web/livestream&id=%s' % (host, channelId)
     driver_list = []
     for i in range(nums):
-        uid, nick = user_list[i]['uid'], urllib.unquote(str(user_list[i]['nick'])).decode('utf-8')
+        user_list[i]['nick'] = urllib.unquote(str(user_list[i]['nick']))
+        uid, nick = user_list[i]['uid'], user_list[i]['nick'].decode('utf-8')
         time_s = int(time.mktime(time.localtime())) + 3600
         my_cookies = {   'domain': '.%s' % (host,),
                          'expires': time.ctime(time_s),
