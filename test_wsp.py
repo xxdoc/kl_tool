@@ -12,21 +12,19 @@ class _Obj(object):
     def __init__(self, data):
         self.__dict__.update(data)
 
-def log(res, key, params):
+def log(res, key, params, func=json.loads):
     obj = {}
     print key,'>>',
     if res.ok:
-        try: obj = res.json()
-        except ValueError as ex: raise ValueError('api:%s@%s result not json!' % (key, params))
+        try: obj = func(res.content)
+        except ValueError as ex: print 'api:%s@%s result rror:%s!' % (key, params, ex)
         flag = obj.get('Flag', 'no-flag')
         print 'OK(%s):' % (flag,) if obj and flag==100 else 'Error(%s):' % (flag,),  \
               obj.get('FlagString', '') if obj else '', '  args:', params
         print json.dumps(obj, indent=2) if obj else res.content, '\n'
     else:
-        print res, '\n'
+        print res, res.content.decode('utf-8'), '\n'
     return _Obj(obj)
-
-
 
 def main():
     host = '25wx.kkyoo.com'  # 修改为需要测试的域名
