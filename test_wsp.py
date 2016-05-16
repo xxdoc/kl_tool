@@ -18,10 +18,10 @@ def log(res, key, params, func=json.loads):
     if res.ok:
         try: obj = func(res.content)
         except ValueError as ex: print 'api:%s@%s result rror:%s!' % (key, params, ex)
-        flag = obj.get('Flag', 'no-flag')
-        print 'OK(%s):' % (flag,) if obj and flag==100 else 'Error(%s):' % (flag,),  \
-              obj.get('FlagString', '') if obj else '', '  args:', params
-        print json.dumps(obj, indent=2) if obj else res.content, '\n'
+        flag = obj.get('Flag', -1)
+        print 'OK(%s):' % (flag,) if obj and int(flag)==100 else 'Error(%s):' % (flag,),  \
+              obj.get('FlagString', '') if obj else '', '\nargs:', json.dumps(params, indent=2)
+        print 'data:',json.dumps(obj, indent=2) if obj else res.content, '\n'
     else:
         print res, res.content.decode('utf-8'), '\n'
     return _Obj(obj)
@@ -53,35 +53,62 @@ def main():
     $action_api = array( 'channelinfo', 'getgaps', 'addgaps', 'deletegaps', 'getblacklists',
                          'addblacklists', 'deleteblacklists', 'addmgr', 'delmgr', 'getmgrlists' );
     """
+    #return load_room_data(post, 'stockroom.json')
+
     get('channellist', {'page':1, 'num':2})
-    get('newchannel', {'uid':10097, 'state':1, 'viewlimit':100, 'real_name':'我是测试', 'qq':123456, 'tel':1212})
-    get('channelinfo', {'channelId':2688})
 
-    get('getgaps', {'channelId':3757})
-    post('addgaps', {'channelId':3757, 'uid':10020})
-    post('deletegaps', {'channelId':3757, 'uid':10020})
+    get('channelinfo', {'maiquanId':2688})
 
-    get('getblacklists', {'channelId':3757})
-    post('addblacklists', {'channelId':3757, 'uid':10031})
-    post('deleteblacklists', {'channelId':3757, 'uid':10031})
+    get('getgaps', {'maiquanId':3757})
+    post('addgaps', {'maiquanId':3757, 'uid':10020})
+    post('deletegaps', {'maiquanId':3757, 'uid':10020})
 
-    get('getmgrlists', {'channelId':3757})
-    post('addmgr', {'channelId':3757, 'uid':10031})
-    post('delmgr', {'channelId':3757, 'uid':10031})
+    get('getblacklists', {'maiquanId':3757})
+    post('addblacklists', {'maiquanId':3757, 'uid':10031})
+    post('deleteblacklists', {'maiquanId':3757, 'uid':10031})
+
+    post('addmgr', {'maiquanId':3757, 'uid':10033})
+    post('addmgr', {'maiquanId':3757, 'uid':10034})
+    get('getmgrlists', {'maiquanId':3757})
+    post('addmgr', {'maiquanId':3757, 'uid':10031})
+    post('delmgr', {'maiquanId':3757, 'uid':10031})
 
     ##错误测试
-    assert get('channelinfo', {'channelId':3757}, {'Authorization':'1234'}).Flag==109
+    assert get('channelinfo', {'maiquanId':3757}, {'Authorization':'1234'}).Flag==109
 
-    assert get('channelinf', {'channelId':3757}).Flag==111
+    assert get('channelinf', {'maiquanId':3757}).Flag==111
 
-    assert get('channelinfo', {'channelId':666666}).Flag==108
+    assert get('channelinfo', {'maiquanId':666666}).Flag==108
 
-    assert get('newchannel', {'uid':9999999, 'state':1, 'viewlimit':100, 'real_name':'我是测试', 'qq':123456, 'tel':1212}).Flag==1004
     assert get('newchannel', {'uid':10042, 'viewlimit':100, 'real_name':'我是测试', 'qq':123456, 'tel':1212}).Flag==101
 
     assert get('channelinfo', {'channelid':666666}).Flag==101
-    assert post('addmgr', {'channelId':3757, 'uid':9999999}).Flag==1004
-    assert post('addmgr', {'channelId':9999999, 'uid':10031}).Flag==108
+    assert post('addmgr', {'maiquanId':9999999, 'uid':10031}).Flag==108
+
+
+def load_room_data(func, fstr):
+    with open(fstr, 'r') as rf:
+        data = json.load(rf)
+        ret_list = []
+        print 'all data:', len(data['RECORDS'])
+        for item in data['RECORDS']:
+            tmp = {
+                'uid':item['ownuid'],
+                'state':1,
+                'viewlimit':1000,
+                'roomtype':item['roomtype'],
+                'maiquanId':item['roomid'],
+                'nick':item['roomname'],
+                'notice':item['roomradio']
+            }
+            ret = func('newchannel', tmp)
+            ret.mid = item['roomid']
+            ret_list.append(ret)
+
+    print '\nALL OK:', [i.mid for i in ret_list if i.Flag==100]
+    print '\nALL Error:', [i.mid for i in ret_list if i.Flag!=100]
+    return ret_list
+
 
 if __name__ == '__main__':
     main()

@@ -26,7 +26,11 @@ def main():
         res = requests.post(api % (key,), data=json.dumps(params), headers=auth)
         return log(res, key, params, func=lambda x:json.loads(json.loads(x)['d']) )
 
-    post_json('UserLOgin', {'parameter':{'Tag':'LoginRoomAuth','Uin':123456,'SessionKey':'WwOMtkdkDpbsEnVWEbFGm6x1Oi5FHHBG','RoomId':222222}})
+    """UserLogin, LoginStockRoom"""
+    post_json('UserLogin', {'parameter':{'Tag':'LoginRoomAuth','Uin':123456,'SessionKey':'WwOMtkdkDpbsEnVWEbFGm6x1Oi5FHHBG','RoomId':0}})
+
+    post_json('LoginStockRoom', {'parameter':{'Tag':'LoginRoomPwd','NeedFlockVip':1,'Uin':62853012,'PassWord':md5str('123'),'RoomId':10}})
+
 
 if __name__ == '__main__':
     main()
