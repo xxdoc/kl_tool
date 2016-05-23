@@ -27,8 +27,13 @@ def log(res, key, params, func=json.loads):
     return _Obj(obj)
 
 def main():
-    host = '25wx.kkyoo.com'  # 修改为需要测试的域名
-    wsp_test = {'wspKey':"6c9887da7c41952c406d82e377f7bc65",}  # 修改为需要测试的wspKey
+    host = 'mqstock.kkyoo.com'  # 修改为需要测试的域名
+    #host = 'mq.app'  # 修改为需要测试的域名
+
+    wsp_test = {'wspKey':"bfb1ab1a6c4e964fe8b5994895e5f8eb",}  # 修改为需要测试的wspKey
+
+    #wsp_test = {'wspKey':"6c9887da7c41952c406d82e377f7bc65",}  # 修改为需要测试的wspKey
+
 
     api = 'http://' + host + '/dev_wx/wpd/index.php?r=console/mqApi&api=%s'
     add_header = {
@@ -53,7 +58,8 @@ def main():
     $action_api = array( 'channelinfo', 'getgaps', 'addgaps', 'deletegaps', 'getblacklists',
                          'addblacklists', 'deleteblacklists', 'addmgr', 'delmgr', 'getmgrlists' );
     """
-    #return load_room_data(post, 'stockroom.json')
+    return load_room_data(post, 'stockroom.json')
+
 
     get('channellist', {'page':1, 'num':2})
 
