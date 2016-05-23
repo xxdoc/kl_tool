@@ -29,7 +29,7 @@ def main():
     """UserLogin, LoginStockRoom"""
     #post_json('UserLogin', {'parameter':{'Tag':'LoginRoomAuth','Uin':62853880,'SessionKey':'JVZeD0YEqPJ67r8iotLCpxnyTg4LRUYg','RoomId':0}})
 
-    post_json('LoginStockRoom', {'parameter':{'Tag':'LoginRoomPwd','NeedFlockVip':1,'Uin':62853012,'PassWord':md5str('123'),'RoomId':100013}})
+    post_json('LoginStockRoom', {'parameter':{'Tag':'LoginRoomPwd','NeedFlockVip':1,'Uin':62853880,'PassWord':md5str('123456'),'RoomId':100013}})
 
 
 if __name__ == '__main__':
