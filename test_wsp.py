@@ -28,11 +28,11 @@ def log(res, key, params, func=json.loads):
 
 def main():
     host = 'mqstock.kkyoo.com'  # 修改为需要测试的域名
-    #host = 'mq.app'  # 修改为需要测试的域名
+    host = 'mq.app'  # 修改为需要测试的域名
 
     wsp_test = {'wspKey':"bfb1ab1a6c4e964fe8b5994895e5f8eb",}  # 修改为需要测试的wspKey
 
-    #wsp_test = {'wspKey':"6c9887da7c41952c406d82e377f7bc65",}  # 修改为需要测试的wspKey
+    wsp_test = {'wspKey':"6c9887da7c41952c406d82e377f7bc65",}  # 修改为需要测试的wspKey
 
 
     api = 'http://' + host + '/dev_wx/wpd/index.php?r=console/mqApi&api=%s'
@@ -58,7 +58,7 @@ def main():
     $action_api = array( 'channelinfo', 'getgaps', 'addgaps', 'deletegaps', 'getblacklists',
                          'addblacklists', 'deleteblacklists', 'addmgr', 'delmgr', 'getmgrlists' );
     """
-    return load_room_data(post, 'stockroom.json')
+    load_room_data(post, 'stockroom.json')
 
 
     get('channellist', {'page':1, 'num':2})
@@ -80,7 +80,7 @@ def main():
     post('delmgr', {'maiquanId':3757, 'uid':10031})
 
     ##错误测试
-    assert get('channelinfo', {'maiquanId':3757}, {'Authorization':'1234'}).Flag==109
+    assert get('newchannel', {'maiquanId':3757}, {'Authorization':'1234'}).Flag==109
 
     assert get('channelinf', {'maiquanId':3757}).Flag==111
 
@@ -102,6 +102,7 @@ def load_room_data(func, fstr):
                 'uid':item['ownuid'],
                 'state':1,
                 'viewlimit':1000,
+                'expireDay':365,
                 'roomtype':item['roomtype'],
                 'maiquanId':item['roomid'],
                 'nick':item['roomname'],
