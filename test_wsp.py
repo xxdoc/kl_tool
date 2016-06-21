@@ -58,12 +58,14 @@ def main():
     $action_api = array( 'channelinfo', 'getgaps', 'addgaps', 'deletegaps', 'getblacklists',
                          'addblacklists', 'deleteblacklists', 'addmgr', 'delmgr', 'getmgrlists' );
     """
-    load_room_data(post, 'stockroom.json')
+    #load_room_data(post, 'stockroom.json')
 
 
-    get('channellist', {'page':1, 'num':2})
+    #get('channellist', {'page':1, 'num':2})
 
-    get('channelinfo', {'maiquanId':2688})
+    get('newchannel', {'maiquanId':0, 'uid':10001, 'state':1, 'roomtype':2000,
+                       'viewlimit':1000, 'expireDay':365, 'nick':'测试自增id', 'hall_pic':'g.cn', 'pic':'baidu.com'})
+    return 0;
 
     get('getgaps', {'maiquanId':3757})
     post('addgaps', {'maiquanId':3757, 'uid':10020})

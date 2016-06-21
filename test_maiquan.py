@@ -4,6 +4,15 @@ import hashlib
 import json
 from test_wsp import log, md5str
 
+url = 'http://120.4640.lcps.aodianyun.com:3000/switch'
+json_str = '{"formatIndex":0,"enable":true,"publishURL":["rtmp://1436.lsspublish.aodianyun.com/dyy_81/KMGjT"],"playURL":"","videoSize":"1280x720","videoBitrate":"1500k","videoCBR":true,"audioBitrate":"48k"}'
+json_str = '{"paraArray":[{"w":1280,"h":720,"x":0,"y":0,"v":100,"z":2},{"w":1280,"h":720,"x":1280,"y":720,"v":0,"z":0},{"w":1280,"h":720,"x":1280,"y":720,"v":0,"z":3},{"w":1280,"h":720,"x":1280,"y":720,"v":0,"z":1}]}'
+json_str = '{"paraArray":[{"w":1280,"h":720,"x":0,"y":0,"v":100,"z":3},{"w":1280,"h":720,"x":1280,"y":720,"v":0,"z":1},{"w":1280,"h":720,"x":1280,"y":720,"v":0,"z":2},{"w":1280,"h":720,"x":1280,"y":720,"v":0,"z":0}]}'
+res = requests.post(url, data=json_str)
+print res
+print res.content
+a=1
+
 def main():
     host = 'api.91mq.com'
     api = 'http://' + host + '/ktvwebservice.asmx/%s'
@@ -33,4 +42,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    #main()
+    pass
