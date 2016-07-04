@@ -28,14 +28,12 @@ def log(res, key, params, func=json.loads):
 
 def main():
     host = 'mqstock.kkyoo.com'  # 修改为需要测试的域名
-    host = 'mq.app'  # 修改为需要测试的域名
+    host = 'my.app'  # 修改为需要测试的域名
 
     wsp_test = {'wspKey':"bfb1ab1a6c4e964fe8b5994895e5f8eb",}  # 修改为需要测试的wspKey
 
-    wsp_test = {'wspKey':"6c9887da7c41952c406d82e377f7bc65",}  # 修改为需要测试的wspKey
 
-
-    api = 'http://' + host + '/dev_wx/wpd/index.php?r=console/mqApi&api=%s'
+    api = 'http://' + host + '/api/MaiQuanRoomAssist/%s'
     add_header = {
                 'User-Agent': ('Mozilla/5.0 (Windows NT 6.1)'
                                 ' AppleWebKit/537.36 (KHTML, like Gecko)'
@@ -63,35 +61,32 @@ def main():
 
     #get('channellist', {'page':1, 'num':2})
 
-    get('newchannel', {'maiquanId':0, 'uid':10001, 'state':1, 'roomtype':2000,
-                       'viewlimit':1000, 'expireDay':365, 'nick':'测试自增id', 'hall_pic':'g.cn', 'pic':'baidu.com'})
-    return 0;
+    get('newchannel', {'room_id':0, 'owner_id':10001, 'state':1, 'roomtype':2000,
+                       'viewlimit':1000, 'expireDay':365, 'room_title':'测试自增id', 'hall_pic':'g.cn', 'cover_pic':'baidu.com'})
 
-    get('getgaps', {'maiquanId':3757})
-    post('addgaps', {'maiquanId':3757, 'uid':10020})
-    post('deletegaps', {'maiquanId':3757, 'uid':10020})
+    get('getgaps', {'room_id':97})
+    post('addgaps', {'room_id':97, 'uid':10020})
+    post('deletegaps', {'room_id':97, 'uid':10020})
 
-    get('getblacklists', {'maiquanId':3757})
-    post('addblacklists', {'maiquanId':3757, 'uid':10031})
-    post('deleteblacklists', {'maiquanId':3757, 'uid':10031})
+    get('getblacklists', {'room_id':97})
+    post('addblacklists', {'room_id':97, 'uid':10031})
+    post('deleteblacklists', {'room_id':97, 'uid':10031})
 
-    post('addmgr', {'maiquanId':3757, 'uid':10033})
-    post('addmgr', {'maiquanId':3757, 'uid':10034})
-    get('getmgrlists', {'maiquanId':3757})
-    post('addmgr', {'maiquanId':3757, 'uid':10031})
-    post('delmgr', {'maiquanId':3757, 'uid':10031})
+    post('addmgr', {'room_id':97, 'uid':10033})
+    post('addmgr', {'room_id':97, 'uid':10034})
+    get('getmgrlists', {'room_id':97})
+    post('addmgr', {'room_id':97, 'uid':10031})
+    post('delmgr', {'room_id':97, 'uid':10031})
 
     ##错误测试
-    assert get('newchannel', {'maiquanId':3757}, {'Authorization':'1234'}).Flag==109
+    assert get('newchannel', {'room_id':97}, {'Authorization':'1234'}).Flag==175
 
-    assert get('channelinf', {'maiquanId':3757}).Flag==111
-
-    assert get('channelinfo', {'maiquanId':666666}).Flag==108
+    assert get('channelinfo', {'room_id':666666}).Flag==108
 
     assert get('newchannel', {'uid':10042, 'viewlimit':100, 'real_name':'我是测试', 'qq':123456, 'tel':1212}).Flag==101
 
     assert get('channelinfo', {'channelid':666666}).Flag==101
-    assert post('addmgr', {'maiquanId':9999999, 'uid':10031}).Flag==108
+    assert post('addmgr', {'room_id':9999999, 'uid':10031}).Flag==108
 
 
 def load_room_data(func, fstr):
@@ -106,7 +101,7 @@ def load_room_data(func, fstr):
                 'viewlimit':1000,
                 'expireDay':365,
                 'roomtype':item['roomtype'],
-                'maiquanId':item['roomid'],
+                'room_id':item['roomid'],
                 'nick':item['roomname'],
                 'notice':item['roomradio']
             }
