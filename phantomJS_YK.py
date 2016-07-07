@@ -4,17 +4,8 @@ import time
 from tool import _LOG
 
 def main():
-##    try:
-##        host_key = raw_input('host_key:')
-##        channelId = int(raw_input('channelId:'))
-##        nums = int(raw_input('nums:'))
-##    except ValueError as ex:
-##        _LOG('error input')
-##        time.sleep(5)
-##        return None
-
     host = '25.kkyoo.com'
-    room_id = 97
+    room_id = 100025
     nums = 28
     wait_m = 10
     url = 'http://%s/live/%d' % (host, room_id)
