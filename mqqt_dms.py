@@ -35,6 +35,16 @@ def init_log():
     USER_LOG.addHandler(handler)
     USER_LOG.setLevel(logging.DEBUG)
 
+def flush_log():
+    global TASK_LOG, DMS_LOG, USER_LOG
+    def _flush(logger):
+        for handler in logger.handlers:
+            handler.flush()
+
+    for item in [TASK_LOG, DMS_LOG, USER_LOG]:
+        _flush(item)
+
+
 class DmsAnalysis(object):
 
     def __init__(self, dms_host, dms_port, topic_api, topic_timer=10, nums_timer=10):
@@ -246,10 +256,12 @@ class DmsAnalysis(object):
             if now_minute % self.nums_timer == 0:
                 self.save_topic_count()
 
+            flush_log()
             time.sleep(60)
             print '.'
 
     def close(self):
+        flush_log()
         now_minute = int(time.time() / 60)
         log_msg = '%s:close at %s config:%s' % ('run', now_minute, self.dms_config)
         TASK_LOG.info(log_msg)

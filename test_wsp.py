@@ -28,7 +28,7 @@ def log(res, key, params, func=json.loads):
 
 def main():
     host = 'mqstock.kkyoo.com'  # 修改为需要测试的域名
-    host = 'my.app'  # 修改为需要测试的域名
+    #host = 'my.app'  # 修改为需要测试的域名
 
     wsp_test = {'wspKey':"bfb1ab1a6c4e964fe8b5994895e5f8eb",}  # 修改为需要测试的wspKey
 
@@ -56,8 +56,8 @@ def main():
     $action_api = array( 'channelinfo', 'getgaps', 'addgaps', 'deletegaps', 'getblacklists',
                          'addblacklists', 'deleteblacklists', 'addmgr', 'delmgr', 'getmgrlists' );
     """
-    #load_room_data(post, 'stockroom.json')
-
+    load_room_data(post, 'room_list_copy.json')
+    return
 
     #get('channellist', {'page':1, 'num':2})
 
@@ -96,17 +96,19 @@ def load_room_data(func, fstr):
         print 'all data:', len(data['RECORDS'])
         for item in data['RECORDS']:
             tmp = {
-                'uid':item['ownuid'],
-                'state':1,
-                'viewlimit':1000,
-                'expireDay':365,
-                'roomtype':item['roomtype'],
-                'room_id':item['roomid'],
-                'nick':item['roomname'],
-                'notice':item['roomradio']
+                'state': 1,
+                'room_id': item['room_id'],
+                'roomtype': item['roomtype'],
+                'viewlimit': item['viewlimit'],
+                'expireDay': item['expireDay'],
+                'room_title': item['room_title'],
+                'owner_id': item['owner_id'],
+                'notice': item['notice'],
+                'cover_pic': item['cover_pic'],
+                'hall_pic': item['hall_pic']
             }
             ret = func('newchannel', tmp)
-            ret.mid = item['roomid']
+            ret.mid = item['room_id']
             ret_list.append(ret)
 
     print '\nALL OK:', [i.mid for i in ret_list if i.Flag==100]
