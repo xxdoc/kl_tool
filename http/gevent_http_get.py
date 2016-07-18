@@ -1,9 +1,7 @@
 #-*- coding: utf-8 -*-
 from gevent import monkey
 monkey.patch_all()
-import gevent
 from gevent.pool import Pool
-
 import urllib2
 import gzip
 import datetime
@@ -36,7 +34,12 @@ class MultiHttpDownLoad(object):
             self.log('get data:%s(length:%d)<idx:%d>' % (url, len(data), idx))
             do_data(url, data)
 
-        gpool = Pool(self.spawn_num) if self.spawn_num>1 else None
+        if not hasattr(do_data, '__call__') or not hasattr(isok_func, '__call__'):
+            raise ValueError('do_data and isok_func must be callable')
+        if not url_list:
+            return
+
+        gpool = Pool(self.spawn_num) if self.spawn_num > 1 else None
         for idx, url in enumerate(url_list):
             if self.spawn_num>1:
                 gpool.spawn(_do_get, idx, url, isok_func, use_gzip)
@@ -96,7 +99,7 @@ class MultiHttpDownLoad(object):
                 data = gzip.GzipFile(fileobj=StringIO.StringIO(data)).read()
             except Exception as ex:
                 if use_gzip:
-                    return self.__get_url(url, use_gzip=False, timeout=timeout, proxy_info=proxy_info)
+                    return self.__get_url(url, use_gzip=False, proxy_info=proxy_info)
                 else:
                     raise ex
         return data, headers, proxy_info
