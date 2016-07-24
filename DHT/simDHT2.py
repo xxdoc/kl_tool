@@ -282,7 +282,7 @@ class Master(object):
 
 def main():
     # max_node_qsize bigger, bandwith bigger, speed higher
-    mongo = Master('wownga.jios.org', 27017, 'btdb', 'magnet')
+    mongo = Master('127.0.0.1', 27017, 'btdb', 'magnet')
     dht = DHTServer(mongo, "0.0.0.0", 6881, max_node_qsize=1000)
     dht.start()
     dht.auto_send_find_node()
