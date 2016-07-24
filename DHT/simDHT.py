@@ -2,12 +2,17 @@
 # encoding: utf-8
 
 import socket
+import datetime
+import pymongo
+import time
+import sys
+
 from hashlib import sha1
 from random import randint
 from struct import unpack
 from socket import inet_ntoa
 from threading import Timer, Thread
-from time import sleep
+
 from collections import deque
 
 from bencode import bencode, bdecode
@@ -52,7 +57,7 @@ def timer(t, f):
 
 
 def get_neighbor(target, nid, end=10):
-    return target[:end]+nid[end:]
+    return target[:end] + nid[end:]
 
 
 class KNode(object):
@@ -109,7 +114,7 @@ class DHTClient(Thread):
                 self.send_find_node((node.ip, node.port), node.nid)
             except IndexError:
                 pass
-            sleep(wait)
+            time.sleep(wait)
 
     def process_find_node_response(self, msg, address):
         nodes = decode_nodes(msg["r"]["nodes"])
@@ -149,99 +154,127 @@ class DHTServer(DHTClient):
                 (data, address) = self.ufd.recvfrom(65536)
                 msg = bdecode(data)
                 self.on_message(msg, address)
-            except Exception:
+            except Exception as ex:
+                #print 'run Exception:%s' % (ex, )
                 pass
 
     def on_message(self, msg, address):
-        try:
-            if msg["y"] == "r":
-                if msg["r"].has_key("nodes"):
-                    self.process_find_node_response(msg, address)
-            elif msg["y"] == "q":
-                try:
-                    self.process_request_actions[msg["q"]](msg, address)
-                except KeyError:
-                    self.play_dead(msg, address)
-        except KeyError:
-            pass
+        if msg.get('y', '') == "r":
+            if "nodes" in msg.get('r', {}):
+                self.process_find_node_response(msg, address)
+        elif msg.get('y', '') == "q":
+            msg_q = msg.get("q", '')
+            if msg_q in self.process_request_actions:
+                self.process_request_actions[msg_q](msg, address)
+            else:
+                self.play_dead(msg, address)
 
     def on_get_peers_request(self, msg, address):
-        try:
-            infohash = msg["a"]["info_hash"]
-            tid = msg["t"]
-            nid = msg["a"]["id"]
-            token = infohash[:TOKEN_LENGTH]
-            msg = {
-                "t": tid,
-                "y": "r",
-                "r": {
-                    "id": get_neighbor(infohash, self.nid),
-                    "nodes": "",
-                    "token": token
-                }
+        infohash = msg.get("a", {}).get("info_hash", '')
+        tid = msg.get("t", None)
+        nid = msg.get("a", {}).get("id", None)
+        if not infohash or tid is None or nid is None:
+            return False
+        
+        token = infohash[:TOKEN_LENGTH]
+        msg = {
+            "t": tid,
+            "y": "r",
+            "r": {
+                "id": get_neighbor(infohash, self.nid),
+                "nodes": "",
+                "token": token
             }
-            self.send_krpc(msg, address)
-        except KeyError:
-            pass
+        }
+        return self.send_krpc(msg, address)
 
     def on_announce_peer_request(self, msg, address):
         try:
-            infohash = msg["a"]["info_hash"]
-            token = msg["a"]["token"]
-            nid = msg["a"]["id"]
-            tid = msg["t"]
+            msg_a = msg.get('a', {})
+            nid = msg_a.get("id", None)
+            tid = msg.get('t', None)
+            if nid is None or tid is None:
+                return False
 
-            if infohash[:TOKEN_LENGTH] == token:
-                if msg["a"].has_key("implied_port") and msg["a"]["implied_port"] != 0:
-                    port = address[1]
-                else:
-                    port = msg["a"]["port"]
-                    if port < 1 or port > 65535: return
-                self.master.log(infohash, (address[0], port))
-        except Exception:
-            pass
+            infohash = msg_a.get("info_hash", '')
+            token = msg_a.get("token", '')
+            if not token or infohash[:TOKEN_LENGTH]!=token:
+                return False
+                
+            if "implied_port" in msg_a and msg_a.get("implied_port", 0)!=0:
+                port = address[1]
+            else:
+                port = msg_a.get("port", 0)
+                if port < 1 or port > 65535: return
+
+            from_addr = '%s:%s' % (address[0], port)
+            return self.master.save(infohash.encode("hex"), from_addr)
+        except Exception as ex:
+            print 'on_announce_peer_request Exception:%s' (ex, )
         finally:
             self.ok(msg, address)
 
     def play_dead(self, msg, address):
-        try:
-            tid = msg["t"]
-            msg = {
-                "t": tid,
-                "y": "e",
-                "e": [202, "Server Error"]
-            }
-            self.send_krpc(msg, address)
-        except KeyError:
-            pass
+        tid = msg.get("t", None)
+        if tid is None:
+            return False
+            
+        msg = {
+            "t": tid,
+            "y": "e",
+            "e": [202, "Server Error"]
+        }
+        return self.send_krpc(msg, address)
 
     def ok(self, msg, address):
-        try:
-            tid = msg["t"]
-            nid = msg["a"]["id"]
-            msg = {
-                "t": tid,
-                "y": "r",
-                "r": {
-                    "id": get_neighbor(nid, self.nid)
-                }
+        tid = msg.get("t", None)
+        nid = msg.get("a", {}).get("id", None)
+        if tid is None or nid is None:
+            return False
+            
+        msg = {
+            "t": tid,
+            "y": "r",
+            "r": {
+                "id": get_neighbor(nid, self.nid)
             }
-            self.send_krpc(msg, address)
-        except KeyError:
-            pass
-
+        }
+        return self.send_krpc(msg, address)
 
 class Master(object):
 
-    def log(self, infohash, address=None):
-        print "%s from %s:%s" % (
-            infohash.encode("hex"), address[0], address[1]
-        )
+    def __init__(self, mongo_host, mongo_port, database, collection, logger=None):
+        self.con = pymongo.MongoClient(mongo_host, mongo_port)
+        self.cur = self.con[database][collection]
+        self.logger = logger
 
+    def log(self, msg, tag='DEBUG'):
+        tag = tag.upper()
+        if self.logger and getattr(self.logger, 'log', None):
+            self.logger.log(msg, tag)
+        else:
+            time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+            print '%s [%s] %s' % (time_str, tag, msg)
+
+    def save(self, hash_key, from_addr):
+        msg = "%s from %s" % (hash_key, from_addr)
+        self.log(msg, 'INFO')
+
+        try:
+            self.cur.update_one({'_id': hash_key}, {'$inc': {'count': 1}, '$set':{'uptime': int(time.time())}}, upsert=True)
+            return True
+        except pymongo.errors.PyMongoError as ex:
+            msg = 'PyMongoError:%s, hash_key:%s, from_addr:%s\n' % (ex, hash_key, from_addr)
+            self.log(msg, 'ERROR')
+            return False
+
+def main():
+    # max_node_qsize bigger, bandwith bigger, speed higher
+    mongo = Master('127.0.0.1', 27017, 'btdb', 'magnet')
+    dht = DHTServer(mongo, "0.0.0.0", 6881, max_node_qsize=800)
+    dht.start()
+    dht.auto_send_find_node()
 
 # using example
 if __name__ == "__main__":
-    # max_node_qsize bigger, bandwith bigger, speed higher
-    dht = DHTServer(Master(), "0.0.0.0", 6882, max_node_qsize=200)
-    dht.start()
-    dht.auto_send_find_node()
+    main()
