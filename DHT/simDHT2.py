@@ -273,7 +273,7 @@ class Master(object):
         self.log(msg, 'INFO')
 
         try:
-            self.cur.update_one({'_id': hash_key}, {'$inc': {'count': 1}, '$set':{'uptime': time_now}}, upsert=True)
+            self.cur.update_one({'_id': hash_key}, {'$inc': {'count': 1}, '$set':{'uptime': time_now, 'try_count': 0}}, upsert=True)
             return True
         except pymongo.errors.PyMongoError as ex:
             msg = 'PyMongoError:%s, hash_key:%s, from_addr:%s\n' % (ex, hash_key, from_addr)
