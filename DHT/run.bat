@@ -1,1 +1,1 @@
-python simDHT.py
+python simDHT2.py

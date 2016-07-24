@@ -79,8 +79,9 @@ class DHTClient(Thread):
     def send_krpc(self, msg, address):
         try:
             self.ufd.sendto(bencode(msg), address)
+            return True
         except Exception:
-            pass
+            return False
 
     def send_find_node(self, address, nid=None):
         nid = get_neighbor(nid, self.nid) if nid else self.nid
@@ -208,8 +209,6 @@ class DHTServer(DHTClient):
 
             from_addr = '%s:%s' % (address[0], port)
             return self.master.save(infohash.encode("hex"), from_addr)
-        except Exception as ex:
-            print 'on_announce_peer_request Exception:%s' (ex, )
         finally:
             self.ok(msg, address)
 
@@ -246,6 +245,8 @@ class Master(object):
         self.con = pymongo.MongoClient(mongo_host, mongo_port)
         self.cur = self.con[database][collection]
         self.logger = logger
+        self.cache = {}
+        self.cache_time = 600
 
     def log(self, msg, tag='DEBUG'):
         tag = tag.upper()
@@ -256,11 +257,23 @@ class Master(object):
             print '%s [%s] %s' % (time_str, tag, msg)
 
     def save(self, hash_key, from_addr):
+        if not hash_key:
+            return False
+            
+        time_now = int(time.time())
+        if hash_key in self.cache:
+            if time_now - self.cache[hash_key] > self.cache_time:
+                self.cache[hash_key] = time_now
+            else:
+                return False
+        else:
+            self.cache.setdefault(hash_key, time_now)
+
         msg = "%s from %s" % (hash_key, from_addr)
         self.log(msg, 'INFO')
 
         try:
-            self.cur.update_one({'_id': hash_key}, {'$inc': {'count': 1}, '$set':{'uptime': int(time.time())}}, upsert=True)
+            self.cur.update_one({'_id': hash_key}, {'$inc': {'count': 1}, '$set':{'uptime': time_now}}, upsert=True)
             return True
         except pymongo.errors.PyMongoError as ex:
             msg = 'PyMongoError:%s, hash_key:%s, from_addr:%s\n' % (ex, hash_key, from_addr)
