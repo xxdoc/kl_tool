@@ -12,11 +12,12 @@
 import inspect
 import pymongo
 import json
+import libtorrent as bt
 from api_tool import api_wrapper, FNVHash
 from dht_config import config
 
 TASK_CUR = config.MONGODB_CONN.btdb.magnet
-SAVE_CUR = config.MONGOFS_CONN.torrentfs.torrent
+SAVE_CUR = config.MONGODB_CONN.torrentfs.torrent
 REDIS_CUR = config.REDIS_CONN
 
 #========================================================
@@ -99,7 +100,7 @@ def doneTorrentTask(hashkey, info, torrent):
             SAVE_CUR.update_one({'_id': hashkey}, {'$set':{'torrent': torrent}}, upsert=True)
         except pymongo.errors.PyMongoError as ex:
             msg = 'PyMongoError:%s, hashkey:%s, torrent:%s\n' % (ex, torrent, info)
-
+    #magnet:?xt=urn:btih:f8181597b51c157fb470e5ee236e364c6fbc2af2
     return save_result
 
 def is_in_doing_task(item, expire):
@@ -110,6 +111,12 @@ def is_in_doing_task(item, expire):
         return False
     else:
         return True
+
+
+def get_link():
+    info = bt.torrent_info('test.torrent')
+    link = "magnet:?xt=urn:btih:%s&dn=%s" % (info.info_hash(), info.name())
+    return link
 
 def main():
     print apiHelper()

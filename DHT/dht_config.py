@@ -18,15 +18,15 @@ from api_tool import Config
 _CONF = {
     'api_ver': 'v1.0',
     'mongodb': {
-        'host': '127.0.0.1',
+        'host': 'wownga.jios.org',
         'port': 27017,
     },
     'mongofs': {
-        'host': '127.0.0.1',
+        'host': 'wownga.jios.org',
         'port': 27018,
     },
     'redis': {
-        'host': '127.0.0.1',
+        'host': 'wownga.jios.org',
         'port': 6379,
         'db': 0,
     }
