@@ -67,14 +67,29 @@ class KNode(object):
         self.port = port
 
 
-class DHTClient(Thread):
+class BaseLogger(object):
+    _LOG_LEVEL_DICT = {'DEBUG':10, 'INFO':20, 'WARN':30, 'ERROR':40, 'FALAT':50}
+    
+    def log(self, msg, tag='DEBUG'):
+        tag = tag.upper()
+        log_filter = lambda obj, t: obj._LOG_LEVEL_DICT.get(t, 0)>=20
+        if getattr(self, 'log_filter', log_filter)(self, tag):
+            if getattr(self, 'logger', None):
+                self.logger.log(msg, tag)
+            else:
+                time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+                print '%s [%s] %s' % (time_str, tag, msg)
 
-    def __init__(self, max_node_qsize):
+            
+class DHTClient(Thread, BaseLogger):
+
+    def __init__(self, max_node_qsize, logger=None):
         Thread.__init__(self)
         self.setDaemon(True)
         self.max_node_qsize = max_node_qsize
         self.nid = random_id()
         self.nodes = deque(maxlen=max_node_qsize)
+        self.logger = logger
 
     def send_krpc(self, msg, address):
         try:
@@ -159,6 +174,7 @@ class DHTServer(DHTClient):
                 pass
 
     def on_message(self, msg, address):
+        #self.log('on_message msg:%s, address:%s' % (msg, address))
         if msg.get('y', '') == "r":
             if "nodes" in msg.get('r', {}):
                 self.process_find_node_response(msg, address)
@@ -170,12 +186,14 @@ class DHTServer(DHTClient):
                 self.play_dead(msg, address)
 
     def on_get_peers_request(self, msg, address):
+        self.log('get_peers msg:%s, address:%s' % (msg, address))
+
         infohash = msg.get("a", {}).get("info_hash", '')
         tid = msg.get("t", None)
         nid = msg.get("a", {}).get("id", None)
         if not infohash or tid is None or nid is None:
             return False
-        
+
         token = infohash[:TOKEN_LENGTH]
         msg = {
             "t": tid,
@@ -190,6 +208,8 @@ class DHTServer(DHTClient):
 
     def on_announce_peer_request(self, msg, address):
         try:
+            self.log('announce msg:%s, address:%s' % (msg, address))
+
             msg_a = msg.get('a', {})
             nid = msg_a.get("id", None)
             tid = msg.get('t', None)
@@ -199,8 +219,9 @@ class DHTServer(DHTClient):
             infohash = msg_a.get("info_hash", '')
             token = msg_a.get("token", '')
             if not token or infohash[:TOKEN_LENGTH]!=token:
+                self.log('announce error token:%s, infohash:%s' % (token, infohash), 'ERROR')
                 return False
-                
+
             if "implied_port" in msg_a and msg_a.get("implied_port", 0)!=0:
                 port = address[1]
             else:
@@ -216,7 +237,7 @@ class DHTServer(DHTClient):
         tid = msg.get("t", None)
         if tid is None:
             return False
-            
+
         msg = {
             "t": tid,
             "y": "e",
@@ -229,7 +250,7 @@ class DHTServer(DHTClient):
         nid = msg.get("a", {}).get("id", None)
         if tid is None or nid is None:
             return False
-            
+
         msg = {
             "t": tid,
             "y": "r",
@@ -239,7 +260,7 @@ class DHTServer(DHTClient):
         }
         return self.send_krpc(msg, address)
 
-class Master(object):
+class Master(BaseLogger):
 
     def __init__(self, mongo_host, mongo_port, database, collection, logger=None):
         self.con = pymongo.MongoClient(mongo_host, mongo_port)
@@ -248,23 +269,16 @@ class Master(object):
         self.cache = {}
         self.cache_time = 600
 
-    def log(self, msg, tag='DEBUG'):
-        tag = tag.upper()
-        if self.logger and getattr(self.logger, 'log', None):
-            self.logger.log(msg, tag)
-        else:
-            time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
-            print '%s [%s] %s' % (time_str, tag, msg)
-
     def save(self, hash_key, from_addr):
         if not hash_key:
             return False
-            
+
         time_now = int(time.time())
         if hash_key in self.cache:
             if time_now - self.cache[hash_key] > self.cache_time:
                 self.cache[hash_key] = time_now
             else:
+                self.log('.', 'INFO')
                 return False
         else:
             self.cache.setdefault(hash_key, time_now)
@@ -283,7 +297,7 @@ class Master(object):
 def main():
     # max_node_qsize bigger, bandwith bigger, speed higher
     mongo = Master('127.0.0.1', 27017, 'btdb', 'magnet')
-    dht = DHTServer(mongo, "0.0.0.0", 6881, max_node_qsize=1000)
+    dht = DHTServer(mongo, "0.0.0.0", 6881, max_node_qsize=800)
     dht.start()
     dht.auto_send_find_node()
 
