@@ -43,7 +43,7 @@ def apiHelper(func=''):
     return {func:api_dict[func]} if func in api_dict else result
 
 @api_wrapper(config.api_ver, parser=lambda i: (i.apikey, i.get('nums', '200')))
-def getTorrentTask(apikey='', nums=20):
+def getTorrentTask(apikey='', nums=20, use_radis=True):
     """getTorrentTask hashkeys to download torrent.
 
     :Parameters:
@@ -55,9 +55,9 @@ def getTorrentTask(apikey='', nums=20):
     """
     all_time = nums * 1
     task_list = []
-    ret = TASK_CUR.find({'info': {'$exists':False},'try_count':{'$lt':10}}).sort('count', pymongo.DESCENDING)
+    ret = TASK_CUR.find({'info': {'$exists':False},'try_count':{'$lt':10}})
     for item in ret:
-        if is_in_doing_task(item, all_time):
+        if use_radis and is_in_doing_task(item, all_time):
             continue
 
         if len(task_list) >= nums:
@@ -119,12 +119,14 @@ def get_link():
     return link
 
 def main():
-    print apiHelper()
-    print apiHelper('getTorrentTask')
-    print getTorrentTask()
-    test = getTorrentTask()
+    test = getTorrentTask('', 10000, False)
+    out_list = []
+    base_str = 'magnet:?xt=urn:btih:%s'
     for item in test:
-        doneTorrentTask(item['hashkey'], item, json.dumps(item))
+        out_list.append(base_str % (item['hashkey'],))
+
+    with open('torrent_test.text', 'w') as wf:
+        wf.writelines([s+'\n' for s in out_list])
 
 if __name__ == '__main__':
     main()
