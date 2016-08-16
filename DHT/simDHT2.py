@@ -69,7 +69,7 @@ class KNode(object):
 
 class BaseLogger(object):
     _LOG_LEVEL_DICT = {'DEBUG':10, 'INFO':20, 'WARN':30, 'ERROR':40, 'FALAT':50}
-    
+
     def log(self, msg, tag='DEBUG'):
         tag = tag.upper()
         log_filter = lambda obj, t: obj._LOG_LEVEL_DICT.get(t, 0)>=20
@@ -80,7 +80,7 @@ class BaseLogger(object):
                 time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
                 print '%s [%s] %s' % (time_str, tag, msg)
 
-            
+
 class DHTClient(Thread, BaseLogger):
 
     def __init__(self, max_node_qsize, logger=None):
@@ -230,6 +230,8 @@ class DHTServer(DHTClient):
 
             from_addr = '%s:%s' % (address[0], port)
             return self.master.save(infohash.encode("hex"), from_addr)
+        except Exception as ex:
+            self.log('announce Exception:%s' % (ex, ), 'ERROR')
         finally:
             self.ok(msg, address)
 
@@ -278,12 +280,14 @@ class Master(BaseLogger):
             if time_now - self.cache[hash_key] > self.cache_time:
                 self.cache[hash_key] = time_now
             else:
-                self.log('.', 'INFO')
+                #self.log('.', 'INFO')
                 return False
         else:
             self.cache.setdefault(hash_key, time_now)
 
-        msg = "%s from %s" % (hash_key, from_addr)
+        time_per = time_now - 60
+        per = len( [k for k, v in self.cache.items() if v > time_per] )
+        msg = "<%d> %s from %s" % (per, hash_key, from_addr)
         self.log(msg, 'INFO')
 
         try:
@@ -297,7 +301,7 @@ class Master(BaseLogger):
 def main():
     # max_node_qsize bigger, bandwith bigger, speed higher
     mongo = Master('127.0.0.1', 27017, 'btdb', 'magnet')
-    dht = DHTServer(mongo, "0.0.0.0", 6881, max_node_qsize=800)
+    dht = DHTServer(mongo, "0.0.0.0", 6881, max_node_qsize=200)
     dht.start()
     dht.auto_send_find_node()
 

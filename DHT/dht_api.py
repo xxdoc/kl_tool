@@ -12,7 +12,6 @@
 import inspect
 import pymongo
 import json
-import libtorrent as bt
 from api_tool import api_wrapper, FNVHash
 from dht_config import config
 
@@ -53,22 +52,23 @@ def getTorrentTask(apikey='', nums=20):
     :Returns:
       task_list of :class:`list`.
     """
-    all_time = nums * 1
+    all_time = nums * 100
     task_list = []
-    ret = TASK_CUR.find({'info': {'$exists':False},'try_count':{'$lt':10}}).sort('count', pymongo.DESCENDING)
+    ret = TASK_CUR.find({'info': {'$exists':False},'try_count':{'$lt':1}})
     for item in ret:
+        if len(task_list) >= nums:
+            break
+
         if is_in_doing_task(item, all_time):
             continue
 
-        if len(task_list) >= nums:
-            break
         if item['_id']:
             task_list.append({'hashkey':item['_id'], 'count':item['count'], 'uptime':item['uptime']})
 
     return task_list
 
 @api_wrapper(config.api_ver, parser=lambda i: (i.get('hashkey', ''), json.loads(i.get('info', 'null')), i.get('torrent', '')))
-def doneTorrentTask(hashkey, info, torrent):
+def doneTorrentTask(hashkey, info, torrent=''):
     """doneTorrentTask save info and torrent to hashkeys.
 
     :Parameters:
@@ -87,20 +87,23 @@ def doneTorrentTask(hashkey, info, torrent):
         save_result['data']['info_len'] = len(info)
         set_dict = {'$inc':{'try_count': 1}, '$set':{'info': info}}
     else:
+        save_result['data']['info_len'] = 0
         set_dict = {'$inc':{'try_count': 1}}
 
     try:
-        SAVE_CUR.update_one({'_id': hashkey}, set_dict, upsert=True)
+        TASK_CUR.update_one({'_id': hashkey}, set_dict, upsert=True)
+        save_result['data']['info_save'] = 'ok'
     except pymongo.errors.PyMongoError as ex:
         msg = 'PyMongoError:%s, hashkey:%s, info:%s\n' % (ex, hashkey, info)
+        save_result['error'] = {'Exception': 'PyMongoError', 'msg': msg}
 
-    if torrent:
-        save_result['data']['torrent_len'] = len(torrent)
-        try:
-            SAVE_CUR.update_one({'_id': hashkey}, {'$set':{'torrent': torrent}}, upsert=True)
-        except pymongo.errors.PyMongoError as ex:
-            msg = 'PyMongoError:%s, hashkey:%s, torrent:%s\n' % (ex, torrent, info)
-    #magnet:?xt=urn:btih:f8181597b51c157fb470e5ee236e364c6fbc2af2
+##    if torrent:
+##        save_result['data']['torrent_len'] = len(torrent)
+##        try:
+##            SAVE_CUR.update_one({'_id': hashkey}, {'$set':{'torrent': torrent}}, upsert=True)
+##        except pymongo.errors.PyMongoError as ex:
+##            msg = 'PyMongoError:%s, hashkey:%s, torrent:%s\n' % (ex, torrent, info)
+    #magnet:?xt=urn:btih:de7e43293abc22785b6a394b5ae1960543c71fb7
     return save_result
 
 def is_in_doing_task(item, expire):
@@ -119,12 +122,10 @@ def get_link():
     return link
 
 def main():
-    print apiHelper()
-    print apiHelper('getTorrentTask')
-    print getTorrentTask()
-    test = getTorrentTask()
-    for item in test:
-        doneTorrentTask(item['hashkey'], item, json.dumps(item))
+    task = getTorrentTask()
+    for item in task:
+        print 'magnet:?xt=urn:btih:%s' % (item['hashkey'], )
+
 
 if __name__ == '__main__':
     main()

@@ -26,7 +26,7 @@ _CONF = {
         'port': 27018,
     },
     'redis': {
-        'host': 'wownga.jios.org',
+        'host': '127.0.0.1',
         'port': 6379,
         'db': 0,
     }
