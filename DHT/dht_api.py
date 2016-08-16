@@ -42,7 +42,7 @@ def apiHelper(func=''):
     return {func:api_dict[func]} if func in api_dict else result
 
 @api_wrapper(config.api_ver, parser=lambda i: (i.apikey, i.get('nums', '200')))
-def getTorrentTask(apikey='', nums=20):
+def getTorrentTask(apikey='', nums=20, use_radis=True):
     """getTorrentTask hashkeys to download torrent.
 
     :Parameters:
@@ -122,10 +122,14 @@ def get_link():
     return link
 
 def main():
-    task = getTorrentTask()
-    for item in task:
-        print 'magnet:?xt=urn:btih:%s' % (item['hashkey'], )
+    test = getTorrentTask('', 10000, False)
+    out_list = []
+    base_str = 'magnet:?xt=urn:btih:%s'
+    for item in test:
+        out_list.append(base_str % (item['hashkey'],))
 
+    with open('torrent_test.text', 'w') as wf:
+        wf.writelines([s+'\n' for s in out_list])
 
 if __name__ == '__main__':
     main()
