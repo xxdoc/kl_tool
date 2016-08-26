@@ -174,7 +174,7 @@ class DHTServer(DHTClient):
                 pass
 
     def on_message(self, msg, address):
-        #self.log('on_message msg:%s, address:%s' % (msg, address))
+        #self.log('on_message msg:%s, address:%s' % (msg, address), 'INFO')
         if msg.get('y', '') == "r":
             if "nodes" in msg.get('r', {}):
                 self.process_find_node_response(msg, address)
@@ -186,7 +186,7 @@ class DHTServer(DHTClient):
                 self.play_dead(msg, address)
 
     def on_get_peers_request(self, msg, address):
-        self.log('get_peers msg:%s, address:%s' % (msg, address))
+        self.log('get_peers msg:%s, address:%s' % (msg, address), 'INFO')
 
         infohash = msg.get("a", {}).get("info_hash", '')
         tid = msg.get("t", None)
@@ -208,7 +208,7 @@ class DHTServer(DHTClient):
 
     def on_announce_peer_request(self, msg, address):
         try:
-            self.log('announce msg:%s, address:%s' % (msg, address))
+            self.log('announce msg:%s, address:%s' % (msg, address), 'INFO')
 
             msg_a = msg.get('a', {})
             nid = msg_a.get("id", None)
