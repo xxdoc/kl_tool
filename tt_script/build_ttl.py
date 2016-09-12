@@ -31,12 +31,14 @@ def load_json(file_name):
         return json.load(rf)
 
 def fix_config(cfg):
-    rst, base_ini = {}, load_file(cwd('_tt_config_ini', 'TERATERM_TPL.INI'))
+    rst, base_ini = {}, load_file( cwd('_tt_config_ini', 'TERATERM_TPL.INI') )
     for key, item in cfg.items():
-        item['Prompt'] = '#' if item['User']=='root' else '$'  # 根据不同的帐号设置不同的命令行提示符
         dump_file(cwd('_tt_config_ini', 'tmp', key+'.INI'), base_ini.replace('{{TPL_TITLE}}', key, 1))
-        item['Ini'] = cwd('_tt_config_ini', 'tmp', key+'.INI')  # 生成自定义的配置文件
+        item.setdefault('Ini', cwd('_tt_config_ini', 'tmp', key+'.INI') )  # 生成自定义的配置文件
+        item.setdefault('Prompt', '#' if item['User']=='root' else '$')  # 根据不同的帐号设置不同的命令行提示符
         item['FirstCmd'] = 'ps -ef | grep node' if key.find('node')>=0 else 'ps -ef | grep "nginx\|httpd"'
+        if item.get('Sudo', None):
+           item['Sudo'].setdefault('Prompt', '#' if item['Sudo']['User']=='root' else '$')
         rst[key] = item
     return rst
 
@@ -45,7 +47,7 @@ def _append(str_list, str_append):
     return str_list
 
 def base_ttl(key, item):
-    return [
+    tmp_list = [
         "SET_Title ='%s' \n" % (key, ),
         "SET_Prompt = '%s' \n" % (item['Prompt'], ),
         "SET_Host = '%s' \n" % (item['Host'], ),
@@ -65,8 +67,18 @@ strconcat tmp_connect_cmd ' /passwd='
 strconcat tmp_connect_cmd SET_Password
 strconcat tmp_connect_cmd ' /f='
 strconcat tmp_connect_cmd SET_Ini
-connect tmp_connect_cmd """,
+connect tmp_connect_cmd
+""",
     ]
+    if item.get('Sudo', None):
+        tmp_list.extend([
+            "wait SET_Prompt \n",
+            "sendln 'su %s' \n" % (item['Sudo']['User'], ),
+            "wait 'Password:' \n",
+            "sendln '%s' \n" % (item['Sudo']['Password'], ),
+            "SET_Prompt = '%s' \n" % (item['Sudo']['Prompt'], ),
+        ])
+    return tmp_list
 
 def connect_ttl(key, item):
     return _append(base_ttl(key, item), """
