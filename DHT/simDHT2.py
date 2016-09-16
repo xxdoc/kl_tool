@@ -174,7 +174,7 @@ class DHTServer(DHTClient):
                 pass
 
     def on_message(self, msg, address):
-        #self.log('on_message msg:%s, address:%s' % (msg, address), 'INFO')
+        #self.log('on_message msg:%s, address:%s' % (msg, address), 'DEBUG')
         if msg.get('y', '') == "r":
             if "nodes" in msg.get('r', {}):
                 self.process_find_node_response(msg, address)
@@ -186,7 +186,7 @@ class DHTServer(DHTClient):
                 self.play_dead(msg, address)
 
     def on_get_peers_request(self, msg, address):
-        self.log('get_peers msg:%s, address:%s' % (msg, address), 'INFO')
+        self.log('get_peers msg:%s, address:%s' % (msg, address), 'DEBUG')
 
         infohash = msg.get("a", {}).get("info_hash", '')
         tid = msg.get("t", None)
@@ -208,7 +208,7 @@ class DHTServer(DHTClient):
 
     def on_announce_peer_request(self, msg, address):
         try:
-            self.log('announce msg:%s, address:%s' % (msg, address), 'INFO')
+            self.log('announce msg:%s, address:%s' % (msg, address), 'DEBUG')
 
             msg_a = msg.get('a', {})
             nid = msg_a.get("id", None)
@@ -280,7 +280,7 @@ class Master(BaseLogger):
             if time_now - self.cache[hash_key] > self.cache_time:
                 self.cache[hash_key] = time_now
             else:
-                #self.log('.', 'INFO')
+                #self.log('.', 'DEBUG')
                 return False
         else:
             self.cache.setdefault(hash_key, time_now)
@@ -301,7 +301,7 @@ class Master(BaseLogger):
 def main():
     # max_node_qsize bigger, bandwith bigger, speed higher
     mongo = Master('127.0.0.1', 27017, 'btdb', 'magnet')
-    dht = DHTServer(mongo, "0.0.0.0", 6881, max_node_qsize=200)
+    dht = DHTServer(mongo, "0.0.0.0", 6881, max_node_qsize=400)
     dht.start()
     dht.auto_send_find_node()
 
