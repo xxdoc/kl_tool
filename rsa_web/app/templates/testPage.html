@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+    <title>JavaScript RSA Encryption</title>
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="http://cdn.bootcss.com/jsencrypt/2.3.1/jsencrypt.min.js"></script>
+    <script src="http://cdn.bootcss.com/json2/20150503/json2.min.js"></script>
+    <script type="text/javascript">
+        function randomString(len) {
+          len = len || 32;
+          var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+          var maxPos = $chars.length;
+          var pwd = '';
+          for (i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+          }
+          return pwd;
+        }
+      
+        function set_task_key(task_token) {
+            console.log('task_token', task_token);
+            var decrypt = new JSEncrypt();
+            decrypt.setPrivateKey($('#privkey').val());
+            var task_id = decrypt.decrypt(task_token);
+            var task_key = randomString(32);
+            $('#input').val(task_key);
+            
+            console.log('task_id', task_id);
+            var task_json = JSON.stringify({
+              'id': task_id,
+              't': parseInt(new Date().getTime()/1000),
+              'k': task_key,
+            });
+            console.log('task_json', task_json);
+
+            var encrypt = new JSEncrypt();
+            encrypt.setPublicKey($('#server-pubkey').val());
+            var task_token = encrypt.encrypt(task_json);
+            task_token = task_token.replace(/\+/g, '-').replace(/\//g, '_');
+            console.log('task_token', task_token);
+
+            $.ajax({
+                type: "GET",
+                url: "/sendData",
+                data: { data: task_token, },
+                dataType: "json",
+                success: function(data){
+                    console.log('getTaskToken', data);
+                    if( data.errno==0 ){
+                        console.log('save task_key done!');
+                    } else {
+                        console.log(data.error);
+                    }
+                }
+             });
+            return true;
+        }
+      // Call this code when the page is done loading.
+      $(function() {
+        $.ajax({
+            type: "GET",
+            url: "/getTaskToken",
+            data: { 
+                pubkey_n:"{{server.client_pem[rand_key].pubkey.n}}", 
+                pubkey_e:"{{server.client_pem[rand_key].pubkey.e}}"
+            },
+            dataType: "json",
+            success: function(data){
+                console.log('getTaskToken', data);
+                if( data.errno==0 ){
+                    set_task_key(data.id);
+                } else {
+                    console.log(data.error);
+                }
+            }
+         });
+         
+        // Run a quick encryption/decryption when they click.
+        $('#testme').click(function() {
+
+          // Encrypt with the public key...
+          var encrypt = new JSEncrypt();
+          encrypt.setPublicKey($('#pubkey').val());
+          var encrypted = encrypt.encrypt($('#input').val());
+          
+          // Decrypt with the private key...
+          var decrypt = new JSEncrypt();
+          decrypt.setPrivateKey($('#privkey').val());
+          var uncrypted = decrypt.decrypt(encrypted);
+
+          // Now a simple check to see if the round-trip worked.
+          if (uncrypted == $('#input').val()) {
+            alert('It works!!!');
+          }
+          else {
+            alert('Something went wrong....');
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <label for="server-pubkey">Server Public Key</label><br/>
+    <textarea id="server-pubkey" rows="15" cols="65">{{server.pub_pem}}</textarea><br/>
+
+    <label for="privkey">Client Private Key {{rand_key}}</label><br/>
+    <textarea id="privkey" rows="15" cols="65">{{server.client_pem[rand_key].priv_pem}}</textarea><br/>
+    <label for="pubkey">Client Public Key</label><br/>
+    <textarea id="pubkey" rows="15" cols="65">{{server.client_pem[rand_key].pub_pem}}</textarea><br/>
+    <label for="input">Text to encrypt:</label><br/>
+    <textarea id="input" name="input" type="text" rows=4 cols=70>{{session.get('task_key', '')}}</textarea><br/>
+    <input id="testme" type="button" value="Test Me!!!" /><br/>
+  </body>
+</html>
