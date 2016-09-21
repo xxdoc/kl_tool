@@ -2,6 +2,8 @@ import os
 import rsa
 import collections
 
+RsaKeyPem = collections.namedtuple('RsaKeyPem','pub_pem pubkey priv_pem privkey')
+
 class BaseServer(object):
     def __init__(self, pub, priv, root):
         with open(os.path.join(root, pub), 'r') as rf:
@@ -11,7 +13,6 @@ class BaseServer(object):
             self.priv_pem = rf.read()
             self.privkey = rsa.PrivateKey.load_pkcs1(self.priv_pem)
 
-        RsaKeyPem = collections.namedtuple('RsaKeyPem','pub_pem pubkey priv_pem privkey')
         self.client_pem = {}
         for item in os.listdir(root):
             tmp = item.split('_')
