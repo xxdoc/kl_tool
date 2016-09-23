@@ -63,7 +63,7 @@ USER_AGENT = (
 )
 ACCEPT_ENCODING = 'gzip,deflate,sdch'
 
-def getUrl(url, header_list=None, use_gzip=True, timeout=HTTP_TIME_OUT, proxy_info=None):
+def getUrl(url, header=None, use_gzip=True, timeout=HTTP_TIME_OUT, proxy_info=None):
     if not url:
         return '', None
 
@@ -76,8 +76,8 @@ def getUrl(url, header_list=None, use_gzip=True, timeout=HTTP_TIME_OUT, proxy_in
     req = urllib2.Request(url)
     if use_gzip:
         req.add_header('Accept-Encoding', ACCEPT_ENCODING)
-    if header_list:
-        for (h_tag, h_val) in header_list:
+    if header and isinstance(header, dict):
+        for (h_tag, h_val) in header.items():
             req.add_header(h_tag, h_val)
 
     req.add_header('User-Agent', USER_AGENT)

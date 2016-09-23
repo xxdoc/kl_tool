@@ -27,8 +27,7 @@ def log(res, key, params, func=json.loads):
     return _Obj(obj)
 
 def main():
-    host = 'mqstock.kkyoo.com'  # 修改为需要测试的域名
-    #host = 'my.app'  # 修改为需要测试的域名
+    host = 'my.app'  # 修改为需要测试的域名
 
     wsp_test = {'wspKey':"bfb1ab1a6c4e964fe8b5994895e5f8eb",}  # 修改为需要测试的wspKey
 
@@ -56,37 +55,29 @@ def main():
     $action_api = array( 'channelinfo', 'getgaps', 'addgaps', 'deletegaps', 'getblacklists',
                          'addblacklists', 'deleteblacklists', 'addmgr', 'delmgr', 'getmgrlists' );
     """
-    load_room_data(post, 'room_list_copy.json')
-    return
 
-    #get('channellist', {'page':1, 'num':2})
+    get('channellist', {'page':1, 'num':2})
 
-    get('newchannel', {'room_id':0, 'owner_id':10001, 'state':1, 'roomtype':2000,
-                       'viewlimit':1000, 'expireDay':365, 'room_title':'测试自增id', 'hall_pic':'g.cn', 'cover_pic':'baidu.com'})
+    get('getgaps', {'room_id':100228})
+    post('addgaps', {'room_id':100228, 'uid':10020})
+    get('getgaps', {'room_id':100228})
+    post('deletegaps', {'room_id':100228, 'uid':10020})
 
-    get('getgaps', {'room_id':97})
-    post('addgaps', {'room_id':97, 'uid':10020})
-    post('deletegaps', {'room_id':97, 'uid':10020})
+    get('getblacklists', {'room_id':100228})
+    post('addblacklists', {'room_id':100228, 'uid':10031})
+    get('getblacklists', {'room_id':100228})
+    post('deleteblacklists', {'room_id':100228, 'uid':10031})
 
-    get('getblacklists', {'room_id':97})
-    post('addblacklists', {'room_id':97, 'uid':10031})
-    post('deleteblacklists', {'room_id':97, 'uid':10031})
-
-    post('addmgr', {'room_id':97, 'uid':10033})
-    post('addmgr', {'room_id':97, 'uid':10034})
-    get('getmgrlists', {'room_id':97})
-    post('addmgr', {'room_id':97, 'uid':10031})
-    post('delmgr', {'room_id':97, 'uid':10031})
+    post('addmgr', {'room_id':100228, 'uid':10033})
+    post('addmgr', {'room_id':100228, 'uid':10034})
+    get('getMgrs', {'room_id':100228})
+    post('addmgr', {'room_id':100228, 'uid':10031})
+    post('delmgr', {'room_id':100228, 'uid':10031})
 
     ##错误测试
     assert get('newchannel', {'room_id':97}, {'Authorization':'1234'}).Flag==175
 
-    assert get('channelinfo', {'room_id':666666}).Flag==108
-
-    assert get('newchannel', {'uid':10042, 'viewlimit':100, 'real_name':'我是测试', 'qq':123456, 'tel':1212}).Flag==101
-
-    assert get('channelinfo', {'channelid':666666}).Flag==101
-    assert post('addmgr', {'room_id':9999999, 'uid':10031}).Flag==108
+    assert get('channelinfo', {'room_id':666666}).Flag==103
 
 
 def load_room_data(func, fstr):
