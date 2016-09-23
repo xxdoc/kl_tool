@@ -27,17 +27,13 @@ def log(res, key, params, func=json.loads):
     return _Obj(obj)
 
 def main():
-    host = 'my.app'  # 修改为需要测试的域名
-
-    wsp_test = {'wspKey':"bfb1ab1a6c4e964fe8b5994895e5f8eb",}  # 修改为需要测试的wspKey
-
-
+    host = 'mqstock.kkyoo.com'  # 修改为需要测试的域名
     api = 'http://' + host + '/api/MaiQuanRoomAssist/%s'
     add_header = {
                 'User-Agent': ('Mozilla/5.0 (Windows NT 6.1)'
                                 ' AppleWebKit/537.36 (KHTML, like Gecko)'
                                 ' Chrome/45.0.2454.101 Safari/537.36'),
-                'Authorization': md5str('wsp_' + wsp_test['wspKey']),
+                'Authorization': 'ce50f5997b0b8c0e608a1153a44d386e',
                 "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                 'Accept':'application/json'}
 
@@ -49,35 +45,17 @@ def main():
         res = requests.post(api % (key,), data=params, headers=auth)
         return log(res, key, params)
 
-
-    """
-    $private_api = array('channellist', 'newchannel');
-    $action_api = array( 'channelinfo', 'getgaps', 'addgaps', 'deletegaps', 'getblacklists',
-                         'addblacklists', 'deleteblacklists', 'addmgr', 'delmgr', 'getmgrlists' );
-    """
+    get('channelInfo', {'room_id':295891})
 
     get('channellist', {'page':1, 'num':2})
 
-    get('getgaps', {'room_id':100228})
-    post('addgaps', {'room_id':100228, 'uid':10020})
-    get('getgaps', {'room_id':100228})
-    post('deletegaps', {'room_id':100228, 'uid':10020})
+    get('getgaps', {'room_id':295891})
 
-    get('getblacklists', {'room_id':100228})
-    post('addblacklists', {'room_id':100228, 'uid':10031})
-    get('getblacklists', {'room_id':100228})
-    post('deleteblacklists', {'room_id':100228, 'uid':10031})
+    get('getblacklists', {'room_id':295891})
 
-    post('addmgr', {'room_id':100228, 'uid':10033})
-    post('addmgr', {'room_id':100228, 'uid':10034})
-    get('getMgrs', {'room_id':100228})
-    post('addmgr', {'room_id':100228, 'uid':10031})
-    post('delmgr', {'room_id':100228, 'uid':10031})
+    get('getMgrs', {'room_id':295891})
 
-    ##错误测试
-    assert get('newchannel', {'room_id':97}, {'Authorization':'1234'}).Flag==175
 
-    assert get('channelinfo', {'room_id':666666}).Flag==103
 
 
 def load_room_data(func, fstr):
