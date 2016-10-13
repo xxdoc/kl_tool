@@ -103,3 +103,5 @@ $RECYCLE.BIN/
 *.ttl
 *.ignore
 *.pem
+
+/tt_script/_tt_config_ini/tmp/
