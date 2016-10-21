@@ -49,7 +49,7 @@ def read_srt(file_name):
         file_lines = rf.readlines()
 
     re_tmp = re.compile('^[\d]{2}:[\d]{2}:[\d]{2},[\d]{3}')
-    need_translate = lambda s: False if not s or s.isalnum() or s.find('</font>')>0 or re_tmp.match(s) else True
+    need_translate = lambda s: False if not s or s.isalnum() or re_tmp.match(s) else True
 
     en_dict = {}
     for idx, line in enumerate(file_lines):
