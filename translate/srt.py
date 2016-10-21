@@ -7,12 +7,15 @@ import re
 import cPickle
 import os
 
+from config_ignore import BAIDU_TRANSLATE_APP_ID, BAIDU_TRANSLATE_SECRET_KEY
+#从配置文件 获取 百度翻译API appid 和 secretKey 你可以直接在这里配置
+
 def md5str(string):
     m1 = md5.new()
     m1.update(string)
     return m1.hexdigest()
 
-def baidu_translate(en_list, fromLang='en', toLang='zh', appid='20161021000030574', secretKey='kLNpJ3Y9JNfRpf5vecBY'):
+def baidu_translate(en_list, fromLang='en', toLang='zh', appid=BAIDU_TRANSLATE_APP_ID, secretKey=BAIDU_TRANSLATE_SECRET_KEY):
     api = 'http://api.fanyi.baidu.com/api/trans/vip/translate'
 
     q = '\n' . join(en_list)
@@ -86,18 +89,14 @@ def srt_translate(srt_file):
     for en, zh in translate_dict.items():
         idx_list = en_dict.get(en, [])
         for idx in idx_list:
-            file_lines[idx] = en + zh
+            file_lines[idx] = en + zh.encode('utf-8')
 
-    out_file = srt_file.replace('en.srt', 'enzh.srt')
+    out_file = srt_file.replace('.en.srt', '.enzh.srt')
     save_srt(out_file, file_lines)
     return out_file
 
 def main():
-    file_list = [
-        'Black.Mirror.S03E01.WEBRip.FS.en.srt',
-        'Black.Mirror.S03E02.WEBRip.FS.en.srt',
-        'Black.Mirror.S03E03.WEBRip.FS.en.srt'
-    ]
+    file_list = [item for item in os.listdir(os.getcwd()) if item.endswith('.en.srt') and os.path.isfile(item)]
     print [srt_translate(srt_file) for srt_file in file_list]
 
 if __name__ == '__main__':

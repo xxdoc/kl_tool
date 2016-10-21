@@ -105,3 +105,6 @@ $RECYCLE.BIN/
 *.pem
 
 /tt_script/_tt_config_ini/tmp/
+
+*_ignore.py
+*.translate
