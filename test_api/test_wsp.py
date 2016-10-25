@@ -3,8 +3,8 @@ import requests
 import json
 
 def main():
-    api_key = '0f58d051cccd93078dd8f5b0b9997f31'  # 你的API_KEY
-    url = 'http://finance.aodianyun.com/api/%s/%s'
+    api_key = '009ef5d8bec9adb59d2a4fa6dc1d5f37'  # 你的API_KEY
+    url = 'http://dyy.aodianyun.com/api/%s/%s'
 
     add_header = {
         'User-Agent': ( 'Mozilla/5.0 (Windows NT 6.1)'
@@ -17,15 +17,23 @@ def main():
 
     def get(api, params, auth=add_header):
         res = requests.get(url % api, params=params, headers=auth)
-        return res.content
+        return res.json()
 
     def post(api, params,  auth=add_header):
         res = requests.post(url %api, data=params, headers=auth)
-        return res.content
+        return res.json()
 
-    print post(('RoomMgr', 'newCaiJingRoom'), {'room_title': '测试API建立房间', })
+    tmp_admin = post(('CompanyMgr', 'newSubCompany'), {'admin_type': 'jiaoyu', 'billing_type':'liuliang'})
+    print tmp_admin
+    assert tmp_admin['Flag']==100, '开通客户失败'
 
-    print get(('RoomMgr', 'getRoomDmsUserCount'), {'room_id': 1000, })
+    admin_id = tmp_admin['Info']['admin_id']
+    print post(('CompanyMgr', 'stateSubCompany'), {'admin_id': admin_id, 'state':2})
+
+    print post(('CompanyMgr', 'stateSubCompany'), {'admin_id': admin_id, 'state':1})
+
+    tmp_room = post(('CompanyMgr', 'newRoomByAdminId'), {'admin_id': admin_id})
+    print tmp_room
 
 if __name__ == '__main__':
     main()
