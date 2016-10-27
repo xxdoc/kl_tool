@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*- 
 #-------------------------------------------------------------------------------
+#https://pypi.tuna.tsinghua.edu.cn/simple
 import os
 import json
 
@@ -9,6 +10,7 @@ def main():
     for key, item in cfg.items():
         dump_file(cwd(key+'.ttl'), connect_ttl(key, item))
         dump_file(cwd('clear_log', key+'_clear.ttl'), clear_log_ttl(key, item))
+        dump_file(cwd('glances', key+'_glances.ttl'), glances_ttl(key, item))
 
 def cwd(*f):
     return os.path.join(os.getcwd(), *f)
@@ -42,8 +44,8 @@ def fix_config(cfg):
         rst[key] = item
     return rst
 
-def _append(str_list, str_append):
-    str_list.append(str_append)
+def _append(str_list, *str_append):
+    str_list.extend(str_append)
     return str_list
 
 def base_ttl(key, item):
@@ -123,6 +125,21 @@ restoresetup SET_Ini
 disconnect
 closett
 """)
+
+def glances_ttl(key, item):
+    return _append(base_ttl(key, item), """
+;++++++++++++++++++++++++++++++++++++++++++++
+tmp_cd_cmd = 'cd '
+strconcat tmp_cd_cmd SET_WorkPath
+
+wait SET_Prompt
+sendln tmp_cd_cmd
+wait SET_Prompt
+sendln 'netstat -apn | grep 61208  '
+wait SET_Prompt
+sendln 'glances -w'
+
+""", 'exec "explorer http://%s:%d"' % (item['Host'].split(':')[0], 61208) )
 
 if __name__ == '__main__':
     main()
