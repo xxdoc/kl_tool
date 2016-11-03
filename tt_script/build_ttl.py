@@ -138,8 +138,13 @@ wait SET_Prompt
 sendln 'netstat -apn | grep 61208  '
 wait SET_Prompt
 sendln 'glances -w'
-
-""", 'exec "explorer http://%s:%d"' % (item['Host'].split(':')[0], 61208) )
+wait '61208'
+""", 'exec "explorer http://%s:%d"' % (item['Host'].split(':')[0], 61208), """
+;++++++++++++++++++++++++++++++++++++++++++++
+settitle SET_Title
+restoresetup SET_Ini
+disconnect
+""" )
 
 if __name__ == '__main__':
     main()
