@@ -42,7 +42,7 @@ def get_url_list(url_base, page_nums):
         if not data:
             return
         dom = pq(data)
-        ul = dom('.newslist_line').find('a')
+        ul = dom('.chunlist').find('a')
         tmp = [item.attrib['href'] for item in ul if item.attrib.get('href', '')]
         url_list.extend( tmp )
         _LOG('add page url:%s, item:%d' % (url, len(tmp)))
@@ -64,10 +64,9 @@ def get_ip_list(url_list):
         if not data:
             return
         dom = pq(data)
-        page_list = [item.attrib['href'] for item in dom('.pagelist').find('a') if item.attrib.get('href', '')]
+        page_list = [item.attrib['href'] for item in dom('.pagebreak').find('a') if item.attrib.get('href', '')]
         if page_list:
-            page_list = page_list[1:-1]
-            page_list = [_fix_url(url, item) for item in page_list]
+            page_list = [_fix_url(url, item) for item in page_list if item.endswith('.html')]
             for item in page_list:
                 url_data.setdefault(item, '')
         _LOG('get page url:%s, data:%d' % (url, len(data)))
@@ -82,9 +81,13 @@ def get_ip_list(url_list):
         if not html:
             return []
         bs = BeautifulSoup(html, 'lxml')
-        div = bs.find('div', class_='cont_font')
-        ip_str = div.find('p').text.split('\n') if div else ''
-        tmp = [item.strip() for item in ip_str if item.strip()]
+        div = bs.find('div', class_='content')
+        p_list = div.findAll('p') if div else None
+        if not p_list:
+            ip_str = div.text.split('\n') if div else ''
+            tmp = [item.strip() for item in ip_str if item.strip()]
+        else:
+            tmp = [item.text.strip() for item in p_list if item.text.strip()] if p_list else []
         return tmp
 
     for url, data in url_data.items():
