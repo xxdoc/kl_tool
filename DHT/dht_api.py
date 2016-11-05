@@ -103,7 +103,7 @@ def doneTorrentTask(hashkey, info, torrent=''):
 ##            SAVE_CUR.update_one({'_id': hashkey}, {'$set':{'torrent': torrent}}, upsert=True)
 ##        except pymongo.errors.PyMongoError as ex:
 ##            msg = 'PyMongoError:%s, hashkey:%s, torrent:%s\n' % (ex, torrent, info)
-    #magnet:?xt=urn:btih:de7e43293abc22785b6a394b5ae1960543c71fb7
+    #magnet:?xt=urn:btih:ec6b187a284b097d83079a166cb5c7abce67c83f
     return save_result
 
 def is_in_doing_task(item, expire):
