@@ -9,7 +9,6 @@ import json
 from mrq.task import Task
 from mrq.dashboard import app as FlaskApp
 from flask import request
-from werkzeug.serving import run_simple
 from mrq.job import queue_job
 
 import tasks
@@ -22,7 +21,6 @@ app = FlaskApp.app
 ALLOW_TASK_DICT = {
     'tasks.Fetch': tasks.Fetch,
 }
-
 
 
 @app.route('/api/queuejob/<task>/')

@@ -7,7 +7,8 @@ import re
 
 class Fetch(Task):
 
-    @SchemaWrapper({'url': And(basestring, len, Regex('^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$'))}, ignore_extra_keys=True)
+    @SchemaWrapper({'url': And(basestring, len, \
+        Regex('^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$'))}, ignore_extra_keys=True)
     def run(self, params):
         url = params.get('url', '')
         return getUrl(url, proxy_info=None)
