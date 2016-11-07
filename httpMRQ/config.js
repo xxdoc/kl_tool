@@ -6,10 +6,6 @@
     subscribe_key: 'dms_hub',
     topic_key: 'dms_topic',
   },
-  api_config: {
-    job_api: 'http://127.0.0.1:5555/?token=asdfahdjgawj&',
-
-  },
   log4js_config: {
     "appenders": [{
       "type": "console",

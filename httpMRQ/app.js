@@ -16,23 +16,26 @@ var logger = log4js.getLogger('normal');
 
 function RedisHandler(redis_config) {
     console.log("redis config:", redis_config);
+    var self = this;
     this.config = redis_config;
     this.client = redis.createClient(redis_config.port, redis_config.host, {
         auth_pass: redis_config.password
     });
     this.client.on('ready', function(){
         console.log('redis ready');
+        self.client.subscribe(self.config.subscribe_key, function(err) {
+            console.log("redis subscribe:", self.config.subscribe_key, err);
+        });
     });
     this.client.on("error", function(err) {
         console.log("redis error:", err);
     });
 }
-RedisHandler.prototype.GetTopicList = function(skey, callback) {
+RedisHandler.prototype.GetTopicExtMap = function(callback) {
     var self = this;
-    this.client.hget(this.config.topic_key, skey,
-    function(err, res) {
-        console.log("redis get topic:", skey, res);
-        callback(res);
+    this.client.hgetall(this.config.topic_key, function(err, res) {
+        console.log("redis get topic_key:", err, res);
+        !err && callback(res);
     });
 }
 RedisHandler.prototype.DisConnect = function() {
@@ -41,21 +44,40 @@ RedisHandler.prototype.DisConnect = function() {
 }
 
 
-function DMS(pub_key, sub_key, cid){
+function DMS(job_api, ext_map, pub_key, sub_key, cid){
     var host = "mqtt.dms.aodianyun.com"
-    this.client = null;
-    this.topic_map ={};
+    var self = this;
     if(cid == "" || cid == null){
         cid = 'mqttjs'+ Math.floor( Math.random()*1000) + (new Date().getTime());
     }
-    
-    this.client = mqtt.createClient(1883, host, {username: pub_key,password: sub_key, clean:false, clientId:cid});
-    this.client.on("reconnect", this.emit.bind(this, "reconnect"));
-    this.client.on("offline", this.emit.bind(this, "offline"));
-    this.client.on("connect", this.emit.bind(this, "connect"));
-    this.client.on("error", this.emit.bind(this, "error"));
-    this.client.on("close", this.emit.bind(this, "close"));
-    this.client.on('message', this.emit.bind(this, "message"));
+    this.cid = cid;
+    this.pub_key = pub_key;
+    this.sub_key = sub_key;
+    this.job_api = job_api;
+    this.ext_map = ext_map;
+    this.client = null;
+    this.topic_map ={};
+
+    this.client = mqtt.createClient(1883, host, {username: this.pub_key,password: this.sub_key, clean:false, clientId:cid});
+    this.client.on("reconnect", function(err, info) {  // dms 重连之后 自动重新关注当前需要的话题列表
+        console.log("dms on reconnect:", err, info);
+        self.runOnTopic(self.job_api, self.ext_map);
+    });
+    this.client.on("offline", function(err, info) {
+        console.log("dms on offline:", err, info);
+    });
+    this.client.on("connect", function(err, info) {
+        console.log("dms on connect:", err, info);
+    });
+    this.client.on("error", function(err, info) {
+        console.log("dms on error:", err, info);
+    });
+    this.client.on("close", function(err, info) {
+        console.log("dms on close:", err, info);
+    });
+    this.client.on('message', function(topic, message, opts) {
+        console.log("dms on message:", topic, message, opts);
+    });
 }
 util.inherits(DMS, events.EventEmitter);
 DMS.prototype.disconnect = function(){
@@ -104,10 +126,19 @@ DMS.prototype.topic = function(topic, sub_callback, unsub_callback){
     this.subscribe(sub_map, sub_callback);
     this.unsubscribe(unsub_map, unsub_callback);
 }
-
+DMS.prototype.runOnTopic = function(job_api, ext_map){
+    var self = this;
+    this.job_api = job_api;
+    this.ext_map = ext_map;
+    this.topic(topic_list, function(err, info) {
+        console.log("dms subscribe back:", err, info);
+    }, function(err, info) {
+        console.log("dms unsubscribe back:", err, info);
+    });
+}
 
 function App(config) {
-    console.log("App init");
+    console.log("app init");
     this.childMap = {};
     this.processMap = {};
     this.config = config;
@@ -116,29 +147,37 @@ function App(config) {
     this.Start();
 }
 App.prototype.Start = function() {
-    console.log("App start");
-    self = this;
-    this.redis.subscribe(this.config.redis_config.subscribe_key);
-    this.redis.on('message', function(key, msg_str) {
+    console.log("app start");
+    var self = this;
+    console.log("app load redis topic_key");
+    this.redis.GetTopicExtMap(function(msg_list) {
+        for(var idx in msg_list){
+            var msg = msg_list[idx];
+            var skey = msg['pub_key']+':'+msg['sub_key'];
+            var dms = skey in self.processMap ? self.processMap[skey] : new DMS(msg['job_api'], msg['ext_map'], msg['pub_key'], msg['sub_key'], msg['client_id']);
+            dms.runOnTopic(msg['job_api'], msg['ext_map']);
+            self.processMap[skey] = dms;
+        }
+    });
+    console.log("app on redis message");
+    this.redis.client.on('message', function(key, msg_str) {
         var msg = JSON.parse(msg_str);
         var skey = msg['pub_key']+':'+msg['sub_key'];
         if( msg.cmd=='reload' ){
-            dms = skey in self.processMap ? self.processMap[skey] : new DMS(msg['pub_key'], msg['sub_key']);
-            self.redis.GetTopicList(skey , function(topic_list) {
-                dms.topic(topic_list);
-            })
+            var dms = skey in self.processMap ? self.processMap[skey] : new DMS(msg['job_api'], msg['ext_map'], msg['pub_key'], msg['sub_key'], msg['client_id']);
+            dms.runOnTopic(msg['job_api'], msg['ext_map']);
             self.processMap[skey] = dms;
         } else if( msg.cmd=='remove' ){
-            dms = skey in self.processMap ? self.processMap[skey] : null;
+            var dms = skey in self.processMap ? self.processMap[skey] : null;
             if( dms ){
                 dms.disconnect();
                 delete self.processMap[skey];
             }
         }
-    }
+    });
 }
 App.prototype.Stop = function() {
-    console.log("App stop");
+    console.log("app stop");
     this.stop = true;
     var exitMsg = {
         cmd: "exit"
