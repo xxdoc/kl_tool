@@ -1,10 +1,14 @@
 #-*- coding: utf-8 -*-
 import urllib2
 import os
+import inspect
 import random
-from schema import Schema, SchemaError
-from mrq.task import Task
+from schema import Schema, SchemaError, Regex, And, Use, Optional
+from flask import request
+from mrq.dashboard.utils import jsonify
 
+from mrq.task import Task
+from functools import update_wrapper
 ALL_ERROR = Exception
 
 HTTP_ERROR_MAX = 10
@@ -54,7 +58,9 @@ def getProxy():
         return random.choice(proxy_list)
     return None
 
-def SchemaWrapper(*args, **kwgs):
+HttpUrlSchema = And(basestring, len, Regex(r'^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$'))
+
+def TaskSchemaWrapper(*args, **kwgs):
     schema = Schema(*args, **kwgs)
 
     def _wrapper(func):
@@ -63,10 +69,10 @@ def SchemaWrapper(*args, **kwgs):
 
     return _wrapper
 
-def fixParams(all_dict, task, args):
+def fixTaskParams(all_dict, task, args):
     cls = all_dict.get(task, None)
     if not cls or not issubclass(cls, Task):
-        return None, {'error': 'task:%s is not allowed' % (task,) }
+        return None, ApiErrorBuild('task:%s is not allowed' % (task,), 531)
     schema = getattr(cls.run, 'params_schema', None)
     ex = None
     if not schema:
@@ -75,4 +81,36 @@ def fixParams(all_dict, task, args):
         try:
             return schema.validate(args), ex
         except SchemaError as ex:
-            return None, {'error': '%s:%s' % (ex.__class__.__name__, ex)}
+            return None, ApiErrorBuild('%s:%s' % (ex.__class__.__name__, ex), 511)
+
+def ApiSchemaWrapper(*args, **kwgs):
+    schema = Schema(*args, **kwgs)
+
+    def _wrapper(func):
+
+        def api(*func_args, **func_kwgs):
+            args = request.args.to_dict()
+            try:
+                params = schema.validate(args)
+                return jsonify(func(**params))
+            except SchemaError as ex:
+                return jsonify(ApiErrorBuild('%s:%s' % (ex.__class__.__name__, ex), 511))
+
+        update_wrapper(api, func)
+        api.params_schema = schema
+        return api
+
+    return _wrapper
+
+def ApiErrorBuild(msg='something is error', code=None, errors=None):
+    if msg and isinstance(msg, (list, tuple)) and code is None and errors is None:
+        return ApiErrorBuild(*msg)
+    elif isinstance(msg, Exception):
+        code = getattr(msg, 'code', 551) if code is None else code #默认异常错误码 551
+        msg = '%s:%s' % (msg.__class__.__name__, msg.message)
+
+    code = 500 if code is None else abs(int(code))
+    err = {'code':code, 'message': msg}
+    if errors:
+        err['errors'] = [ApiErrorBuild(item) for item in errors]
+    return {'error': err}

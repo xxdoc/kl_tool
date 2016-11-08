@@ -19,11 +19,50 @@
 		<div class="span12">
 			<form>
 				<fieldset>
-					 <legend>表单项</legend> <label>表签名</label><input type="text" /> <span class="help-block">这里填写帮助信息.</span> <label class="checkbox"><input type="checkbox" /> 勾选同意</label> <button type="submit" class="btn">提交</button>
+                    <legend>表单项</legend>
+                    <label>PubKey</label>
+                    <input class="input-large" name="pub_key" type="text" value="{{ INPUT.get('pub_key', '') }}" />
+                    <span class="help-block">DMS pub_key.</span>
+                    <label>SubKey</label>
+                    <input class="input-large" name="sub_key" type="text" value="{{ INPUT.get('sub_key', '') }}" />
+                    <span class="help-block">DMS sub_key.</span>
+                    <label>Topic</label>
+                    <input class="input-large" name="topic" type="text" />
+                    <span class="help-block">DMS topic 需要关注的话题.</span>
+                    <label>SubKey</label>
+                    <input class="input-xxlarge" name="ext" type="text" />
+                    <span class="help-block">结束到消息后 把消息添加到任务的额外参数.</span>
+					<button type="button" class="btn" id="btn-subscribe-topic">提交</button>
 				</fieldset>
 			</form>
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+$(function() {
+    $('#btn-subscribe-topic').click(function() {
+        var pub_key = $('input[name=pub_key]').val(),
+            sub_key = $('input[name=sub_key]').val(),
+            topic = $('input[name=topic]').val(),
+            ext = $('input[name=ext]').val();
+        var load = function(){
+            $.ajax({
+                type:'POST',
+                url: '/dms/api/subscribe/',
+                data: {pub_key: pub_key, sub_key: sub_key, topic: topic, ext: ext},
+                dataType: 'JSON',
+                success:function(data) {
+                    if( data.error ){
+                        dlg(data.error);
+                    } else {
+                        dlg('添加成功');
+                    }
+                }
+            });
+        }
+        dlgLoading(load);
+    });
+});
+</script>
 </body>
 </html>

@@ -1,14 +1,20 @@
 #-*- coding: utf-8 -*-
 from mrq.task import Task
-from schema import Regex, And, Use, Optional
-from tool import getUrl, getProxy, SchemaWrapper
-import re
+from mrq.context import log
 
+from tool import getUrl, getProxy, TaskSchemaWrapper, HttpUrlSchema, Regex, And, Use, Optional
 
 class Fetch(Task):
 
-    @SchemaWrapper({'url': And(basestring, len, \
-        Regex('^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$'))}, ignore_extra_keys=True)
+    @TaskSchemaWrapper({'topic': And(str, len), 'message': And(str, len), 'ext': HttpUrlSchema}, ignore_extra_keys=True)
     def run(self, params):
-        url = params.get('url', '')
-        return getUrl(url, proxy_info=None)
+        url = params.get('url', '').strip()
+        topic = params.get('topic', '').strip()
+        message = params.get('message', '').strip()
+        ext_url = 'topic=' + topic + '&message' + message
+        if '?' not in url:
+            url = url + '?' + ext_url
+        else:
+            url = url + ext_url if url.endswith('&') else url + '&' + ext_url
+        log.info('HTTP GET %s' % (url, ))
+        return getUrl(url, use_gzip=False, proxy_info=None)

@@ -11,6 +11,7 @@
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
     <script src="/assets/js/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="/assets/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/assets/js/vue.2.0.min.js" type="text/javascript"></script>
     <script src="/assets/js/dlg.js" type="text/javascript"></script>
 </head>
 <body>
@@ -29,8 +30,8 @@
 				</p>
 			</div>
 			<form class="form-search">
-				PubKey:<input class="input-medium search-query" name="pub_key" type="text" />
-				SubKey:<input class="input-medium search-query" name="sub_key" type="text" />
+				PubKey:<input class="input-medium search-query" name="pub_key" type="text" value="{{ INPUT.get('pub_key', '') }}" />
+				SubKey:<input class="input-medium search-query" name="sub_key" type="text" value="{{ INPUT.get('sub_key', '') }}" />
 				<button type="submit" class="btn">查找</button>
 			</form>
 		</div>

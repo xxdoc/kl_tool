@@ -44,7 +44,7 @@ RedisHandler.prototype.DisConnect = function() {
 }
 
 
-function DMS(job_api, ext_map, pub_key, sub_key, cid){
+function DMS(job_api, ext_dict, pub_key, sub_key, cid){
     var host = "mqtt.dms.aodianyun.com"
     var self = this;
     if(cid == "" || cid == null){
@@ -54,14 +54,14 @@ function DMS(job_api, ext_map, pub_key, sub_key, cid){
     this.pub_key = pub_key;
     this.sub_key = sub_key;
     this.job_api = job_api;
-    this.ext_map = ext_map;
+    this.ext_dict = ext_dict;
     this.client = null;
     this.topic_map ={};
 
     this.client = mqtt.createClient(1883, host, {username: this.pub_key,password: this.sub_key, clean:false, clientId:cid});
     this.client.on("reconnect", function(err, info) {  // dms 重连之后 自动重新关注当前需要的话题列表
         console.log("dms on reconnect:", err, info);
-        self.runOnTopic(self.job_api, self.ext_map);
+        self.runOnTopic(self.job_api, self.ext_dict);
     });
     this.client.on("offline", function(err, info) {
         console.log("dms on offline:", err, info);
@@ -126,10 +126,10 @@ DMS.prototype.topic = function(topic, sub_callback, unsub_callback){
     this.subscribe(sub_map, sub_callback);
     this.unsubscribe(unsub_map, unsub_callback);
 }
-DMS.prototype.runOnTopic = function(job_api, ext_map){
+DMS.prototype.runOnTopic = function(job_api, ext_dict){
     var self = this;
     this.job_api = job_api;
-    this.ext_map = ext_map;
+    this.ext_dict = ext_dict;
     this.topic(topic_list, function(err, info) {
         console.log("dms subscribe back:", err, info);
     }, function(err, info) {
@@ -154,8 +154,8 @@ App.prototype.Start = function() {
         for(var idx in msg_list){
             var msg = msg_list[idx];
             var skey = msg['pub_key']+':'+msg['sub_key'];
-            var dms = skey in self.processMap ? self.processMap[skey] : new DMS(msg['job_api'], msg['ext_map'], msg['pub_key'], msg['sub_key'], msg['client_id']);
-            dms.runOnTopic(msg['job_api'], msg['ext_map']);
+            var dms = skey in self.processMap ? self.processMap[skey] : new DMS(msg['job_api'], msg['ext_dict'], msg['pub_key'], msg['sub_key'], msg['client_id']);
+            dms.runOnTopic(msg['job_api'], msg['ext_dict']);
             self.processMap[skey] = dms;
         }
     });
@@ -164,8 +164,8 @@ App.prototype.Start = function() {
         var msg = JSON.parse(msg_str);
         var skey = msg['pub_key']+':'+msg['sub_key'];
         if( msg.cmd=='reload' ){
-            var dms = skey in self.processMap ? self.processMap[skey] : new DMS(msg['job_api'], msg['ext_map'], msg['pub_key'], msg['sub_key'], msg['client_id']);
-            dms.runOnTopic(msg['job_api'], msg['ext_map']);
+            var dms = skey in self.processMap ? self.processMap[skey] : new DMS(msg['job_api'], msg['ext_dict'], msg['pub_key'], msg['sub_key'], msg['client_id']);
+            dms.runOnTopic(msg['job_api'], msg['ext_dict']);
             self.processMap[skey] = dms;
         } else if( msg.cmd=='remove' ){
             var dms = skey in self.processMap ? self.processMap[skey] : null;
