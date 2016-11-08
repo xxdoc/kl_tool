@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 """ Redis and MongoDB settings
 """
 #MongoDB settings

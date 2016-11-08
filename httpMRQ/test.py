@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 import json
 import tasks
 from tool import fixParams
