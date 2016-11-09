@@ -38,7 +38,7 @@ function dlgLoading(fun, str, title, size){
         <h4 class="modal-title" id="myModalLabel">'+title+'</h4>\
       </div>\
       <div class="modal-body text-center">\
-        <img src="/aae/admin/assets/img/loading.gif" width="60"><br>\
+        <img src="/assets/img/loading.gif" width="60"><br>\
         <h4>'+str+'</h4>\
       </div>\
       <div class="modal-footer">\
