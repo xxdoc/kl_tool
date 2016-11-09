@@ -24,7 +24,10 @@ function RedisHandler(redis_config) {
     this.client.on('ready', function(){
         console.log('redis ready');
         self.client.subscribe(self.config.subscribe_key, function(err) {
-            console.log("redis subscribe:", self.config.subscribe_key, err);
+            if( err ){
+                console.log("redis subscribe error:", err);
+            }
+            console.log("redis subscribe:", self.config.subscribe_key);
         });
     });
     this.client.on("error", function(err) {
@@ -34,7 +37,10 @@ function RedisHandler(redis_config) {
 RedisHandler.prototype.GetTopicExtMap = function(callback) {
     var self = this;
     this.client.hgetall(this.config.topic_key, function(err, res) {
-        console.log("redis get topic_key:", err, res);
+        if( err ){
+            console.log("redis get topic_key error:", err);
+        }
+        console.log("redis get topic_key:", res);
         !err && callback(res);
     });
 }
@@ -58,7 +64,7 @@ function DMS(job_api, ext_dict, pub_key, sub_key, cid){
     this.client = null;
     this.topic_map ={};
 
-    this.client = mqtt.createClient(1883, host, {username: this.pub_key,password: this.sub_key, clean:false, clientId:cid});
+    this.client = mqtt.connect('mqtt://mqtt.dms.aodianyun.com:1883', {username: this.pub_key,password: this.sub_key, clean:false, clientId:cid});
     this.client.on("reconnect", function(err, info) {  // dms 重连之后 自动重新关注当前需要的话题列表
         console.log("dms on reconnect:", err, info);
         self.runOnTopic(self.job_api, self.ext_dict);
@@ -66,8 +72,8 @@ function DMS(job_api, ext_dict, pub_key, sub_key, cid){
     this.client.on("offline", function(err, info) {
         console.log("dms on offline:", err, info);
     });
-    this.client.on("connect", function(err, info) {
-        console.log("dms on connect:", err, info);
+    this.client.on("connect", function(packet) {
+        console.log("dms on connect:", packet);
     });
     this.client.on("error", function(err, info) {
         console.log("dms on error:", err, info);
@@ -77,63 +83,119 @@ function DMS(job_api, ext_dict, pub_key, sub_key, cid){
     });
     this.client.on('message', function(topic, message, opts) {
         console.log("dms on message:", topic, message, opts);
+        var url_list = self.listJobUrl(topic, message);
+        for(var idx in url_list){
+            var url = url_list[idx];
+            self.httpRequest(url, true);
+        }
     });
 }
+DMS.prototype.httpRequest = function(url, is_log) {
+    http.get(url, function(res) { 
+        is_log && console.log("dms job request:", url, res.statusCode);
+        var res_str = "";
+        res.on("data", function(data) {
+            res_str += data;
+        });
+        res.on("end", function() {
+            is_log && console.log("dms job end:", url, res_str);
+        });
+    }).on('error', function(e) { 
+        is_log && console.log("dms job error: ", url, e.message); 
+    });
+}
+
 util.inherits(DMS, events.EventEmitter);
 DMS.prototype.disconnect = function(){
     this.client.end();
 }
+
 DMS.prototype.publish=function(topic, msg, callback){
     var opt = {qos: 1, retain: false}
     this.client.publish(topic, msg, opt, callback);
 }
+
+DMS.prototype.listJobUrl = function(topic, message){
+    if ( !(topic in self.ext_dict) ){
+        return [];
+    }
+    var url_list = [];
+    var ext_set = this.ext_dict[topic];
+    for(var idx in ext_set){
+        var ext_tmp = ext_set[idx];
+        var task = ext_tmp.slice(0, ext_tmp.indexOf('@'));
+        var ext = ext_tmp.slice(ext_tmp.indexOf('@')+1);
+        var job_api = this.job_api.replace('{{task}}', task);
+        var query = '?topic=' + topic + '&message=' + message + '&ext=' + ext
+        url_list.push( job_api + query )
+    }
+    return url_list;
+}
 DMS.prototype.subscribe = function(topic, callback){
-    var map={}
+    var tmp_list = [];
     topic = (topic instanceof Array) ? topic : [topic, ];
     for(var k in topic){
         this.topic_map[topic[k]] = 1;
-        map[topic[k]] = 1;
+        tmp_list.push( topic[k] );
     }
-    this.client.subscribe(map, callback);
+    console.log("dms subscribe:", tmp_list);
+    tmp_list.length && this.client.subscribe(tmp_list, callback);
 }
 DMS.prototype.unsubscribe = function(topic, callback){
-    var map={}
+    var tmp_list = [];
     topic = (topic instanceof Array) ? topic : [topic, ];
     for(var k in topic){
-        map[topic[k]] = 1;
+        tmp_list.push( topic[k] );
         delete this.topic_map[topic[k]];
     }
-    this.client.unsubscribe(map, callback);
+    console.log("dms unsubscribe:", tmp_list);
+    tmp_list.length && this.client.unsubscribe(tmp_list, callback);
 }
 DMS.prototype.topic = function(topic, sub_callback, unsub_callback){
     topic = (topic instanceof Array) ? topic : [topic, ];
+    console.log("dms topic topic_map input:", topic, this.topic_map);
+
+    var tmp_map = {};
     for(var item in this.topic_map){
-        this.topic_map[item] = 0;
+        tmp_map[item] = 0;
     }
     for(var k in topic){
-        this.topic_map[topic[k]] = 1;
+        tmp_map[topic[k]] = 1;
     }
     var sub_map = [],
         unsub_map = [];
-    for(var item in this.topic_map){
-        if( this.topic_map[item] == 1 ){
+    for(var item in tmp_map){
+        if( tmp_map[item]==1 && this.topic_map[item]!=1 ){
             sub_map.push(item);
-        } else {
+            this.topic_map[item] = 1;
+        } else if( tmp_map[item]==0) {
             unsub_map.push(item);
             delete this.topic_map[item];
         }
     }
+    console.log("dms topic topic_map out:", sub_map, unsub_map, this.topic_map);
     this.subscribe(sub_map, sub_callback);
     this.unsubscribe(unsub_map, unsub_callback);
 }
 DMS.prototype.runOnTopic = function(job_api, ext_dict){
+    console.log("dms runOnTopic:", job_api, ext_dict);
     var self = this;
     this.job_api = job_api;
     this.ext_dict = ext_dict;
+    var topic_list = [];
+    for(var topic in this.ext_dict){
+        topic_list.push(topic);
+    }
     this.topic(topic_list, function(err, info) {
-        console.log("dms subscribe back:", err, info);
+        if( err ){
+            console.log("dms subscribe back error:", err);
+        }
+        console.log("dms subscribe back:", info);
     }, function(err, info) {
-        console.log("dms unsubscribe back:", err, info);
+        if( err ){
+            console.log("dms unsubscribe back error:", err);
+        }
+        console.log("dms unsubscribe back:", info);
     });
 }
 
@@ -152,7 +214,7 @@ App.prototype.Start = function() {
     console.log("app load redis topic_key");
     this.redis.GetTopicExtMap(function(msg_list) {
         for(var idx in msg_list){
-            var msg = msg_list[idx];
+            var msg = JSON.parse( msg_list[idx] );
             var skey = msg['pub_key']+':'+msg['sub_key'];
             var dms = skey in self.processMap ? self.processMap[skey] : new DMS(msg['job_api'], msg['ext_dict'], msg['pub_key'], msg['sub_key'], msg['client_id']);
             dms.runOnTopic(msg['job_api'], msg['ext_dict']);
@@ -161,6 +223,10 @@ App.prototype.Start = function() {
     });
     console.log("app on redis message");
     this.redis.client.on('message', function(key, msg_str) {
+        console.log("redis on message:", key, msg_str);
+        if( key!=self.redis.config.subscribe_key ){
+            return ;
+        }
         var msg = JSON.parse(msg_str);
         var skey = msg['pub_key']+':'+msg['sub_key'];
         if( msg.cmd=='reload' ){

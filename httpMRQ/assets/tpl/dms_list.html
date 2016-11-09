@@ -96,7 +96,6 @@ function dms_api_reload(pub_key, sub_key) {
         api('GET', '/dms/api/reload/', {pub_key: pub_key, sub_key: sub_key}, function(data) {
             dlgLoadingHide();
             dlg('刷新成功');
-            setTimeout(page_reload, 1000);
         }, function(error) {
             dlgLoadingHide();
             dlg(error.message);

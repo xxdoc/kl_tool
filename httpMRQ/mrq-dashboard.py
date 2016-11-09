@@ -24,7 +24,7 @@ app = FlaskApp.app
 app.jinja_env.filters['dateformat'] = jinja_filters.dateformat
 app.jinja_env.filters['jsonstringify'] = jinja_filters.jsonstringify
 
-MRQ_JOB_API = 'http://127.0.0.1:5555/api/queuejob/%s/'
+MRQ_JOB_API = 'http://127.0.0.1:5555/api/queuejob/{{task}}/'
 
 MRQ_TASK_DICT = {
     'tasks.Fetch': tasks.Fetch,
