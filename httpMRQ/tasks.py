@@ -6,9 +6,9 @@ from tool import getUrl, getProxy, TaskSchemaWrapper, HttpUrlSchema, Regex, And,
 
 class Fetch(Task):
 
-    @TaskSchemaWrapper({'topic': And(str, len), 'message': And(str, len), 'ext': HttpUrlSchema}, ignore_extra_keys=True)
+    @TaskSchemaWrapper({'topic': And(basestring, len), 'message': And(basestring, len), 'ext': HttpUrlSchema}, ignore_extra_keys=True)
     def run(self, params):
-        url = params.get('url', '').strip()
+        url = params.get('ext', '').strip()
         topic = params.get('topic', '').strip()
         message = params.get('message', '').strip()
         ext_url = 'topic=' + topic + '&message' + message

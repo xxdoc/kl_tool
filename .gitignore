@@ -109,3 +109,4 @@ $RECYCLE.BIN/
 *.translate
 httpMRQ/mrq-config.py
 node_modules
+httpMRQ/mrq-config.py

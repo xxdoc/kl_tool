@@ -82,7 +82,7 @@ function DMS(job_api, ext_dict, pub_key, sub_key, cid){
         console.log("dms on close:", err, info);
     });
     this.client.on('message', function(topic, message, opts) {
-        console.log("dms on message:", topic, message, opts);
+        console.log("dms on message:", topic);
         var url_list = self.listJobUrl(topic, message);
         for(var idx in url_list){
             var url = url_list[idx];
@@ -92,13 +92,12 @@ function DMS(job_api, ext_dict, pub_key, sub_key, cid){
 }
 DMS.prototype.httpRequest = function(url, is_log) {
     http.get(url, function(res) { 
-        is_log && console.log("dms job request:", url, res.statusCode);
         var res_str = "";
         res.on("data", function(data) {
             res_str += data;
         });
         res.on("end", function() {
-            is_log && console.log("dms job end:", url, res_str);
+            is_log && console.log("dms job request:", url, res.statusCode, res_str);
         });
     }).on('error', function(e) { 
         is_log && console.log("dms job error: ", url, e.message); 
@@ -116,18 +115,26 @@ DMS.prototype.publish=function(topic, msg, callback){
 }
 
 DMS.prototype.listJobUrl = function(topic, message){
-    if ( !(topic in self.ext_dict) ){
+    if ( !(topic in this.ext_dict) ){
         return [];
     }
     var url_list = [];
     var ext_set = this.ext_dict[topic];
     for(var idx in ext_set){
         var ext_tmp = ext_set[idx];
-        var task = ext_tmp.slice(0, ext_tmp.indexOf('@'));
-        var ext = ext_tmp.slice(ext_tmp.indexOf('@')+1);
+        var queue = '';
+        var tmp_idx = ext_tmp.indexOf('@');
+        var task = ext_tmp.slice(0, tmp_idx);
+        var ext = ext_tmp.slice(tmp_idx + 1);
+        tmp_idx = task.indexOf('#');
+        if( tmp_idx>0 ){
+            queue = task.slice(tmp_idx + 1);
+            task = task.slice(0, tmp_idx);
+        }
+        var query = '?queue=' + queue + '&topic=' + topic + '&message=' + message + '&ext=' + ext;
         var job_api = this.job_api.replace('{{task}}', task);
-        var query = '?topic=' + topic + '&message=' + message + '&ext=' + ext
-        url_list.push( job_api + query )
+        
+        url_list.push( job_api + encodeURI(query) );
     }
     return url_list;
 }

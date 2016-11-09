@@ -48,11 +48,10 @@ dms_topic_ext_filter = lambda ext_dict: {topic: list(set(ext_list)) for topic, e
 @requires_auth
 def api_queue_job(task):  #存在参数相互依赖的关系  无法使用 ApiSchemaWrapper
     queue = request.args.get('queue', '').strip()
-    params = request.args.to_dict()
-    params, err = fixTaskParams(MRQ_TASK_DICT, task, params)
-
+    args = request.args.to_dict()
+    params, err = fixTaskParams(MRQ_TASK_DICT, task, args)
     rst = ApiErrorBuild()
-    rst = err if not err else {"job_id": queue_job(task, params, queue=queue if queue else None)}
+    rst = {"job_id": queue_job(task, params, queue=queue if queue else None)} if err is None else err
 
     return jsonify(rst)
 
@@ -113,7 +112,7 @@ def dms_api_info(pub_key, sub_key):
     'pub_key': And(basestring, len, lambda s: s.startswith('pub_')),
     'sub_key': And(basestring, len, lambda s: s.startswith('sub_')),
     'topic': And(basestring, len),
-    'ext': And(basestring, len, lambda s: fixTaskParams(MRQ_TASK_DICT, s.split('@', 1)[0], {'topic':'test', 'message':'{}', 'ext':s.split('@', 1)[1]})[1] is None),
+    'ext': And(basestring, len, lambda s: fixTaskParams(MRQ_TASK_DICT, s.split('@', 1)[0].split('#', 1)[0], {'topic':'test', 'message':'{}', 'ext':s.split('@', 1)[1]})[1] is None),
 }, ignore_extra_keys=True)
 def dms_api_subscribe(pub_key, sub_key, topic, ext):
     dmskey = '%s:%s' % (pub_key, sub_key)
