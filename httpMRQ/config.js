@@ -1,6 +1,6 @@
 ﻿var base_config = {
   redis_config: {
-    host: "127.0.0.1",
+    host: "192.168.1.25",
     port: 6379,
     auth: '',
     subscribe_key: 'dms_hub',

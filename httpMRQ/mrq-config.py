@@ -2,13 +2,13 @@
 """ Redis and MongoDB settings
 """
 #MongoDB settings
-MONGODB_JOBS = "mongodb://127.0.0.1:27017/mrq" # MongoDB URI for the jobs, scheduled_jobs & workers database.Defaults to mongodb://127.0.0.1:27017/mrq
-MONGODB_LOGS = "mongodb://127.0.0.1:27017/mrq" #MongoDB URI for the logs database."0" will disable remote logs, "1" will use main MongoDB.Defaults to 1
+MONGODB_JOBS = "mongodb://192.168.1.25:27017/mrq" # MongoDB URI for the jobs, scheduled_jobs & workers database.
+MONGODB_LOGS = "mongodb://192.168.1.25:27017/mrq" #MongoDB URI for the logs database."0" will disable remote logs, "1" will use main MongoDB.Defaults to 1
 MONGODB_LOGS_SIZE = None #If provided, sets the log collection to capped to that amount of bytes.
 NO_MONGODB_ENSURE_INDEXES = None #If provided, skip the creation of MongoDB indexes at worker startup.
 
 #Redis settings
-REDIS = "redis://127.0.0.1:6379" #Redis URI.Defaults to redis://127.0.0.1:6379
+REDIS = "redis://192.168.1.25:6379" #Redis URI.
 REDIS_PREFIX = "mrq" #Redis key prefix.Default to "mrq".
 REDIS_MAX_CONNECTIONS = 1000 #Redis max connection pool size.Defaults to 1000.
 REDIS_TIMEOUT = 30 #Redis connection pool timeout to wait for an available connection.Defaults to 30.
@@ -50,7 +50,7 @@ SCHEDULER_INTERVAL = 60 #Seconds between scheduler checks.Defaults to 60 seconds
 REPORT_INTERVAL = 10.5 #Seconds between worker reports to MongoDB.Defaults to 10 seconds, floats are acceptable too.
 REPORT_FILE = "" #Filepath of a json dump of the worker status. Disabled if none.
 ADMIN_PORT = 0 #Start an admin server on this port, if provided. Incompatible with --processes.Defaults to 0
-ADMIN_IP = "127.0.0.1" #IP for the admin server to listen on. Use "0.0.0.0" to allow access from outside.Defaults to 127.0.0.1.
+ADMIN_IP = "127.0.0.1" #IP for the admin server to listen on. Use "0.0.0.0" to allow access from outside.
 LOCAL_IP = "" #Overwrite the local IP, to be displayed in the dashboard.
 MAX_LATENCY = 3  #Max seconds while worker may sleep waiting for a new job.Can be < 1 and a float value.
 
