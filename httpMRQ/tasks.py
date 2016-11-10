@@ -2,6 +2,7 @@
 from mrq.task import Task
 from mrq.context import log
 import requests
+from urllib import urlencode
 from tool import TaskSchemaWrapper, HttpUrlSchema, Regex, And, Use, Optional
 
 class Fetch(Task):
@@ -11,7 +12,7 @@ class Fetch(Task):
         url = params.get('ext', '').strip()
         topic = params.get('topic', '').strip()
         message = params.get('message', '').strip()
-        ext_url = 'topic=' + topic + '&message' + message
+        ext_url = urlencode({'topic': topic, 'message': message})
         if '?' not in url:
             url = url + '?' + ext_url
         else:

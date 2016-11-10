@@ -66,11 +66,17 @@ function DMS(job_api, ext_dict, pub_key, sub_key, cid){
 
     this.client = mqtt.connect('mqtt://mqtt.dms.aodianyun.com:1883', {username: this.pub_key,password: this.sub_key, clean:false, clientId:cid});
     this.client.on("reconnect", function(err, info) {  // dms 重连之后 自动重新关注当前需要的话题列表
-        console.log("dms on reconnect:", err, info);
+        if( err ){
+            console.log("dms on reconnect error:", err);
+        }
+        console.log("dms on reconnect:", info);
         self.runOnTopic(self.job_api, self.ext_dict);
     });
     this.client.on("offline", function(err, info) {
-        console.log("dms on offline:", err, info);
+        if( err ){
+            console.log("dms on offline error:", err);
+        }
+        console.log("dms on offline:", info);
     });
     this.client.on("connect", function(packet) {
         console.log("dms on connect:", packet);
@@ -79,30 +85,36 @@ function DMS(job_api, ext_dict, pub_key, sub_key, cid){
         console.log("dms on error:", err, info);
     });
     this.client.on("close", function(err, info) {
-        console.log("dms on close:", err, info);
+        if( err ){
+            console.log("dms on close error:", err);
+        }
+        console.log("dms on close:", info);
     });
+
+    var httpRequest = function(url, is_log) {
+        http.get(url, function(res) { 
+            var res_str = "";
+            res.on("data", function(data) {
+                res_str += data;
+            });
+            res.on("end", function() {
+                is_log && console.log("dms job request:", url, res.statusCode, res_str);
+            });
+        }).on('error', function(e) { 
+            is_log && console.log("dms job error: ", url, e.message); 
+        });
+    }
+
     this.client.on('message', function(topic, message, opts) {
         console.log("dms on message:", topic);
         var url_list = self.listJobUrl(topic, message);
         for(var idx in url_list){
             var url = url_list[idx];
-            self.httpRequest(url, true);
+            httpRequest(url, true);
         }
     });
 }
-DMS.prototype.httpRequest = function(url, is_log) {
-    http.get(url, function(res) { 
-        var res_str = "";
-        res.on("data", function(data) {
-            res_str += data;
-        });
-        res.on("end", function() {
-            is_log && console.log("dms job request:", url, res.statusCode, res_str);
-        });
-    }).on('error', function(e) { 
-        is_log && console.log("dms job error: ", url, e.message); 
-    });
-}
+
 
 util.inherits(DMS, events.EventEmitter);
 DMS.prototype.disconnect = function(){
