@@ -1,14 +1,29 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
-import time
-from tool import _LOG
+import time, datetime
+
+def _LOG(msg_in, time_now=True, new_line=True):
+    if time_now:
+        time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+        msg_in = u'%s => %s' % (time_str, msg_in)
+    if getattr(_LOG, 'log_file', None):
+        _LOG.log_file.write(msg_in+'\n')
+        _LOG.log_file.flush()
+
+    if isinstance(msg_in, unicode):
+        msg_in = msg_in.encode('gbk', 'ignore')
+
+    if new_line:
+        print msg_in
+    else:
+        print msg_in,
 
 def main():
-    host = '25.kkyoo.com'
-    room_id = 100025
-    nums = 28
+    host = 'finance.aodianyun.com'
+    room_id = 1000
+    nums = 30
     wait_m = 10
-    url = 'http://%s/live/%d' % (host, room_id)
+    url = 'http://%s/slive/%d' % (host, room_id)
     driver_list = []
     for i in range(nums):
         tmp = webdriver.PhantomJS()
