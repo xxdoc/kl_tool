@@ -8,88 +8,31 @@ class Solution(object):
         :type wordlist: Set[str]
         :rtype: List[List[int]]
         """
-        range_ = range(len(beginWord))
-        if beginWord == endWord:
-            return [[beginWord]]
-        if _distance(beginWord, endWord, range_) == 1:
-            return [[beginWord, endWord]]
-
-        distance_list = self.initDistanceist(beginWord, endWord, wordlist)
-        begin_idx, end_idx = 0, len(distance_list) - 1
-        solved, distance_list, begin_idx, end_idx = self.checkDistanceist(distance_list, begin_idx, end_idx, range_)
-        while not solved and begin_idx < end_idx:
-            solved, distance_list, begin_idx, end_idx = self.checkDistanceist(distance_list, begin_idx, end_idx, range_)
-        return solved.values()
-
-
-    def solutionDistanceist(self, solved, distance_list, begin_idx, end_idx):
-        _tree = lambda this_tag, idx, step: {step_tag: _tree(step_tag, idx + step, step) for step_tag in distance_list[idx][this_tag][1]}
-
-        def _wtree(tree):
-            key_list = []
-            for key, val in tree.items():
-                key_list.extend([[key] + ext for ext in _wtree(val)] if val else [[key]])
-            return key_list
-
-        ret = {}
-        for tag in solved:
-            for begin_from in _wtree(_tree(tag, begin_idx, -1)):
-                for end_from in _wtree(_tree(tag, end_idx, +1)):
-                    res = begin_from[::-1] + [tag] + end_from
-                    ret.setdefault(','.join(res), res)
-        return ret
-
-    def checkDistanceist(self, distance_list, begin_idx, end_idx, range_):
-        result = {}
-
-        begin_tag_all = set(distance_list[begin_idx].keys())
-        end_tag_all = set(distance_list[end_idx].keys())
-        begin_reachable_all, distance_list = self.reachableDistanceist(distance_list, begin_idx, begin_idx + 1, range_)
-
-        begin_tmp = end_tag_all & begin_reachable_all
-        if begin_tmp: result.update(self.solutionDistanceist(begin_tmp, distance_list, begin_idx + 1, end_idx))
-
-        end_reachable_all, distance_list = self.reachableDistanceist(distance_list, end_idx, end_idx - 1, range_)
-        end_tmp = begin_tag_all & end_reachable_all
-        if end_tmp: result.update(self.solutionDistanceist(end_tmp, distance_list, begin_idx, end_idx - 1))
-
-        join_tmp = begin_reachable_all & end_reachable_all
-        if not result and join_tmp: result.update(self.solutionDistanceist(join_tmp, distance_list, begin_idx + 1, end_idx - 1))
-
-        return result, distance_list, begin_idx + 1, end_idx - 1
-
-    def reachableDistanceist(self, distance_list, this_idx, next_idx, range_):
         ALL_CHAR = "abcdefghijklmnopqrstuvwxyz"
-        this_reachable_all = set()
-        this_dict = distance_list[this_idx]
-        next_dict = distance_list[next_idx]
-        _reachable = lambda prev: (prev[:i] + j + prev[i + 1:] for i in range_ for j in ALL_CHAR if prev[i] != j)
+        solved, solved_len, reachable, range_ = {beginWord: [[beginWord]], endWord: []}, {beginWord: 1}, [beginWord, ], range(len(beginWord))
+        append_and_copy = lambda item_list, add: [item + [add] for item in item_list]
+        _newword = lambda prev: (prev[:i] + j + prev[i + 1:] for i in range_ for j in ALL_CHAR if prev[i] != j)
 
-        for this_tag, item in this_dict.items():
-            allow_ = set(item[0])
-            for tag in _reachable(this_tag):
-                if tag not in allow_: continue
-                this_reachable_all.add(tag)
-                allow_.remove(tag)
-                if tag in next_dict:
-                    next_dict[tag][1].append(this_tag)
-                else:
-                    next_dict[tag] = (allow_, [this_tag])
-        return this_reachable_all, distance_list
-
-    def initDistanceist(self, beginWord, endWord, wordlist):
-        return [
-            {beginWord: (set(wordlist), [])}] + \
-            [{} for _ in wordlist] + \
-            [{endWord: (set(wordlist), [])}
-        ]
-
-def _distance(str1, str2, range_):
-    distance = 0
-    for idx in range_:
-        if str2[idx] != str1[idx]:
-            distance += 1
-    return distance
+        while reachable:
+            prev = reachable.pop(0)
+            for newword in _newword(prev):
+                if newword == endWord:
+                    solved[endWord] = append_and_copy(solved[prev], endWord)
+                    max_len = len(solved[endWord][0])
+                    while reachable:
+                        prev_ = reachable.pop(0)
+                        if solved_len[prev_] < max_len:
+                            for newword_ in _newword(prev_):
+                                newword_ == endWord  and solved[endWord].extend(append_and_copy(solved[prev_], endWord))
+                    break
+                if newword in wordlist:
+                    reachable.append(newword)
+                    solved[newword] = append_and_copy(solved[prev], newword)
+                    solved_len[newword] = len(solved[newword][0])
+                    wordlist.remove(newword)
+                elif newword in solved and solved_len[newword] == solved_len[prev] + 1:
+                    solved[newword].extend(append_and_copy(solved[prev], newword))
+        return solved[endWord]
 
 ############################
 ########### TEST ###########

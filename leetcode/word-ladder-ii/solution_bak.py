@@ -59,20 +59,16 @@ class Solution(object):
         return result, distance_list, begin_idx + 1, end_idx - 1
 
     def reachableDistanceist(self, distance_list, this_idx, next_idx, range_):
-        ALL_CHAR = "abcdefghijklmnopqrstuvwxyz"
         this_reachable_all = set()
         this_dict = distance_list[this_idx]
         next_dict = distance_list[next_idx]
-        _reachable = lambda prev: (prev[:i] + j + prev[i + 1:] for i in range_ for j in ALL_CHAR if prev[i] != j)
-
         for this_tag, item in this_dict.items():
-            allow_ = set(item[0])
-            for tag in _reachable(this_tag):
-                if tag not in allow_: continue
+            for tag in _reachable(this_tag, item[0], range_):
                 this_reachable_all.add(tag)
+                allow_ = set(item[0])
                 allow_.remove(tag)
                 if tag in next_dict:
-                    next_dict[tag][1].append(this_tag)
+                    next_dict[tag] = (allow_, next_dict[tag][1] + [this_tag])
                 else:
                     next_dict[tag] = (allow_, [this_tag])
         return this_reachable_all, distance_list
@@ -84,12 +80,60 @@ class Solution(object):
             [{endWord: (set(wordlist), [])}
         ]
 
+def _reachable(prev, str_set, range_, ALL_CHAR = "abcdefghijklmnopqrstuvwxyz"):
+    for i in range_:
+        for char in ALL_CHAR:
+            if prev[i] == char:
+                continue
+            newword = prev[:i] + char + prev[i + 1:]
+            if newword in str_set:
+                yield newword
+
 def _distance(str1, str2, range_):
     distance = 0
     for idx in range_:
         if str2[idx] != str1[idx]:
             distance += 1
     return distance
+
+
+class Solution2(object):
+    def findLadders(self, beginWord, endWord, wordlist):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordlist: Set[str]
+        :rtype: List[List[int]]
+        """
+        ALL_CHAR = "abcdefghijklmnopqrstuvwxyz"
+        solved, solved_len, reachable, range_ = {beginWord: [[beginWord]], endWord: []}, {beginWord: 1}, [beginWord, ], range(len(beginWord))
+        append_and_copy = lambda item_list, add: [item + [add] for item in item_list]
+
+        while reachable:
+            prev = reachable.pop(0)
+            for i in range_:
+                for j in ALL_CHAR:
+                    if prev[i] == j: continue
+                    newword = prev[:i] + j + prev[i + 1:]
+                    if newword == endWord:
+                        solved[endWord] = append_and_copy(solved[prev], endWord)
+                        max_len = len(solved[endWord][0])
+                        while reachable:
+                            prev_ = reachable.pop(0)
+                            if solved_len[prev_] >= max_len: break
+                            for ni in range_:
+                                for nj in ALL_CHAR:
+                                    if prev_[ni] == nj: continue
+                                    endWord == prev_[:ni] + nj + prev_[ni+1:] and solved[endWord].extend(append_and_copy(solved[prev_], endWord))
+                        break
+                    if newword in wordlist:
+                        reachable.append(newword)
+                        solved[newword] = append_and_copy(solved[prev], newword)
+                        solved_len[newword] = len(solved[newword][0])
+                        wordlist.remove(newword)
+                    elif newword in solved and solved_len[newword] == solved_len[prev] + 1:
+                        solved[newword].extend(append_and_copy(solved[prev], newword))
+        return solved[endWord]
 
 ############################
 ########### TEST ###########
