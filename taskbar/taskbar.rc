@@ -48,8 +48,8 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "Comments", "\0"
-            VALUE "CompanyName", "phuslu@hotmail.com\0"
-            VALUE "FileDescription", "goproxy(taskbar)\0"
+            VALUE "CompanyName", "wowngasb@gmail.com\0"
+            VALUE "FileDescription", "taskbar tool\0"
             VALUE "FileVersion", "1, 0, 0, 0\0"
             VALUE "InternalName", "taskbar\0"
             VALUE "LegalCopyright", "MIT License\0"
@@ -128,10 +128,9 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_CMDLINE             """E:\\Program Files\\MongoDB\\Server\\3.2\\bin\\mongod.exe"" --dbpath N:\\mongodb_torrent --wiredTigerCacheSizeGB 2"
+    IDS_CMDLINE             "python"
     IDS_ENVIRONMENT         "TASKBAR_VISIBLE=0\nTASKBAR_TOOLTIP=GoProxy\nTASKBAR_TITLE=GoProxy Notify\nTASKBAR_BALLOON=GoProxy 已经启动，单击托盘图标可以最小化。\n"
-    IDS_PROXYLIST           "http://127.0.0.1:8087/proxy.pac\n127.0.0.1:8087\n"
-    IDS_RASPBK              "%APPDATA%\\Microsoft\\Network\\Connections\\Pbk\n%ALLUSERSPROFILE%\\Microsoft\\Network\\Connections\\Pbk\n%ALLUSERSPROFILE%\\Application Data\\Microsoft\\Network\\Connections\\Pbk\\rasphone.pbk\n"
+    IDS_SUBMENULIST         "http://127.0.0.1:8087/proxy.pac\n127.0.0.1:8087\n"
 END
 
 #endif    // Chinese (中国) resources
