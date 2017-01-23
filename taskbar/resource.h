@@ -2,7 +2,6 @@
 // Microsoft Developer Studio generated include file.
 // Used by taskbar.rc
 //
-#define IDI_TASKBAR                     105
 #define IDI_SMALL                       106
 
 // Next default values for new objects

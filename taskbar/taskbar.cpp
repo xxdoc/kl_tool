@@ -10,8 +10,12 @@
 #include "psapi.h"
 #include "resource.h"
 
+#pragma comment(lib, "kernel32.lib") 
+#pragma comment(lib, "user32.lib")
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "psapi.lib")
+
+#pragma comment(linker, "/OPT:NOWIN98")
 
 #ifndef INTERNET_OPTION_PER_CONNECTION_OPTION
     #define INTERNET_OPTION_PER_CONNECTION_OPTION           75
@@ -62,20 +66,22 @@ HWND hConsole;
 
 WCHAR szWindowClass[16] = L"taskbar";
 
-WCHAR szVisible[8] = L"";
-WCHAR szTooltip[512] = L"";
-WCHAR szTitle[64] = L"";
-WCHAR szBalloon[512] = L"";
-WCHAR szPath[2048] = L"";
-
+/* data segment  可由外部修改的配置信息  */
 WCHAR szCommand[1024] = L"python";
 WCHAR szEnvironment[1024] = L"ENV_VISIBLE=0\nENV_TOOLTIP=GoProxy\nENV_TITLE=GoProxy Notify\nENV_BALLOON=GoProxy 已经启动，单击托盘图标可以最小化。\n";
 WCHAR szSubMenuTitle[2048] = L"RunPython\nRunPip\n";
 WCHAR szSubMenuCmd[2048] = L"python\npip\n";
 WCHAR szSubMenuPath[2048] = L"";
 
-WCHAR szPathLast[2048] = L"";
-WCHAR szCommandLast[1024] = L"";
+WCHAR szVisible[8] = L"";
+WCHAR szTooltip[256] = L"";
+WCHAR szTitle[64] = L"";
+WCHAR szBalloon[512] = L"";
+WCHAR szPath[1024] = L"";
+
+WCHAR szSubTitleLast[64] = L"";
+WCHAR szSubPathLast[1024] = L"";
+WCHAR szSubCommandLast[1024] = L"";
 
 WCHAR *lpSubMenuTitleList[8] = {0};
 WCHAR *lpSubMenuCmdList[8] = {0};
@@ -83,26 +89,25 @@ WCHAR *lpSubMenuPathList[8] = {0};
 
 volatile DWORD dwChildrenPid;
 
-static DWORD MyGetProcessId(HANDLE hProcess)
-{
+static DWORD MyGetProcessId(HANDLE hProcess) {
     typedef DWORD (WINAPI *pfnGPI)(HANDLE);
     typedef ULONG (WINAPI *pfnNTQIP)(HANDLE, ULONG, PVOID, ULONG, PULONG);
 
     static int first = 1;
     static pfnGPI pfnGetProcessId;
     static pfnNTQIP ZwQueryInformationProcess;
-    if (first){
+    if (first) {
         first = 0;
         pfnGetProcessId = (pfnGPI)GetProcAddress(GetModuleHandleW(L"KERNEL32.DLL"), "GetProcessId");
-        if (!pfnGetProcessId){
+        if (!pfnGetProcessId) {
             ZwQueryInformationProcess = (pfnNTQIP)GetProcAddress(GetModuleHandleW(L"NTDLL.DLL"), "ZwQueryInformationProcess");
         }
 
     }
-    if (pfnGetProcessId){
+    if (pfnGetProcessId) {
         return pfnGetProcessId(hProcess);
     }
-    if (ZwQueryInformationProcess){
+    if (ZwQueryInformationProcess) {
         struct {
             PVOID Reserved1;
             PVOID PebBaseAddress;
@@ -116,30 +121,27 @@ static DWORD MyGetProcessId(HANDLE hProcess)
     return 0;
 }
 
-
-static BOOL MyEndTask(DWORD pid)
-{
+static BOOL MyEndTask(DWORD pid) {
     WCHAR szCmd[1024] = {0};
     wsprintf(szCmd, L"taskkill /f /pid %d", pid);
     return _wsystem(szCmd) == 0;
 }
 
-BOOL ShowTrayIcon(LPCTSTR lpszSubMenu, DWORD dwMessage=NIM_ADD)
-{
+BOOL ShowTrayIcon(LPCTSTR lpszSubMenu, DWORD dwMessage=NIM_ADD) {
     NOTIFYICONDATA nid;
     ZeroMemory(&nid, sizeof(NOTIFYICONDATA));
     nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
-    nid.hWnd   = hWnd;
-    nid.uID       = NID_UID;
+    nid.hWnd = hWnd;
+    nid.uID = NID_UID;
     nid.uFlags = NIF_ICON|NIF_MESSAGE;
     nid.dwInfoFlags=NIIF_INFO;
     nid.uCallbackMessage = WM_TASKBARNOTIFY;
     nid.hIcon = LoadIcon(hInst, (LPCTSTR)IDI_SMALL);
     nid.uTimeoutAndVersion = 3 * 1000 | NOTIFYICON_VERSION;
     lstrcpy(nid.szInfoTitle, szTitle);
-    if (lpszSubMenu){
+    if (lpszSubMenu) {
         nid.uFlags |= NIF_INFO|NIF_TIP;
-        if (lstrlen(lpszSubMenu) > 0){
+        if (lstrlen(lpszSubMenu) > 0) {
             lstrcpy(nid.szTip, lpszSubMenu);
             lstrcpy(nid.szInfo, lpszSubMenu);
         } else {
@@ -151,26 +153,23 @@ BOOL ShowTrayIcon(LPCTSTR lpszSubMenu, DWORD dwMessage=NIM_ADD)
     return TRUE;
 }
 
-BOOL DeleteTrayIcon()
-{
+BOOL DeleteTrayIcon() {
     NOTIFYICONDATA nid;
     nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
-    nid.hWnd   = hWnd;
-    nid.uID       = NID_UID;
+    nid.hWnd = hWnd;
+    nid.uID = NID_UID;
     Shell_NotifyIcon(NIM_DELETE, &nid);
     return TRUE;
 }
 
-BOOL ShowPopupMenu()
-{
+BOOL ShowPopupMenu() {
     POINT pt;
     HMENU hSubMenu = NULL;
     BOOL isZHCN = GetSystemDefaultLCID() == 2052;
-    LPCTSTR lpCurrentSubMenu = L"";
-    if (lpSubMenuTitleList[1] != NULL){
+    if (lpSubMenuTitleList[1] != NULL) {
         hSubMenu = CreatePopupMenu();
-        for (int i = 0; lpSubMenuTitleList[i]; i++){
-            UINT uFlags = wcscmp(lpSubMenuTitleList[i], lpCurrentSubMenu) == 0 ? MF_STRING | MF_CHECKED : MF_STRING;
+        for (int i = 0; lpSubMenuTitleList[i]; i++) {
+            UINT uFlags = wcscmp(lpSubMenuTitleList[i], szSubTitleLast) == 0 ? MF_STRING | MF_CHECKED : MF_STRING;
             LPCTSTR lpText = wcslen(lpSubMenuTitleList[i]) ? lpSubMenuTitleList[i] : ( isZHCN ? L"默认" : L"<None>");
             AppendMenu(hSubMenu, uFlags, WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE+i, lpText);
         }
@@ -179,8 +178,7 @@ BOOL ShowPopupMenu()
     HMENU hMenu = CreatePopupMenu();
     AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_SHOW, ( isZHCN ? L"显示" : L"Show") );
     AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_HIDE, ( isZHCN ? L"隐藏" : L"Hide") );
-    if (hSubMenu != NULL)
-    {
+    if (hSubMenu != NULL) {
         AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT_PTR)hSubMenu, ( isZHCN ? L"常用命令" : L"SubMenu") );
     }
     AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_RELOAD, ( isZHCN ? L"重新运行" : L"Reload") );
@@ -188,22 +186,23 @@ BOOL ShowPopupMenu()
     GetCursorPos(&pt);
     TrackPopupMenu(hMenu, TPM_LEFTALIGN, pt.x, pt.y, 0, hWnd, NULL);
     PostMessage(hWnd, WM_NULL, 0, 0);
-    if (hSubMenu != NULL)
+    
+    if (hSubMenu != NULL) {
         DestroyMenu(hSubMenu);
+    }
     DestroyMenu(hMenu);
     return TRUE;
 }
 
-BOOL ParseSubMenuTitleList()
-{
+BOOL ParseSubMenuTitleList() {
     WCHAR * tmpSubMenuString = _wcsdup(szSubMenuTitle);
     ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuTitle, sizeof(szSubMenuTitle)/sizeof(szSubMenuTitle[0]));
     free(tmpSubMenuString);
     WCHAR *sep = L"\n";
     WCHAR *pos = wcstok(szSubMenuTitle, sep);
     INT i = 0;
-    lpSubMenuTitleList[i++] = L"";
-    while (pos && i < sizeof(lpSubMenuTitleList)/sizeof(lpSubMenuTitleList[0])){
+    lpSubMenuTitleList[i++] = L"默认";
+    while (pos && i < sizeof(lpSubMenuTitleList)/sizeof(lpSubMenuTitleList[0])) {
         lpSubMenuTitleList[i++] = pos;
         pos = wcstok(NULL, sep);
     }
@@ -212,16 +211,15 @@ BOOL ParseSubMenuTitleList()
     return TRUE;
 }
 
-BOOL ParseSubMenuCmdList()
-{
+BOOL ParseSubMenuCmdList() {
     WCHAR * tmpSubMenuString = _wcsdup(szSubMenuCmd);
     ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuCmd, sizeof(szSubMenuCmd)/sizeof(szSubMenuCmd[0]));
     free(tmpSubMenuString);
     WCHAR *sep = L"\n";
     WCHAR *pos = wcstok(szSubMenuCmd, sep);
     INT i = 0;
-    lpSubMenuCmdList[i++] = L"";
-    while (pos && i < sizeof(lpSubMenuCmdList)/sizeof(lpSubMenuCmdList[0])){
+    lpSubMenuCmdList[i++] = szCommand;
+    while (pos && i < sizeof(lpSubMenuCmdList)/sizeof(lpSubMenuCmdList[0])) {
         lpSubMenuCmdList[i++] = pos;
         pos = wcstok(NULL, sep);
     }
@@ -230,16 +228,15 @@ BOOL ParseSubMenuCmdList()
     return TRUE;
 }
 
-BOOL ParseSubMenuPathList()
-{
+BOOL ParseSubMenuPathList() {
     WCHAR * tmpSubMenuString = _wcsdup(szSubMenuPath);
     ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuPath, sizeof(szSubMenuPath)/sizeof(szSubMenuPath[0]));
     free(tmpSubMenuString);
     WCHAR *sep = L"\n";
     WCHAR *pos = wcstok(szSubMenuPath, sep);
     INT i = 0;
-    lpSubMenuPathList[i++] = L"";
-    while (pos && i < sizeof(lpSubMenuPathList)/sizeof(lpSubMenuPathList[0])){
+    lpSubMenuPathList[i++] = szPath;
+    while (pos && i < sizeof(lpSubMenuPathList)/sizeof(lpSubMenuPathList[0])) {
         lpSubMenuPathList[i++] = pos;
         pos = wcstok(NULL, sep);
     }
@@ -248,11 +245,10 @@ BOOL ParseSubMenuPathList()
     return TRUE;
 }
 
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
-{
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPED|WS_SYSMENU, NULL, NULL, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
 
-   if (!hWnd){
+   if (!hWnd) {
       return FALSE;
    }
 
@@ -262,17 +258,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-
-BOOL SetEenvironment()
-{
+BOOL SetEenvironment() {
     WCHAR *sep = L"\n";
     WCHAR *pos = NULL;
     WCHAR *token = wcstok(szEnvironment, sep);
-    while(token != NULL){
-        if (pos = wcschr(token, L'=')){
+    while(token != NULL) {
+        if (pos = wcschr(token, L'=')) {
             *pos = 0;
             SetEnvironmentVariableW(token, pos+1);
-            //wprintf(L"[%s] = [%s]\n", token, pos+1);
         }
         token = wcstok(NULL, sep);
     }
@@ -292,9 +285,8 @@ BOOL SetEenvironment()
     return TRUE;
 }
 
-BOOL WINAPI ConsoleHandler(DWORD CEvent)
-{
-    switch(CEvent){
+BOOL WINAPI ConsoleHandler(DWORD CEvent) {
+    switch(CEvent) {
         case CTRL_LOGOFF_EVENT:
         case CTRL_SHUTDOWN_EVENT:
         case CTRL_CLOSE_EVENT:
@@ -304,31 +296,30 @@ BOOL WINAPI ConsoleHandler(DWORD CEvent)
     return TRUE;
 }
 
-BOOL CreateConsole()
-{
+BOOL CreateConsole() {
     AllocConsole();
     _wfreopen(L"CONIN$",  L"r+t", stdin);
     _wfreopen(L"CONOUT$", L"w+t", stdout);
 
     hConsole = GetConsoleWindow();
 
-    if (szVisible[0] == L'0'){
+    if (szVisible[0] == L'0') {
         ShowWindow(hConsole, SW_HIDE);
     } else {
         SetForegroundWindow(hConsole);
     }
 
-    if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler,TRUE)==FALSE){
+    if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler,TRUE)==FALSE) {
         printf("Unable to install handler!\n");
         return FALSE;
     }
 
     CONSOLE_SCREEN_BUFFER_INFO csbi;
-    if (GetConsoleScreenBufferInfo(GetStdHandle(STD_ERROR_HANDLE), &csbi)){
+    if (GetConsoleScreenBufferInfo(GetStdHandle(STD_ERROR_HANDLE), &csbi)) {
         COORD size = csbi.dwSize;
-        if (size.Y < 2048){
+        if (size.Y < 2048) {
             size.Y = 2048;
-            if (!SetConsoleScreenBufferSize(GetStdHandle(STD_ERROR_HANDLE), size)){
+            if (!SetConsoleScreenBufferSize(GetStdHandle(STD_ERROR_HANDLE), size)) {
                 printf("Unable to set console screen buffer size!\n");
             }
         }
@@ -336,15 +327,14 @@ BOOL CreateConsole()
     return TRUE;
 }
 
-BOOL ExecCmdline(WCHAR *path, WCHAR *cmd)
-{
-    if(NULL == cmd){
+BOOL ExecCmdline(WCHAR *title, WCHAR *path, WCHAR *cmd) {
+    if(NULL == cmd || NULL == title) {
         return FALSE;
     }
     
-    if(NULL == path){
+    if(NULL == path) {
         SetCurrentDirectory(path);
-        lstrcpy(szPathLast, path);
+        lstrcpy(szSubPathLast, path);
     }
 
     SetWindowText(hConsole, szTitle);
@@ -362,25 +352,24 @@ BOOL ExecCmdline(WCHAR *path, WCHAR *cmd)
     }
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
-    
-    lstrcpy(szCommandLast, cmd);
+
+    lstrcpy(szSubTitleLast, title);
+    lstrcpy(szSubCommandLast, cmd);
     return TRUE;
 }
 
-BOOL ReloadCmdline(WCHAR *path, WCHAR *cmd)
-{
+BOOL ReloadCmdline(WCHAR *title, WCHAR *path, WCHAR *cmd) {
     ShowWindow(hConsole, SW_SHOW);
     SetForegroundWindow(hConsole);
     wprintf(L"\n\n");
     MyEndTask(dwChildrenPid);
     wprintf(L"\n\n");
     Sleep(200);
-    ExecCmdline(path, cmd);
+    ExecCmdline(title, path, cmd);
     return TRUE;
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     static const UINT WM_TASKBARCREATED = ::RegisterWindowMessage(L"TaskbarCreated");
     int nID;
     switch (message) {
@@ -402,7 +391,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 ShowWindow(hConsole, SW_HIDE);
             }
             if (nID == WM_TASKBARNOTIFY_MENUITEM_RELOAD) {
-                ReloadCmdline(szPathLast, szCommandLast);
+                ReloadCmdline(szSubTitleLast, szSubPathLast, szSubCommandLast);
             } else if (nID == WM_TASKBARNOTIFY_MENUITEM_ABOUT) {
                 MessageBoxW(hWnd, szTooltip, szWindowClass, 0);
             } else if (nID == WM_TASKBARNOTIFY_MENUITEM_EXIT) {
@@ -412,7 +401,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 WCHAR *szSubMenu = lpSubMenuTitleList[nID-WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE];
                 WCHAR *szSubCmd = lpSubMenuCmdList[nID-WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE];
                 WCHAR *szSubPath = lpSubMenuPathList[nID-WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE];
-                ReloadCmdline(szSubPath, szSubCmd);
+                ReloadCmdline(szSubMenu, szSubPath, szSubCmd);
                 ShowTrayIcon(szSubMenu, NIM_MODIFY);
             }
             break;
@@ -433,29 +422,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    return 0;
 }
 
-ATOM MyRegisterClass(HINSTANCE hInstance)
-{
+ATOM MyRegisterClass(HINSTANCE hInstance) {
     WNDCLASSEX wcex;
 
     wcex.cbSize = sizeof(WNDCLASSEX);
 
-    wcex.style            = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = (WNDPROC)WndProc;
-    wcex.cbClsExtra        = 0;
-    wcex.cbWndExtra        = 0;
-    wcex.hInstance        = hInstance;
-    wcex.hIcon            = LoadIcon(hInstance, (LPCTSTR)IDI_TASKBAR);
-    wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground    = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName    = (LPCTSTR)NULL;
-    wcex.lpszClassName    = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc = (WNDPROC)WndProc;
+    wcex.cbClsExtra = 0;
+    wcex.cbWndExtra = 0;
+    wcex.hInstance = hInstance;
+    wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_SMALL);
+    wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+    wcex.lpszMenuName = (LPCTSTR)NULL;
+    wcex.lpszClassName = szWindowClass;
+    wcex.hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
     return RegisterClassEx(&wcex);
 }
 
-int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int nCmdShow)
-{
+int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int nCmdShow) {
     MSG msg;
     hInst = hInstance;
     SetEenvironment();
@@ -466,7 +453,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int nCmd
     }
     CreateConsole();
     
-    ExecCmdline(szPath, szCommand);
+    ExecCmdline(L"默认", szPath, szCommand);
     ShowTrayIcon(szBalloon);
     
     while (GetMessage(&msg, NULL, 0, 0)) {
