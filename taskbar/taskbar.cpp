@@ -3,21 +3,15 @@
 #endif
 
 #include <windows.h>
-#include <wininet.h>
 #include <shellapi.h>
 #include <stdio.h>
-#include <wininet.h>
 #include <io.h>
-#include "ras.h"
-#include "raserror.h"
+
 #include "psapi.h"
 #include "resource.h"
 
-#pragma comment(lib, "rasapi32.lib")
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "psapi.lib")
-#pragma comment(lib, "advapi32.lib")
-#pragma comment(lib, "wininet.lib")
 
 #ifndef INTERNET_OPTION_PER_CONNECTION_OPTION
     #define INTERNET_OPTION_PER_CONNECTION_OPTION           75
@@ -65,20 +59,27 @@ extern "C" WINBASEAPI HWND WINAPI GetConsoleWindow();
 HINSTANCE hInst;
 HWND hWnd;
 HWND hConsole;
-WCHAR szTitle[64] = L"";
-WCHAR szWindowClass[16] = L"taskbar";
-WCHAR szCommandLine[1024] = L"";
-WCHAR szTooltip[512] = L"";
-WCHAR szBalloon[512] = L"";
-WCHAR szEnvironment[1024] = L"";
-WCHAR szSubMenuString[2048] = L"";
 
-WCHAR *lpSubMenuList[8] = {0};
+WCHAR szWindowClass[16] = L"taskbar";
+
+WCHAR szVisible[8] = L"";
+WCHAR szTooltip[512] = L"";
+WCHAR szTitle[64] = L"";
+WCHAR szBalloon[512] = L"";
+WCHAR szPath[2048] = L"";
+
+WCHAR szCommandLine[1024] = L"python";
+WCHAR szEnvironment[1024] = L"ENV_VISIBLE=0\nENV_TOOLTIP=GoProxy\nENV_TITLE=GoProxy Notify\nENV_BALLOON=GoProxy 已经启动，单击托盘图标可以最小化。\n";
+WCHAR szSubMenuTitle[2048] = L"RunPython\nRunPip\n";
+WCHAR szSubMenuCmd[2048] = L"python\npip\n";
+
+WCHAR *lpSubMenuTitleList[8] = {0};
+WCHAR *lpSubMenuCmdList[8] = {0};
+
 volatile DWORD dwChildrenPid;
 
 static DWORD MyGetProcessId(HANDLE hProcess)
 {
-    // https://gist.github.com/kusma/268888
     typedef DWORD (WINAPI *pfnGPI)(HANDLE);
     typedef ULONG (WINAPI *pfnNTQIP)(HANDLE, ULONG, PVOID, ULONG, PULONG);
 
@@ -87,8 +88,7 @@ static DWORD MyGetProcessId(HANDLE hProcess)
     static pfnNTQIP ZwQueryInformationProcess;
     if (first){
         first = 0;
-        pfnGetProcessId = (pfnGPI)GetProcAddress(
-            GetModuleHandleW(L"KERNEL32.DLL"), "GetProcessId");
+        pfnGetProcessId = (pfnGPI)GetProcAddress(GetModuleHandleW(L"KERNEL32.DLL"), "GetProcessId");
         if (!pfnGetProcessId){
             ZwQueryInformationProcess = (pfnNTQIP)GetProcAddress(GetModuleHandleW(L"NTDLL.DLL"), "ZwQueryInformationProcess");
         }
@@ -162,11 +162,11 @@ BOOL ShowPopupMenu()
     HMENU hSubMenu = NULL;
     BOOL isZHCN = GetSystemDefaultLCID() == 2052;
     LPCTSTR lpCurrentSubMenu = L"";
-    if (lpSubMenuList[1] != NULL){
+    if (lpSubMenuTitleList[1] != NULL){
         hSubMenu = CreatePopupMenu();
-        for (int i = 0; lpSubMenuList[i]; i++){
-            UINT uFlags = wcscmp(lpSubMenuList[i], lpCurrentSubMenu) == 0 ? MF_STRING | MF_CHECKED : MF_STRING;
-            LPCTSTR lpText = wcslen(lpSubMenuList[i]) ? lpSubMenuList[i] : ( isZHCN ? L"\x7981\x7528\x4ee3\x7406" : L"<None>");
+        for (int i = 0; lpSubMenuTitleList[i]; i++){
+            UINT uFlags = wcscmp(lpSubMenuTitleList[i], lpCurrentSubMenu) == 0 ? MF_STRING | MF_CHECKED : MF_STRING;
+            LPCTSTR lpText = wcslen(lpSubMenuTitleList[i]) ? lpSubMenuTitleList[i] : ( isZHCN ? L"\x7981\x7528\x4ee3\x7406" : L"<None>");
             AppendMenu(hSubMenu, uFlags, WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE+i, lpText);
         }
     }
@@ -191,19 +191,18 @@ BOOL ShowPopupMenu()
 
 BOOL ParseSubMenuList()
 {
-    WCHAR * tmpSubMenuString = _wcsdup(szSubMenuString);
-    ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuString, sizeof(szSubMenuString)/sizeof(szSubMenuString[0]));
+    WCHAR * tmpSubMenuString = _wcsdup(szSubMenuTitle);
+    ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuTitle, sizeof(szSubMenuTitle)/sizeof(szSubMenuTitle[0]));
     free(tmpSubMenuString);
     WCHAR *sep = L"\n";
-    WCHAR *pos = wcstok(szSubMenuString, sep);
+    WCHAR *pos = wcstok(szSubMenuTitle, sep);
     INT i = 0;
-    lpSubMenuList[i++] = L"";
-    while (pos && i < sizeof(lpSubMenuList)/sizeof(lpSubMenuList[0]))
-    {
-        lpSubMenuList[i++] = pos;
+    lpSubMenuTitleList[i++] = L"";
+    while (pos && i < sizeof(lpSubMenuTitleList)/sizeof(lpSubMenuTitleList[0])){
+        lpSubMenuTitleList[i++] = pos;
         pos = wcstok(NULL, sep);
     }
-    lpSubMenuList[i] = 0;
+    lpSubMenuTitleList[i] = 0;
 
     return TRUE;
 }
@@ -224,7 +223,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 BOOL CDCurrentDirectory()
 {
-    WCHAR szPath[4096] = L"";
     GetModuleFileName(NULL, szPath, sizeof(szPath)/sizeof(szPath[0])-1);
     *wcsrchr(szPath, L'\\') = 0;
     SetCurrentDirectory(szPath);
@@ -234,10 +232,6 @@ BOOL CDCurrentDirectory()
 
 BOOL SetEenvironment()
 {
-    LoadString(hInst, IDS_CMDLINE, szCommandLine, sizeof(szCommandLine)/sizeof(szCommandLine[0])-1);
-    LoadString(hInst, IDS_ENVIRONMENT, szEnvironment, sizeof(szEnvironment)/sizeof(szEnvironment[0])-1);
-    LoadString(hInst, IDS_SUBMENULIST, szSubMenuString, sizeof(szSubMenuString)/sizeof(szEnvironment[0])-1);
-
     WCHAR *sep = L"\n";
     WCHAR *pos = NULL;
     WCHAR *token = wcstok(szEnvironment, sep);
@@ -249,10 +243,10 @@ BOOL SetEenvironment()
         }
         token = wcstok(NULL, sep);
     }
-
-    GetEnvironmentVariableW(L"TASKBAR_TITLE", szTitle, sizeof(szTitle)/sizeof(szTitle[0])-1);
-    GetEnvironmentVariableW(L"TASKBAR_TOOLTIP", szTooltip, sizeof(szTooltip)/sizeof(szTooltip[0])-1);
-    GetEnvironmentVariableW(L"TASKBAR_BALLOON", szBalloon, sizeof(szBalloon)/sizeof(szBalloon[0])-1);
+    GetEnvironmentVariableW(L"ENV_VISIBLE", szVisible, sizeof(szVisible)/sizeof(szVisible[0])-1);
+    GetEnvironmentVariableW(L"ENV_TITLE", szTitle, sizeof(szTitle)/sizeof(szTitle[0])-1);
+    GetEnvironmentVariableW(L"ENV_TOOLTIP", szTooltip, sizeof(szTooltip)/sizeof(szTooltip[0])-1);
+    GetEnvironmentVariableW(L"ENV_BALLOON", szBalloon, sizeof(szBalloon)/sizeof(szBalloon[0])-1);
 
     return TRUE;
 }
@@ -272,7 +266,7 @@ BOOL WINAPI ConsoleHandler(DWORD CEvent)
 
 BOOL CreateConsole()
 {
-    WCHAR szVisible[BUFSIZ] = L"";
+    
 
     AllocConsole();
     _wfreopen(L"CONIN$",  L"r+t", stdin);
@@ -280,7 +274,7 @@ BOOL CreateConsole()
 
     hConsole = GetConsoleWindow();
 
-    if (GetEnvironmentVariableW(L"TASKBAR_VISIBLE", szVisible, BUFSIZ-1) && szVisible[0] == L'0'){
+    if (szVisible[0] == L'0'){
         ShowWindow(hConsole, SW_HIDE);
     } else {
         SetForegroundWindow(hConsole);
@@ -410,9 +404,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DeleteTrayIcon();
                 PostMessage(hConsole, WM_CLOSE, 0, 0);
             }
-            else if (WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE <= nID && nID <= WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE+sizeof(lpSubMenuList)/sizeof(lpSubMenuList[0]))
+            else if (WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE <= nID && nID <= WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE+sizeof(lpSubMenuTitleList)/sizeof(lpSubMenuTitleList[0]))
             {
-                WCHAR *szSubMenu = lpSubMenuList[nID-WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE];
+                WCHAR *szSubMenu = lpSubMenuTitleList[nID-WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE];
                 ShowTrayIcon(szSubMenu, NIM_MODIFY);
             }
             break;
