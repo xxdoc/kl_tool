@@ -54,7 +54,7 @@ extern "C" WINBASEAPI HWND WINAPI GetConsoleWindow();
 #define WM_TASKBARNOTIFY_MENUITEM_RELOAD (WM_USER + 23)
 #define WM_TASKBARNOTIFY_MENUITEM_ABOUT (WM_USER + 24)
 #define WM_TASKBARNOTIFY_MENUITEM_EXIT (WM_USER + 25)
-#define WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE (WM_USER + 26)
+#define WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE (WM_USER + 26)
 
 HINSTANCE hInst;
 HWND hWnd;
@@ -68,13 +68,18 @@ WCHAR szTitle[64] = L"";
 WCHAR szBalloon[512] = L"";
 WCHAR szPath[2048] = L"";
 
-WCHAR szCommandLine[1024] = L"python";
+WCHAR szCommand[1024] = L"python";
 WCHAR szEnvironment[1024] = L"ENV_VISIBLE=0\nENV_TOOLTIP=GoProxy\nENV_TITLE=GoProxy Notify\nENV_BALLOON=GoProxy 已经启动，单击托盘图标可以最小化。\n";
 WCHAR szSubMenuTitle[2048] = L"RunPython\nRunPip\n";
 WCHAR szSubMenuCmd[2048] = L"python\npip\n";
+WCHAR szSubMenuPath[2048] = L"";
+
+WCHAR szPathLast[2048] = L"";
+WCHAR szCommandLast[1024] = L"";
 
 WCHAR *lpSubMenuTitleList[8] = {0};
 WCHAR *lpSubMenuCmdList[8] = {0};
+WCHAR *lpSubMenuPathList[8] = {0};
 
 volatile DWORD dwChildrenPid;
 
@@ -166,20 +171,20 @@ BOOL ShowPopupMenu()
         hSubMenu = CreatePopupMenu();
         for (int i = 0; lpSubMenuTitleList[i]; i++){
             UINT uFlags = wcscmp(lpSubMenuTitleList[i], lpCurrentSubMenu) == 0 ? MF_STRING | MF_CHECKED : MF_STRING;
-            LPCTSTR lpText = wcslen(lpSubMenuTitleList[i]) ? lpSubMenuTitleList[i] : ( isZHCN ? L"\x7981\x7528\x4ee3\x7406" : L"<None>");
-            AppendMenu(hSubMenu, uFlags, WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE+i, lpText);
+            LPCTSTR lpText = wcslen(lpSubMenuTitleList[i]) ? lpSubMenuTitleList[i] : ( isZHCN ? L"默认" : L"<None>");
+            AppendMenu(hSubMenu, uFlags, WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE+i, lpText);
         }
     }
 
     HMENU hMenu = CreatePopupMenu();
-    AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_SHOW, ( isZHCN ? L"\x663e\x793a" : L"Show") );
-    AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_HIDE, ( isZHCN ? L"\x9690\x85cf" : L"Hide") );
+    AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_SHOW, ( isZHCN ? L"显示" : L"Show") );
+    AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_HIDE, ( isZHCN ? L"隐藏" : L"Hide") );
     if (hSubMenu != NULL)
     {
-        AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT_PTR)hSubMenu, ( isZHCN ? L"\x8bbe\x7f6e IE \x4ee3\x7406" : L"Set IE SubMenu") );
+        AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT_PTR)hSubMenu, ( isZHCN ? L"常用命令" : L"SubMenu") );
     }
-    AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_RELOAD, ( isZHCN ? L"\x91cd\x65b0\x8f7d\x5165" : L"Reload") );
-    AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_EXIT,   ( isZHCN ? L"\x9000\x51fa" : L"Exit") );
+    AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_RELOAD, ( isZHCN ? L"重新运行" : L"Reload") );
+    AppendMenu(hMenu, MF_STRING, WM_TASKBARNOTIFY_MENUITEM_EXIT,   ( isZHCN ? L"退出" : L"Exit") );
     GetCursorPos(&pt);
     TrackPopupMenu(hMenu, TPM_LEFTALIGN, pt.x, pt.y, 0, hWnd, NULL);
     PostMessage(hWnd, WM_NULL, 0, 0);
@@ -189,7 +194,7 @@ BOOL ShowPopupMenu()
     return TRUE;
 }
 
-BOOL ParseSubMenuList()
+BOOL ParseSubMenuTitleList()
 {
     WCHAR * tmpSubMenuString = _wcsdup(szSubMenuTitle);
     ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuTitle, sizeof(szSubMenuTitle)/sizeof(szSubMenuTitle[0]));
@@ -203,6 +208,42 @@ BOOL ParseSubMenuList()
         pos = wcstok(NULL, sep);
     }
     lpSubMenuTitleList[i] = 0;
+
+    return TRUE;
+}
+
+BOOL ParseSubMenuCmdList()
+{
+    WCHAR * tmpSubMenuString = _wcsdup(szSubMenuCmd);
+    ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuCmd, sizeof(szSubMenuCmd)/sizeof(szSubMenuCmd[0]));
+    free(tmpSubMenuString);
+    WCHAR *sep = L"\n";
+    WCHAR *pos = wcstok(szSubMenuCmd, sep);
+    INT i = 0;
+    lpSubMenuCmdList[i++] = L"";
+    while (pos && i < sizeof(lpSubMenuCmdList)/sizeof(lpSubMenuCmdList[0])){
+        lpSubMenuCmdList[i++] = pos;
+        pos = wcstok(NULL, sep);
+    }
+    lpSubMenuCmdList[i] = 0;
+
+    return TRUE;
+}
+
+BOOL ParseSubMenuPathList()
+{
+    WCHAR * tmpSubMenuString = _wcsdup(szSubMenuPath);
+    ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuPath, sizeof(szSubMenuPath)/sizeof(szSubMenuPath[0]));
+    free(tmpSubMenuString);
+    WCHAR *sep = L"\n";
+    WCHAR *pos = wcstok(szSubMenuPath, sep);
+    INT i = 0;
+    lpSubMenuPathList[i++] = L"";
+    while (pos && i < sizeof(lpSubMenuPathList)/sizeof(lpSubMenuPathList[0])){
+        lpSubMenuPathList[i++] = pos;
+        pos = wcstok(NULL, sep);
+    }
+    lpSubMenuPathList[i] = 0;
 
     return TRUE;
 }
@@ -221,14 +262,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-BOOL CDCurrentDirectory()
-{
-    GetModuleFileName(NULL, szPath, sizeof(szPath)/sizeof(szPath[0])-1);
-    *wcsrchr(szPath, L'\\') = 0;
-    SetCurrentDirectory(szPath);
-    SetEnvironmentVariableW(L"CWD", szPath);
-    return TRUE;
-}
 
 BOOL SetEenvironment()
 {
@@ -248,26 +281,31 @@ BOOL SetEenvironment()
     GetEnvironmentVariableW(L"ENV_TOOLTIP", szTooltip, sizeof(szTooltip)/sizeof(szTooltip[0])-1);
     GetEnvironmentVariableW(L"ENV_BALLOON", szBalloon, sizeof(szBalloon)/sizeof(szBalloon[0])-1);
 
+    ParseSubMenuTitleList();
+    ParseSubMenuCmdList();
+    ParseSubMenuPathList();
+
+    GetModuleFileName(NULL, szPath, sizeof(szPath)/sizeof(szPath[0])-1);
+    *wcsrchr(szPath, L'\\') = 0;
+    SetEnvironmentVariableW(L"ENV_BOOT_PWD", szPath);
+    
     return TRUE;
 }
 
 BOOL WINAPI ConsoleHandler(DWORD CEvent)
 {
-    switch(CEvent)
-    {
-    case CTRL_LOGOFF_EVENT:
-    case CTRL_SHUTDOWN_EVENT:
-    case CTRL_CLOSE_EVENT:
-        SendMessage(hWnd, WM_CLOSE, NULL, NULL);
-        break;
+    switch(CEvent){
+        case CTRL_LOGOFF_EVENT:
+        case CTRL_SHUTDOWN_EVENT:
+        case CTRL_CLOSE_EVENT:
+            SendMessage(hWnd, WM_CLOSE, NULL, NULL);
+            break;
     }
     return TRUE;
 }
 
 BOOL CreateConsole()
 {
-    
-
     AllocConsole();
     _wfreopen(L"CONIN$",  L"r+t", stdin);
     _wfreopen(L"CONOUT$", L"w+t", stdout);
@@ -295,70 +333,49 @@ BOOL CreateConsole()
             }
         }
     }
-
     return TRUE;
 }
 
-BOOL ExecCmdline()
+BOOL ExecCmdline(WCHAR *path, WCHAR *cmd)
 {
+    if(NULL == cmd){
+        return FALSE;
+    }
+    
+    if(NULL == path){
+        SetCurrentDirectory(path);
+        lstrcpy(szPathLast, path);
+    }
+
     SetWindowText(hConsole, szTitle);
     STARTUPINFO si = { sizeof(si) };
     PROCESS_INFORMATION pi;
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = TRUE;
-    BOOL bRet = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, NULL, NULL, NULL, &si, &pi);
-    if(bRet)
-    {
+    BOOL bRet = CreateProcess(NULL, cmd, NULL, NULL, FALSE, NULL, NULL, NULL, &si, &pi);
+    if(bRet) {
         dwChildrenPid = MyGetProcessId(pi.hProcess);
-    }
-    else
-    {
-        wprintf(L"ExecCmdline \"%s\" failed!\n", szCommandLine);
-        MessageBox(NULL, szCommandLine, L"Error: Cannot execute!", MB_OK);
+    } else {
+        wprintf(L"ExecCmdline \"%s\" failed!\n", cmd);
+        MessageBox(NULL, cmd, L"Error: Cannot execute!", MB_OK);
         ExitProcess(0);
     }
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
+    
+    lstrcpy(szCommandLast, cmd);
     return TRUE;
 }
 
-BOOL TryDeleteUpdateFiles()
+BOOL ReloadCmdline(WCHAR *path, WCHAR *cmd)
 {
-    WIN32_FIND_DATA FindFileData;
-    HANDLE hFind;
-
-    hFind = FindFirstFile(L"~*.tmp", &FindFileData);
-    if (hFind == INVALID_HANDLE_VALUE){
-        return TRUE;
-    }
-
-    do
-    {
-        DeleteFile(FindFileData.cFileName);
-        if (!FindNextFile(hFind, &FindFileData))
-        {
-            break;
-        }
-    } while(TRUE);
-    FindClose(hFind);
-
-    return TRUE;
-}
-
-BOOL ReloadCmdline()
-{
-    //HANDLE hProcess = OpenProcess(SYNCHRONIZE|PROCESS_TERMINATE, FALSE, dwChildrenPid);
-    //if (hProcess)
-    //{
-    //    TerminateProcess(hProcess, 0);
-    //}
     ShowWindow(hConsole, SW_SHOW);
     SetForegroundWindow(hConsole);
     wprintf(L"\n\n");
     MyEndTask(dwChildrenPid);
     wprintf(L"\n\n");
     Sleep(200);
-    ExecCmdline();
+    ExecCmdline(path, cmd);
     return TRUE;
 }
 
@@ -366,47 +383,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static const UINT WM_TASKBARCREATED = ::RegisterWindowMessage(L"TaskbarCreated");
     int nID;
-    switch (message)
-    {
+    switch (message) {
         case WM_TASKBARNOTIFY:
-            if (lParam == WM_LBUTTONUP)
-            {
+            if (lParam == WM_LBUTTONUP) {
                 ShowWindow(hConsole, !IsWindowVisible(hConsole));
                 SetForegroundWindow(hConsole);
-            }
-            else if (lParam == WM_RBUTTONUP)
-            {
+            } else if (lParam == WM_RBUTTONUP) {
                 SetForegroundWindow(hWnd);
                 ShowPopupMenu();
             }
             break;
         case WM_COMMAND:
             nID = LOWORD(wParam);
-            if (nID == WM_TASKBARNOTIFY_MENUITEM_SHOW)
-            {
+            if (nID == WM_TASKBARNOTIFY_MENUITEM_SHOW) {
                 ShowWindow(hConsole, SW_SHOW);
                 SetForegroundWindow(hConsole);
-            }
-            else if (nID == WM_TASKBARNOTIFY_MENUITEM_HIDE)
-            {
+            } else if (nID == WM_TASKBARNOTIFY_MENUITEM_HIDE) {
                 ShowWindow(hConsole, SW_HIDE);
             }
-            if (nID == WM_TASKBARNOTIFY_MENUITEM_RELOAD)
-            {
-                ReloadCmdline();
-            }
-            else if (nID == WM_TASKBARNOTIFY_MENUITEM_ABOUT)
-            {
+            if (nID == WM_TASKBARNOTIFY_MENUITEM_RELOAD) {
+                ReloadCmdline(szPathLast, szCommandLast);
+            } else if (nID == WM_TASKBARNOTIFY_MENUITEM_ABOUT) {
                 MessageBoxW(hWnd, szTooltip, szWindowClass, 0);
-            }
-            else if (nID == WM_TASKBARNOTIFY_MENUITEM_EXIT)
-            {
+            } else if (nID == WM_TASKBARNOTIFY_MENUITEM_EXIT) {
                 DeleteTrayIcon();
                 PostMessage(hConsole, WM_CLOSE, 0, 0);
-            }
-            else if (WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE <= nID && nID <= WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE+sizeof(lpSubMenuTitleList)/sizeof(lpSubMenuTitleList[0]))
-            {
-                WCHAR *szSubMenu = lpSubMenuTitleList[nID-WM_TASKBARNOTIFY_MENUITEM_SubMenuLIST_BASE];
+            } else if (WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE <= nID && nID <= WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE+sizeof(lpSubMenuTitleList)/sizeof(lpSubMenuTitleList[0])) {
+                WCHAR *szSubMenu = lpSubMenuTitleList[nID-WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE];
+                WCHAR *szSubCmd = lpSubMenuCmdList[nID-WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE];
+                WCHAR *szSubPath = lpSubMenuPathList[nID-WM_TASKBARNOTIFY_MENUITEM_SUBMENULIST_BASE];
+                ReloadCmdline(szSubPath, szSubCmd);
                 ShowTrayIcon(szSubMenu, NIM_MODIFY);
             }
             break;
@@ -418,8 +424,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PostQuitMessage(0);
             break;
         default:
-            if (message == WM_TASKBARCREATED)
-            {
+            if (message == WM_TASKBARCREATED) {
                 ShowTrayIcon(NULL, NIM_ADD);
                 break;
             }
@@ -453,20 +458,18 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int nCmd
 {
     MSG msg;
     hInst = hInstance;
-    CDCurrentDirectory();
     SetEenvironment();
-    ParseSubMenuList();
+    
     MyRegisterClass(hInstance);
-    if (!InitInstance (hInstance, SW_HIDE))
-    {
+    if (!InitInstance (hInstance, SW_HIDE)) {
         return FALSE;
     }
     CreateConsole();
-    ExecCmdline();
-    ShowTrayIcon(L"run");
-    TryDeleteUpdateFiles();
-    while (GetMessage(&msg, NULL, 0, 0))
-    {
+    
+    ExecCmdline(szPath, szCommand);
+    ShowTrayIcon(szBalloon);
+    
+    while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
