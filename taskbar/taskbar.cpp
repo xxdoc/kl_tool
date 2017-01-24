@@ -68,15 +68,15 @@ WCHAR szWindowClass[16] = L"taskbar";
 
 /* data segment  可由外部修改的配置信息  */
 WCHAR szCommand[1024] = L"python";
-WCHAR szEnvironment[1024] = L"ENV_VISIBLE=0\nENV_TOOLTIP=GoProxy\nENV_TITLE=GoProxy Notify\nENV_BALLOON=GoProxy 已经启动，单击托盘图标可以最小化。\n";
-WCHAR szSubMenuTitle[2048] = L"RunPython\nRunPip\n";
-WCHAR szSubMenuCmd[2048] = L"python\npip\n";
-WCHAR szSubMenuPath[2048] = L"";
+WCHAR szEnvironment[1024] = L"ENV_VISIBLE=0\nENV_TOOLTIP=TaskBar\nENV_TITLE=TaskBar Notify\nENV_BALLOON=TaskBar 已经启动，单击托盘图标可以最小化。\n";
+WCHAR szSubMenuTitle[2048] = L"RunPython\n记事本\n";
+WCHAR szSubMenuCmd[2048] = L"python\nnotepad.exe\n";
+WCHAR szSubMenuPath[2048] = L"C:\\Windows\nC:\\Windows\n";
 
 WCHAR szVisible[8] = L"";
 WCHAR szTooltip[256] = L"";
 WCHAR szTitle[64] = L"";
-WCHAR szBalloon[512] = L"";
+WCHAR szBalloon[256] = L"";
 WCHAR szPath[1024] = L"";
 
 WCHAR szSubTitleLast[64] = L"";
@@ -195,9 +195,9 @@ BOOL ShowPopupMenu() {
 }
 
 BOOL ParseSubMenuTitleList() {
-    WCHAR * tmpSubMenuString = _wcsdup(szSubMenuTitle);
-    ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuTitle, sizeof(szSubMenuTitle)/sizeof(szSubMenuTitle[0]));
-    free(tmpSubMenuString);
+    WCHAR * tmpSubString = _wcsdup(szSubMenuTitle);
+    ExpandEnvironmentStrings(tmpSubString, szSubMenuTitle, sizeof(szSubMenuTitle)/sizeof(szSubMenuTitle[0]));
+    free(tmpSubString);
     WCHAR *sep = L"\n";
     WCHAR *pos = wcstok(szSubMenuTitle, sep);
     INT i = 0;
@@ -212,9 +212,9 @@ BOOL ParseSubMenuTitleList() {
 }
 
 BOOL ParseSubMenuCmdList() {
-    WCHAR * tmpSubMenuString = _wcsdup(szSubMenuCmd);
-    ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuCmd, sizeof(szSubMenuCmd)/sizeof(szSubMenuCmd[0]));
-    free(tmpSubMenuString);
+    WCHAR * tmpSubString = _wcsdup(szSubMenuCmd);
+    ExpandEnvironmentStrings(tmpSubString, szSubMenuCmd, sizeof(szSubMenuCmd)/sizeof(szSubMenuCmd[0]));
+    free(tmpSubString);
     WCHAR *sep = L"\n";
     WCHAR *pos = wcstok(szSubMenuCmd, sep);
     INT i = 0;
@@ -229,9 +229,9 @@ BOOL ParseSubMenuCmdList() {
 }
 
 BOOL ParseSubMenuPathList() {
-    WCHAR * tmpSubMenuString = _wcsdup(szSubMenuPath);
-    ExpandEnvironmentStrings(tmpSubMenuString, szSubMenuPath, sizeof(szSubMenuPath)/sizeof(szSubMenuPath[0]));
-    free(tmpSubMenuString);
+    WCHAR * tmpSubString = _wcsdup(szSubMenuPath);
+    ExpandEnvironmentStrings(tmpSubString, szSubMenuPath, sizeof(szSubMenuPath)/sizeof(szSubMenuPath[0]));
+    free(tmpSubString);
     WCHAR *sep = L"\n";
     WCHAR *pos = wcstok(szSubMenuPath, sep);
     INT i = 0;
