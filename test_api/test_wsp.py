@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import requests
 import json
+import os
+import cPickle
 
 def main():
     api_key = '009ef5d8bec9adb59d2a4fa6dc1d5f37'  # 你的API_KEY
@@ -35,6 +37,32 @@ def main():
     tmp_room = post(('CompanyMgr', 'newRoomByAdminId'), {'admin_id': admin_id})
     print tmp_room
 
+
+def fix_api():
+    url_file = os.path.join(os.getcwd(), 'access_20170512.log')
+    done_file = os.path.join(os.getcwd(), 'done_dict.obj')
+    done_dict, url_set = {}, set()
+    if os.path.isfile(done_file):
+        with open(done_file, 'r') as rf:
+            done_dict = cPickle.load(rf)\
+
+    if os.path.isfile(url_file):
+        with open(url_file, 'r') as rf:
+            for tmp in rf.readlines():
+                tmp = tmp.strip()
+                if tmp:
+                    url_set.add(tmp)
+
+    for url in url_set:
+        if url in done_dict:
+            continue
+        res = requests.get(url)
+        print url, res
+        if res.ok:
+            done_dict.setdefault(url, res.json())
+            with open(done_file, 'w') as wf:
+                cPickle.dump(done_dict, wf)
+
 if __name__ == '__main__':
-    main()
+    fix_api()
 
