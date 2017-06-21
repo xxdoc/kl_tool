@@ -1,0 +1,1 @@
+>rdb -c memory hins1825643_data_20170621052938.rdb > redis_memory_report.csc

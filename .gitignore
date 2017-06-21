@@ -13,3 +13,6 @@ httpMRQ/mrq-config.py
 httpMRQ/config.js
 node_modules
 test_api/api_args.txt
+
+*.rdb
+*.access_log
