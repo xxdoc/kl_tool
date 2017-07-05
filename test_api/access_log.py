@@ -9,6 +9,8 @@ def dump_obj(file_name, obj):
         cPickle.dump(obj, wf)
 
 def load_obj(file_name):
+    if not os.path.isfile(file_name):
+        return None
     with open(file_name, 'rb') as rf:
         return cPickle.load(rf)
 
@@ -88,21 +90,22 @@ def writeCsv(csv_file, ret_data):
             writer.writerow(item)
 
 def main():
-    csv_file = 'access_20170620.csv'
-    url_file = 'access_20170620.access_log'
+    csv_file = 'access_20170627.csv'
+    url_file = 'access_20170627.access_log'
     obj_file = '_tmp_access_log.obj'
     csv_file = os.path.join(os.getcwd(), csv_file)
     url_file = os.path.join(os.getcwd(), url_file)
     obj_file = os.path.join(os.getcwd(), obj_file)
 
-    ret_data = load_obj(obj_file)
-    writeCsv(csv_file, ret_data)
-    return
 
     print '\n---------------Start-------------------\n'
     ret_data = run(url_file, obj_file)
     print '\n---------------End--------------------\n'
     dump_obj(obj_file, ret_data)
+
+    ret_data = load_obj(obj_file)
+    writeCsv(csv_file, ret_data)
+    return
 
 if __name__ == '__main__':
     main()
