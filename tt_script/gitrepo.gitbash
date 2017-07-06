@@ -1,0 +1,130 @@
+echo "> cd /e/xampp/adminTita"
+cd /e/xampp/adminTita
+echo "> git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done"
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+echo "> git fetch --all"
+git fetch --all
+echo "> git pull --all"
+git pull --all
+echo "> git remote add git-osc git@git.oschina.net:wowngasb/adminTita.git"
+git remote add git-osc git@git.oschina.net:wowngasb/adminTita.git
+echo "> git push git-osc --all"
+git push git-osc --all
+echo "> git push git-osc --tags"
+git push git-osc --tags
+echo "> git remote remove git-osc"
+git remote remove git-osc
+echo "> cd /f/countly-server"
+cd /f/countly-server
+echo "> git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done"
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+echo "> git fetch --all"
+git fetch --all
+echo "> git pull --all"
+git pull --all
+echo "> git remote add git-osc git@git.oschina.net:wowngasb/countly_srv.git"
+git remote add git-osc git@git.oschina.net:wowngasb/countly_srv.git
+echo "> git push git-osc --all"
+git push git-osc --all
+echo "> git push git-osc --tags"
+git push git-osc --tags
+echo "> git remote remove git-osc"
+git remote remove git-osc
+echo "> cd /e/xampp/yun_tvbc"
+cd /e/xampp/yun_tvbc
+echo "> git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done"
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+echo "> git fetch --all"
+git fetch --all
+echo "> git pull --all"
+git pull --all
+echo "> git remote add git-osc git@git.oschina.net:wowngasb/yun_tvbc.git"
+git remote add git-osc git@git.oschina.net:wowngasb/yun_tvbc.git
+echo "> git push git-osc --all"
+git push git-osc --all
+echo "> git push git-osc --tags"
+git push git-osc --tags
+echo "> git remote remove git-osc"
+git remote remove git-osc
+echo "> cd /d/live_nodejs"
+cd /d/live_nodejs
+echo "> git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done"
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+echo "> git fetch --all"
+git fetch --all
+echo "> git pull --all"
+git pull --all
+echo "> git remote add git-osc git@git.oschina.net:wowngasb/live_nodejs.git"
+git remote add git-osc git@git.oschina.net:wowngasb/live_nodejs.git
+echo "> git push git-osc --all"
+git push git-osc --all
+echo "> git push git-osc --tags"
+git push git-osc --tags
+echo "> git remote remove git-osc"
+git remote remove git-osc
+echo "> cd /e/xampp/gaea-live"
+cd /e/xampp/gaea-live
+echo "> git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done"
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+echo "> git fetch --all"
+git fetch --all
+echo "> git pull --all"
+git pull --all
+echo "> git remote add git-osc git@git.oschina.net:wowngasb/gaea-live.git"
+git remote add git-osc git@git.oschina.net:wowngasb/gaea-live.git
+echo "> git push git-osc --all"
+git push git-osc --all
+echo "> git push git-osc --tags"
+git push git-osc --tags
+echo "> git remote remove git-osc"
+git remote remove git-osc
+echo "> cd /f/countly_sdk_web"
+cd /f/countly_sdk_web
+echo "> git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done"
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+echo "> git fetch --all"
+git fetch --all
+echo "> git pull --all"
+git pull --all
+echo "> git remote add git-osc git@git.oschina.net:wowngasb/countly_sdk_web.git"
+git remote add git-osc git@git.oschina.net:wowngasb/countly_sdk_web.git
+echo "> git push git-osc --all"
+git push git-osc --all
+echo "> git push git-osc --tags"
+git push git-osc --tags
+echo "> git remote remove git-osc"
+git remote remove git-osc
+echo "> cd /d/mqttHub"
+cd /d/mqttHub
+echo "> git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done"
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+echo "> git fetch --all"
+git fetch --all
+echo "> git pull --all"
+git pull --all
+echo "> git remote add git-osc git@git.oschina.net:wowngasb/mqttHub.git"
+git remote add git-osc git@git.oschina.net:wowngasb/mqttHub.git
+echo "> git push git-osc --all"
+git push git-osc --all
+echo "> git push git-osc --tags"
+git push git-osc --tags
+echo "> git remote remove git-osc"
+git remote remove git-osc
+echo "> cd /d/dnsVod"
+cd /d/dnsVod
+echo "> git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done"
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+echo "> git fetch --all"
+git fetch --all
+echo "> git pull --all"
+git pull --all
+echo "> git remote add git-osc git@git.oschina.net:wowngasb/dnsVod.git"
+git remote add git-osc git@git.oschina.net:wowngasb/dnsVod.git
+echo "> git push git-osc --all"
+git push git-osc --all
+echo "> git push git-osc --tags"
+git push git-osc --tags
+echo "> git remote remove git-osc"
+git remote remove git-osc
+echo "> exit"
+exit

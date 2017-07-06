@@ -1,0 +1,8 @@
+{
+    "xxx_server":{   
+        "Host": "127.0.0.1:22",
+        "User": "user",
+        "Password": "pwd",
+        "WorkPath": "/usr/local/tengine/html"
+    }
+}
