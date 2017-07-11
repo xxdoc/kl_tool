@@ -1,0 +1,85 @@
+[ git_alias.sh ]
+whereis git
+ln -s /usr/bin/git /usr/bin/gti
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.ci commit
+git config --global alias.br branch
+git config --global alias.unstage 'reset HEAD'
+git config --global alias.last 'log -1'
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+[ app_log.sh ]
+#!/bin/bash
+logs_path="/usr/local/tengine/html/log/"
+zip ${logs_path}log_backup_$(date -d "yesterday" +"%Y%m%d").zip ${logs_path}*/*.log
+find $logs_path -name "*.log" | xargs rm -f
+find $logs_path -name "*" -type d -empty | xargs rm -f
+find $logs_path -name "*.zip" -mtime +90 | xargs rm -f
+
+[ nginx_log.sh ]
+#!/bin/bash
+logs_path="/usr/local/tengine/logs/"
+pid_path="/usr/local/tengine/logs/nginx.pid"
+
+mv ${logs_path}access.log ${logs_path}access_$(date -d "yesterday" +"%Y%m%d").log
+mv ${logs_path}error.log ${logs_path}error_$(date -d "yesterday" +"%Y%m%d").log
+
+zip ${logs_path}error_$(date -d "yesterday" +"%Y%m%d").log.zip ${logs_path}error_$(date -d "yesterday" +"%Y%m%d").log
+zip ${logs_path}access_$(date -d "yesterday" +"%Y%m%d").log.zip ${logs_path}access_$(date -d "yesterday" +"%Y%m%d").log
+
+if [ $? -eq 0 ]
+then
+    rm -f ${logs_path}error_$(date -d "yesterday" +"%Y%m%d").log
+    rm -f ${logs_path}access_$(date -d "yesterday" +"%Y%m%d").log
+fi
+> /data/scripts/hls_status_dms/seek_pod
+> /data/scripts/seek_pod
+kill -USR1 `cat ${pid_path}`
+
+find $logs_path -name "*.zip" -mtime +30 | xargs rm -f
+
+[ run_node.sh ]
+#!/bin/bash
+source /etc/profile
+ps -ef | grep 'live_nodejs_app.js' | grep -v grep | awk '{print "kill -9",$2}' | sh
+sleep 2
+cd /usr/local/live_nodejs
+nohup node  live_nodejs_app.js > ./log/'nohup_log'`date +%y-%m-%d_%H%M%S`'.out' 2>&1 &
+
+[ restart_node.sh ]
+#!/bin/bash
+source /etc/profile
+processlist=`ps -ef |grep node|grep live_nodejs_app.js|grep -v grep |wc -l`
+if [[ $processlist -lt 1 ]];then
+    cd /usr/local/live_nodejs
+    nohup node live_nodejs_app.js > ./log/'nohup_log'`date +%y-%m-%d_%H%M%S`'.out' 2>&1 &
+    
+    echo "dyy node restart at `date` "|mail -s 'dyy node  alarm'  konglin@aodiansoft.com
+fi
+
+[ kill_random_worker.sh ]
+#!/bin/bash
+pid_num=`ps -ef |grep "python" |grep "mrqworker" |grep -v "grep" |wc -l`
+num=`expr  $RANDOM %  $pid_num + 1`
+pid=`ps -ef |grep "python" |grep "mrqworker" |grep -v "grep" |head -n $num |tail -1 |awk '{print $2}'`
+kill -2 $pid
+sleep 10
+/bin/sh /usr/local/pymrq/mqttHub/restart_all_worker.sh
+
+[ restart_all_worker.sh ]
+#!/bin/bash
+source /usr/local/pymrq/bin/activate
+cd /usr/local/pymrq/mqttHub
+processlist=`ps -ef |grep python|grep refresh_timed_set|grep -v grep |wc -l`
+if [[ $processlist -lt 2 ]];then
+    sh  ./run_worker.sh
+fi
+processlist=`ps -ef |grep python|grep countly_session_timed_set|grep -v grep |wc -l`
+if [[ $processlist -lt 2 ]];then
+    sh  ./run_countly.sh
+fi
+processlist=`ps -ef |grep python|grep countly_action_raw|grep -v grep |wc -l`
+if [[ $processlist -lt 2 ]];then
+    sh  ./run_action.sh
+fi
