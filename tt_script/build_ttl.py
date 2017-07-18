@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 #-------------------------------------------------------------------------------
 #https://pypi.tuna.tsinghua.edu.cn/simple
 import os
@@ -6,7 +6,7 @@ import json
 
 def main():
     config = load_json( cwd('server_config.ignore') )
-    cfg = fix_config(config);
+    cfg = fix_config(config)
     for key, item in cfg.items():
         dump_file(cwd(key+'.ttl'), connect_ttl(key, item))
         dump_file(cwd('clear_log', key+'_clear.ttl'), clear_log_ttl(key, item))

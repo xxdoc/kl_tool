@@ -1,0 +1,6 @@
+{
+    "repo":{   
+        "repo-xxx": "git@git.github.com:xxxx/repo.git",
+        "WorkPath": "E:\\xxxx\\yyyy"
+    }
+}
