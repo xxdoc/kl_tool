@@ -1,0 +1,26 @@
+; INF file for COMCT332.ocx
+
+[DefaultInstall]
+CopyFiles=install.files
+RegisterOCXs=RegisterFiles
+
+[DestinationDirs]
+install.files=11
+
+[install.files]
+COMCT332.OCX=COMCT332.OCX
+
+[RegisterFiles]
+%11%\COMCT332.OCX
+
+[COMCT332.OCX]
+file-win32-x86=thiscab
+RegisterServer=Yes
+FileVersion=6,0,0,8169
+
+[version]
+signature="$CHICAGO$"
+AdvancedINF=2.0
+
+[SourceDisksNames]
+1="default",,1

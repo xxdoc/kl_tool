@@ -1,0 +1,6 @@
+LIBRARY dll
+
+EXPORTS
+getMD5
+addMD5
+getStringSize

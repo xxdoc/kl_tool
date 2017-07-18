@@ -1,0 +1,211 @@
+Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
+
+Private Declare Function MD5_Str Lib "MD5.dll" Alias "_Z3MD5PcS_" (ByVal Strs As String, ByVal StrMD5 As Long) As Long
+Private Declare Function md5 Lib "MD5.dll" Alias "_Z3MD5PcS_" (ByVal Strs As Long, ByVal StrMD5 As Long) As Long
+
+
+Private Declare Function addMD5 Lib "dll.dll" (ByVal amd5 As String, ByVal astr As String, ByVal sta As Long, ByVal ends As Long) As Boolean
+Private Declare Function getMD5 Lib "dll.dll" (ByVal a As String) As Boolean
+Private Declare Function getStringSize Lib "dll.dll" () As Long
+
+
+Dim len1, len2 As Long
+Dim ptr1, ptr2 As String
+
+
+
+Function klMD5(str As String, isfile As Boolean) As String
+If str = "" Then klMD5 = "NULL":: Exit Function
+Dim md5b As String
+klMD5 = String(33, 0)
+md5b = String(17, 0)
+If isfile Then
+    addMD5 klMD5, str, 0, 1
+    getMD5 md5b
+Else
+    addMD5 klMD5, str, 0, 0
+    getMD5 md5b
+End If
+''Dim abyte(33) As Byte
+''CopyMemory ByVal VarPtr(abyte(0)), ByVal StrPtr(md5b), 32
+
+'Dim abyte() As Byte
+'abyte = StrConv(md5b, vbFromUnicode)
+'
+'klMD5 = Hex(abyte(0)) & Hex(abyte(1)) & Hex(abyte(2)) & Hex(abyte(3))
+'klMD5 = klMD5 & Hex(abyte(4)) & Hex(abyte(5)) & Hex(abyte(6)) & Hex(abyte(7))
+'klMD5 = klMD5 & Hex(abyte(8)) & Hex(abyte(9)) & Hex(abyte(10)) & Hex(abyte(11))
+'klMD5 = klMD5 & Hex(abyte(12)) & Hex(abyte(13)) & Hex(abyte(14)) & Hex(abyte(15))
+End Function
+Function MD5str(Strs As String) As String
+MD5str = String(32 / 2, 0)
+MD5_Str Strs, StrPtr(MD5str)
+a = StringToArray(MD5str)
+MD5str = UCase(StrConv(MD5str, vbUnicode))
+End Function
+Function MD5Byte(bytes() As Byte, Optional AutoAddNull As Boolean = False) As String
+If AutoAddNull Then ReDim Preserve bytes(UBound(bytes) + 1)
+MD5Byte = String(32 / 2, 0)
+md5 VarPtr(bytes(0)), StrPtr(MD5Byte)
+MD5Byte = UCase(StrConv(MD5Byte, vbUnicode))
+If AutoAddNull Then ReDim Preserve bytes(UBound(bytes) - 1)
+End Function
+Function MD5File(Filename As String) As String
+Dim bytes() As Byte
+Open Filename For Binary As #1
+ReDim bytes(LOF(1))
+Get #1, , bytes
+Close
+MD5File = MD5Byte(bytes)
+End Function
+
+Public Function FileExist(Filename As String) As Boolean
+
+On Error GoTo NotExist
+    
+Call FileLen(Filename)
+FileExist = True
+Exit Function
+    
+NotExist:
+    
+End Function
+
+Private Sub Command1_Click()
+If Check1.value > 0 Then
+If FileExist(Text1.Text) Then
+      '  MsgBox Filename & "存在 "
+      Text2.Text = MD5File(Text1.Text)
+      Check1.value = 1
+Else
+      '  MsgBox FileName & "不存在 "
+      Text2.Text = MD5str(Text1.Text)
+      Check1.value = 0
+End If
+Else
+Text2.Text = MD5str(Text1.Text)
+End If
+If Text2.Text = "82BEF32153657DC25DC439A3B500A614" Then
+Text2.Text = "82BEF32153657DC25DC439A3B500A614" & vbNewLine & "--未知错误 "
+End If
+End Sub
+
+Private Sub Command2_Click()
+Label5.Caption = " "
+If StrComp(Text2.Text, Text4.Text, vbTextCompare) Then
+Label5.Caption = "不同"
+Else
+Label5.Caption = "相同"
+End If
+End Sub
+
+Private Sub Command3_Click()
+len1 = 0
+Label6.Caption = ""
+Text2.Text = ""
+If ptr1 <> "" Then
+CommonDialog1.InitDir = ptr1
+Else
+CommonDialog1.InitDir = App.Path
+End If
+CommonDialog1.Filename = ""
+CommonDialog1.Filter = "所有文件(*.*)|*.*"
+CommonDialog1.ShowOpen
+If CommonDialog1.Filename <> "" Then
+ptr1 = CommonDialog1.Filename
+len1 = FileLen(CommonDialog1.Filename)
+If len1 < 200000000 And len1 > 0 Then
+Text1.Text = CommonDialog1.Filename
+Check1.value = 2
+Else
+Text1.Text = "文件过大！"
+End If
+Else
+Text1.Text = "文件不存在！"
+End If
+Label6.Caption = len1
+End Sub
+
+Private Sub Command4_Click()
+len2 = 0
+Label7.Caption = ""
+Text4.Text = ""
+If ptr2 <> "" Then
+CommonDialog1.InitDir = ptr2
+Else
+CommonDialog1.InitDir = App.Path
+End If
+CommonDialog1.Filename = ""
+CommonDialog1.Filter = "所有文件(*.*)|*.*"
+CommonDialog1.ShowOpen
+If CommonDialog1.Filename <> "" Then
+ptr2 = CommonDialog1.Filename
+len2 = FileLen(CommonDialog1.Filename)
+If len2 < 200000000 And len2 > 0 Then
+Text3.Text = CommonDialog1.Filename
+Check2.value = 2
+Else
+Text3.Text = "文件过大！"
+End If
+Else
+Text3.Text = "文件不存在！"
+End If
+Label7.Caption = len2
+End Sub
+
+Private Sub Command5_Click()
+If Check2.value > 0 Then
+If FileExist(Text3.Text) Then
+      '  MsgBox FileName & "存在 "
+      Text4.Text = Md5_File_Calc(Text3.Text)
+      Check2.value = 1
+Else
+      '  MsgBox FileName & "不存在 "
+      Text4.Text = Md5_String_Calc(Text3.Text)
+      Check2.value = 0
+End If
+Else
+Text4.Text = Md5_String_Calc(Text3.Text)
+End If
+If Text4.Text = "82BEF32153657DC25DC439A3B500A614" Then
+Text4.Text = "82BEF32153657DC25DC439A3B500A614" & "--未知错误"
+End If
+End Sub
+
+Private Sub Command6_Click()
+End
+End Sub
+Private Sub Command7_Click()
+If Check1.value > 0 Then
+If FileExist(Text1.Text) Then
+      '  MsgBox Filename & "存在 "
+      Text2.Text = klMD5(Text1.Text, True)
+      Check1.value = 1
+Else
+      '  MsgBox FileName & "不存在 "
+      Text2.Text = klMD5(Text1.Text, False)
+      Check1.value = 0
+End If
+Else
+Text2.Text = klMD5(Text1.Text, False)
+End If
+If Text2.Text = "82BEF32153657DC25DC439A3B500A614" Then
+Text2.Text = "82BEF32153657DC25DC439A3B500A614" & vbNewLine & "--未知错误 "
+End If
+End Sub
+
+Private Sub Text1_KeyPress(KeyAscii As Integer)
+Check1.value = 0
+End Sub
+
+Private Sub Text2_Change()
+Label5.Caption = ""
+End Sub
+
+Private Sub Text3_KeyPress(KeyAscii As Integer)
+Check2.value = 0
+End Sub
+
+Private Sub Text4_Change()
+Label5.Caption = ""
+End Sub

@@ -1,0 +1,490 @@
+dm_ret = dm.FindStr(554,426,604,446,"quxiao","d5863c-555555",1.0,intX,intY)     取消
+
+
+Private Sub login(hwnd As Long, delay1 As Long, delay2 As Long)
+  dm_ret = dm.SetWindowState(hwnd, 1)
+  colors = "fff4a6"
+  For timei = 1 To 40
+  PauseTime delay1
+  color1 = logindm.GetColor(196, 476)
+  color2 = logindm.GetColor(208, 482)
+  color3 = logindm.GetColor(232, 485)
+  If colors = color1 And colors = color2 And colors = color3 >= 0 Then Exit For
+  Next timei
+  PauseTime delay1
+  logindm.MoveTo 570, 420
+  logindm.LeftClick
+  For timei = 1 To 15
+  PauseTime delay1 / 3
+  logindm.KeyPressChar "back"
+  Next timei
+  logindm.SendString hwnd, user
+  PauseTime delay1 * 2
+  logindm.MoveTo 570, 450
+  logindm.LeftClick
+  logindm.SendString hwnd, pass
+  PauseTime delay1 * 2
+  logindm.KeyPressChar "enter"
+
+
+    runer.Enabled = False
+End Sub
+
+
+
+
+
+
+
+
+
+dm_ret = dm.FindStr(144,34,180,45,"","ffe4c7-000000",1.0,intX,intY)  '沈抱尘
+
+dm_ret = dm.FindStr(901,13,924,26,"","ffffff-000000",1.0,intX,intY)  '王城
+
+dm_ret = dm.FindStr(937,13,984,25,"","ffffff-000000",1.0,intX,intY)
+
+dm_ret = dm.FindStr(937,13,985,25,"","ffffff-000000",1.0,intX,intY)
+
+204  34
+
+dm_ret = dm.FindStr(664,310,676,323,"","ebbf88-222222|eb9b4b-222222|eb9642-222222",1.0,intX,intY) 382 40 " 军需
+
+dm_ret = dm.FindStr(439,412,515,429,"","82e2e0-555555|54aaff-555555|a9e2ff-555555",1.0,intX,intY)
+1192200720
+
+
+
+
+
+
+Dim n  As Integer
+Dim r As Boolean
+Dim Levels As Integer
+Dim Nrlevel As Integer
+Public Usename As Integer
+Dim StopAll As Boolean
+Public strDir As String
+Dim strSaveDir As String
+Dim fileName As String
+Dim urlName As String
+Dim dirName As String
+Private Const SWP_NOSIZE = &H1
+Private Const SWP_NOMOVE = &H2
+Private Const SWP_NOZORDER = &H4
+Private Const SWP_NOREDRAW = &H8
+Private Const SWP_NOACTIVATE = &H10
+Private Const SWP_FRAMECHANGED = &H20
+Private Const SWP_SHOWINWINDOW = &H40
+Private Const SWP_HIDEWINDOWS = &H80
+Private Const SWP_NOCOPYBITS = &H100
+Private Const SWP_NOOWNERZORDER = &H200
+Private Const SWP_DRAWFRAME = SWP_FRAMECHANGED
+Private Const SWP_NOREPOSITION = SWP_NOOWNERZORDER
+Private Const HWND_TOP = 0
+Private Const HWND_BOTTOM = 1
+Private Const HWND_TOPMOST = -1
+Private Const HWND_NOTOPMOST = -2
+Private Declare Function DeleteUrlCacheEntry Lib "wininet" Alias "DeleteUrlCacheEntryA" (ByVal lpszUrlName As String) As Long
+Private Declare Function PathFileExists Lib "shlwapi.dll" Alias "PathFileExistsA" (ByVal pszPath As String) As Long
+Private Declare Function SetWindowPos Lib "user32" (ByVal hWnd As Long, ByVal hWndInstrtAfter As Long, ByVal X As Long, ByVal Y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+Private Declare Function ReleaseCapture Lib "user32" () As Long
+Private Declare Function URLDownloadToFile Lib "urlmon" Alias "URLDownloadToFileA" (ByVal pCaller As Long, ByVal szURL As String, ByVal szFileName As String, ByVal dwReserved As Long, ByVal lpfnCB As Long) As Long
+Public Function DownloadFile(Url As String, LocalFilename As String) As Boolean
+If PathFileExists(LocalFilename) Then
+  DownloadFile = True
+  Exit Function
+End If
+strDir = Mid$(LocalFilename, 1, InStrRev(LocalFilename, "\", -1, vbTextCompare) - 1)
+strSaveDir = Mid$(LocalFilename, 1, InStr(4, LocalFilename, "\", vbTextCompare) - 1)
+If PathFileExists(strSaveDir) = 0 Then
+While strDir <> strSaveDir
+   If PathFileExists(strSaveDir) = 0 Then MkDir (strSaveDir)
+   If InStr(Len(strSaveDir) + 2, LocalFilename, "\", vbTextCompare) Then strSaveDir = Mid$(LocalFilename, 1, InStr(Len(strSaveDir) + 2, LocalFilename, "\", vbTextCompare) - 1)
+Wend
+   If PathFileExists(strSaveDir) = 0 Then MkDir (strSaveDir)
+End If
+Dim lngRetVal As Long
+    lngRetVal = URLDownloadToFile(0, Url, LocalFilename, 0, 0)
+    If lngRetVal = 0 Then
+        DownloadFile = True
+        DeleteUrlCacheEntry Url '清除缓存
+    End If
+End Function
+Public Function UrltoDir(Url As String, Dir As String) As String
+If Right$(Dir, 1) = "\" Then Dir = Mid$(Dir, 1, Len(Text3.Text) - 1)
+strDir = Url
+If InStr(1, LCase(strDir), "http:", vbTextCompare) Then
+strDir = Mid$(strDir, 8)
+Else
+Label5.Caption = "error"
+Exit Function
+End If
+If InStr(1, strDir, "@", vbTextCompare) Then strDir = Mid$(strDir, InStr(1, strDir, "@", vbTextCompare) + 1)
+If Right$(strDir, 1) = "/" Then strDir = Mid$(strDir, 1, Len(strDir) - 1)
+If Right$(strDir, 1) = "." Then strDir = Mid$(strDir, 1, Len(strDir) - 1)
+
+ If InStrRev(strDir, "/", -1, vbTextCompare) Then
+ fileName = Mid$(strDir, InStrRev(strDir, "/", -1, vbTextCompare) + 1)
+ Else
+ fileName = "index.html"
+ End If
+End If
+ 
+If InStr(1, strDir, "/", vbTextCompare) Then strDir = Replace(Mid$(strDir, 1, InStrRev(strDir, "/", -1, vbTextCompare) - 1), "/", "\")
+strSaveDir = Dir & "\" & strDir
+
+
+ If InStrRev(fileName, ".", -1, vbTextCompare) Then
+ strDir = Mid$(fileName, InStrRev(fileName, ".", -1, vbTextCompare) + 1)
+ Else
+  fileName = fileName & ".html"
+  strDir = "html"
+ End If
+End If
+'If StrComp(strDir, "html", vbTextCompare) <> 0 And StrComp(strDir, "htm", vbTextCompare) <> 0 Then
+' Svar = MsgBox(strDir & "--The file is other type ,Download or Rename as html ?", vbYesNo + vbQuestion, "Net Downter 1.0")
+' If Svar = vbYes Then
+'  ElseIf Svar = vbNo Then
+'  fileName = Mid$(fileName, 1, InStrRev(fileName, ".", -1, vbTextCompare) - 1) & ".html"
+'  Else
+'   Exit Function
+' End If
+' End If
+UrltoDir = strSaveDir & "\" & fileName
+End Function
+
+Private Sub Check1_Click()
+If Check1.Value = Checked Then
+ Usename = 1
+Else
+ Usename = 2
+End If
+End Sub
+
+Private Sub Command1_Click()
+frmBrowse.Show
+End Sub
+
+Private Sub Command2_Click()
+On Error Resume Next
+
+If Right$(Text3.Text, 1) = "\" Then Text3.Text = Mid$(Text3.Text, 1, Len(Text3.Text) - 1)
+strDir = Text1.Text
+If InStr(1, LCase(strDir), "http:", vbTextCompare) Then
+strDir = Mid$(strDir, 8)
+Else
+Label5.Caption = "error"
+Exit Sub
+End If
+If InStr(1, strDir, "@", vbTextCompare) Then strDir = Mid$(strDir, InStr(1, strDir, "@", vbTextCompare) + 1)
+If Right$(strDir, 1) = "/" Then strDir = Mid$(strDir, 1, Len(strDir) - 1)
+If Right$(strDir, 1) = "." Then strDir = Mid$(strDir, 1, Len(strDir) - 1)
+
+ If InStrRev(strDir, "/", -1, vbTextCompare) Then
+ fileName = Mid$(strDir, InStrRev(strDir, "/", -1, vbTextCompare) + 1)
+ Else
+  Svar = MsgBox("The file is no name ,use index.html?", vbYesNo + vbQuestion, "Net Downter 1.0")
+ If Svar = vbYes Then
+ fileName = "index.html"
+    Else
+ Exit Sub
+ End If
+End If
+ 
+If InStr(1, strDir, "/", vbTextCompare) Then strDir = Replace(Mid$(strDir, 1, InStrRev(strDir, "/", -1, vbTextCompare) - 1), "/", "\")
+strSaveDir = Text3.Text & "\" & strDir
+
+
+ If InStrRev(fileName, ".", -1, vbTextCompare) Then
+ strDir = Mid$(fileName, InStrRev(fileName, ".", -1, vbTextCompare) + 1)
+ Else
+  Svar = MsgBox(fileName & "--The file is no type ,use html ?", vbYesNo + vbQuestion, "Net Downter 1.0")
+ If Svar = vbYes Then
+  fileName = fileName & ".html"
+  strDir = "html"
+  Else
+ Exit Sub
+ End If
+End If
+If StrComp(strDir, "html", vbTextCompare) <> 0 And StrComp(strDir, "htm", vbTextCompare) <> 0 Then
+ Svar = MsgBox(strDir & "--The file is other type ,Download or Rename as html ?", vbYesNo + vbQuestion, "Net Downter 1.0")
+ If Svar = vbYes Then
+  ElseIf Svar = vbNo Then
+  fileName = Mid$(fileName, 1, InStrRev(fileName, ".", -1, vbTextCompare) - 1) & ".html"
+  Else
+   Exit Sub
+ End If
+ End If
+
+ 
+ 
+urlName = Text1.Text
+dirName = strSaveDir & "\" & fileName
+
+
+If StopAll = False Then
+ Svar = MsgBox("The Downloader is busy ,waite OK ?", vbYesNo + vbQuestion, "Net Downter 1.0")
+ If Svar = vbYes Then
+  Exit Sub
+  Else
+ 
+ End If
+Else
+
+Timer1.Enabled = True
+Levels = Val(Text2.Text)
+StopAll = False
+Nrlevel = 0
+Label5.Caption = "busy"
+'Text1.Locked = True
+'Text2.Locked = True
+'Text3.Locked = True
+'Text4.Locked = True
+'Statusline.Caption = "Makeing Download.. at level (" & (Nrlevel) + 1 & ")"
+
+Statusline.Caption = "Save as : " & dirName
+r = DownloadFile(urlName, dirName)
+While r = False
+  Svar = MsgBox("The net maybe bad ,stop ?", vbYesNo + vbQuestion, "Net Downter 1.0")
+  If Svar = vbYes Then
+  Exit Sub
+  Else
+ r = DownloadFile(urlName, dirName)
+  End If
+Wend
+
+StopAll = True
+Label5.Caption = "free"
+End If
+
+
+End Sub
+
+Private Sub Command3_Click()
+
+If PathFileExists(fileName) = 0 Or Len(fileName) = 0 Then
+ Svar = MsgBox(fileName & "File not exit,download it?", vbYesNo + vbQuestion, "Net Downter 1.0")
+ If Svar = vbYes Then
+Call Command2_Click
+ Else
+  Exit Sub
+ End If
+End If
+
+End Sub
+
+Private Sub Command4_Click()
+SaveSetting "Net Downer", "Settings", "LastUrl", Text1.Text
+SaveSetting "Net Downer", "Settings", "Levels", Text2.Text
+SaveSetting "Net Downer", "Settings", "SaveDir", Text3.Text
+SaveSetting "Net Downer", "Settings", "SaveMain", Text4.Text
+SaveSetting "Net Downer", "Settings", "Names", Usename
+SaveSetting "Net Downer", "Settings", "Filters", strFilters
+End
+End Sub
+
+
+Private Sub Command5_Click()
+frmSettings.Show
+End Sub
+
+
+
+
+Private Sub Form_Load()
+SetWindowPos hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE
+Me.Height = 3490
+Text1.Text = GetSetting("Net Downer", "Settings", "LastUrl", "http://www.site.com/pictures.htm")
+Text2.Text = GetSetting("Net Downer", "Settings", "Levels", 1)
+Text3.Text = GetSetting("Net Downer", "Settings", "SaveDir", "c:\temp")
+Text4.Text = GetSetting("Net Downer", "Settings", "SaveMain", "index*.html")
+Usename = GetSetting("Net Downer", "Settings", "Names", 2)
+strFilters = GetSetting("Net Hunter", "Settings", "Filters", ".mov/.asf/.viv/.ra/.rar/.ram/.ace/.zip/.mpg/.mpeg/.avi/.gif/.jpg/.bmp/.ani/.ico/.js/.class/.mdb/.mbr/.jar/.swf/.vbs/.arj/.jpeg/.pdf/.tif/.mp3/.wav/.vid/.wsf/.txt/.doc/.mde/.movie/.tgz")
+frmSettings.txtMediafiles.Text = strFilters
+If Usename = 1 Then
+frmSettings.Check1.Value = Checked
+Else
+frmSettings.Check1.Value = Unchecked
+End If
+StopAll = True
+r = False
+End Sub
+
+
+
+
+Private Sub Label1_DblClick(Index As Integer)
+If StopAll Then Text1.Text = ""
+End Sub
+
+
+
+
+Private Declare Function MD5_Str Lib "MD5.dll" Alias "_Z3MD5PcS_" (ByVal Strs As String, ByVal StrMD5 As Long) As Long
+Private Declare Function MD5 Lib "MD5.dll" Alias "_Z3MD5PcS_" (ByVal Strs As Long, ByVal StrMD5 As Long) As Long
+Dim len1, len2 As Long
+Dim ptr1, ptr2 As String
+
+Function MD5Str(Strs As String) As String
+Dim vbsmd5 As String
+vbsmd5 = Md5_String_Calc(Strs)
+MD5Str = vbsmd5
+'MD5Str = String(32 / 2, 0)
+'MD5_Str Strs, StrPtr(MD5Str)
+'MD5Str = UCase(StrConv(MD5Str, vbUnicode))
+End Function
+Function MD5Byte(bytes() As Byte, Optional AutoAddNull As Boolean = False) As String
+If AutoAddNull Then ReDim Preserve bytes(UBound(bytes) + 1)
+MD5Byte = String(32 / 2, 0)
+MD5 VarPtr(bytes(0)), StrPtr(MD5Byte)
+MD5Byte = UCase(StrConv(MD5Byte, vbUnicode))
+If AutoAddNull Then ReDim Preserve bytes(UBound(bytes) - 1)
+End Function
+Function MD5File(Filename As String) As String
+Dim vbfmd5 As String
+vbfmd5 = Md5_File_Calc(Filename)
+MD5File = vbfmd5
+'Dim bytes() As Byte
+'Open Filename For Binary As #1
+'ReDim bytes(LOF(1))
+'Get #1, , bytes
+'Close
+'MD5File = MD5Byte(bytes)
+End Function
+
+Public Function FileExist(Filename As String) As Boolean
+
+On Error GoTo NotExist
+    
+Call FileLen(Filename)
+FileExist = True
+Exit Function
+    
+NotExist:
+    
+End Function
+
+Private Sub Command1_Click()
+If Check1.value > 0 Then
+If FileExist(Text1.Text) Then
+      '  MsgBox Filename & "存在 "
+      Text2.Text = MD5File(Text1.Text)
+      Check1.value = 1
+Else
+      '  MsgBox FileName & "不存在 "
+      Text2.Text = MD5Str(Text1.Text)
+      Check1.value = 0
+End If
+Else
+Text2.Text = MD5Str(Text1.Text)
+End If
+If Text2.Text = "82BEF32153657DC25DC439A3B500A614" Then
+Text2.Text = "82BEF32153657DC25DC439A3B500A614" & vbNewLine & "--未知错误 "
+End If
+End Sub
+
+Private Sub Command2_Click()
+Label5.Caption = " "
+If StrComp(Text2.Text, Text4.Text, vbTextCompare) Then
+Label5.Caption = "不同"
+Else
+Label5.Caption = "相同"
+End If
+End Sub
+
+Private Sub Command3_Click()
+len1 = 0
+Label6.Caption = ""
+Text2.Text = ""
+If ptr1 <> "" Then
+CommonDialog1.InitDir = ptr1
+Else
+CommonDialog1.InitDir = App.Path
+End If
+CommonDialog1.Filename = ""
+CommonDialog1.Filter = "所有文件(*.*)|*.*"
+CommonDialog1.ShowOpen
+If CommonDialog1.Filename <> "" Then
+ptr1 = CommonDialog1.Filename
+len1 = FileLen(CommonDialog1.Filename)
+If len1 < 200000000 And len1 > 0 Then
+Text1.Text = CommonDialog1.Filename
+Check1.value = 2
+Else
+Text1.Text = "文件过大！"
+End If
+Else
+Text1.Text = "文件不存在！"
+End If
+Label6.Caption = len1
+End Sub
+
+Private Sub Command4_Click()
+len2 = 0
+Label7.Caption = ""
+Text4.Text = ""
+If ptr2 <> "" Then
+CommonDialog1.InitDir = ptr2
+Else
+CommonDialog1.InitDir = App.Path
+End If
+CommonDialog1.Filename = ""
+CommonDialog1.Filter = "所有文件(*.*)|*.*"
+CommonDialog1.ShowOpen
+If CommonDialog1.Filename <> "" Then
+ptr2 = CommonDialog1.Filename
+len2 = FileLen(CommonDialog1.Filename)
+If len2 < 200000000 And len2 > 0 Then
+Text3.Text = CommonDialog1.Filename
+Check2.value = 2
+Else
+Text3.Text = "文件过大！"
+End If
+Else
+Text3.Text = "文件不存在！"
+End If
+Label7.Caption = len2
+End Sub
+
+Private Sub Command5_Click()
+If Check2.value > 0 Then
+If FileExist(Text3.Text) Then
+      '  MsgBox FileName & "存在 "
+      Text4.Text = MD5File(Text3.Text)
+      Check2.value = 1
+Else
+      '  MsgBox FileName & "不存在 "
+      Text4.Text = MD5Str(Text3.Text)
+      Check2.value = 0
+End If
+Else
+Text4.Text = MD5Str(Text3.Text)
+End If
+If Text4.Text = "82BEF32153657DC25DC439A3B500A614" Then
+Text4.Text = "82BEF32153657DC25DC439A3B500A614" & "--未知错误"
+End If
+End Sub
+
+Private Sub Command6_Click()
+End
+End Sub
+
+Private Sub Text1_KeyPress(KeyAscii As Integer)
+Check1.value = 0
+End Sub
+
+Private Sub Text2_Change()
+Label5.Caption = ""
+End Sub
+
+Private Sub Text3_KeyPress(KeyAscii As Integer)
+Check2.value = 0
+End Sub
+
+Private Sub Text4_Change()
+Label5.Caption = ""
+End Sub
+
+

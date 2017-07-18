@@ -1,0 +1,29 @@
+﻿{
+"realm":{"name":"Medivh","slug":"medivh"},
+"alliance":{"auctions":[
+	{"auc":1424716918,"item":82800,"owner":"祖玛的仓库","bid":5600100,"buyout":6000000,"quantity":1,"timeLeft":"LONG","rand":0,"seed":505184640,"petSpeciesId":1213,"petBreedId":14,"petLevel":1,"petQualityId":3},
+	{"auc":1425770569,"item":74703,"owner":"梁山伯是我","bid":3850000,"buyout":3850000,"quantity":1,"timeLeft":"LONG","rand":0,"seed":1013144960},
+	{"auc":1425642693,"item":22449,"owner":"别逼我","bid":49999,"buyout":49999,"quantity":1,"timeLeft":"LONG","rand":0,"seed":2566307674},
+	{"auc":1425376984,"item":74247,"owner":"苏州小不点","bid":2544390,"buyout":2544590,"quantity":10,"timeLeft":"VERY_LONG","rand":0,"seed":2509308913},
+	{"auc":1425695823,"item":74866,"owner":"???","bid":116994,"buyout":116994,"quantity":6,"timeLeft":"VERY_LONG","rand":0,"seed":412732544},
+	{"auc":1425420945,"item":82800,"owner":"请叫我大虾","bid":85532795,"buyout":85532795,"quantity":1,"timeLeft":"VERY_LONG","rand":0,"seed":67969408,"petSpeciesId":1183,"petBreedId":4,"petLevel":1,"petQualityId":3},
+	{"auc":1425532218,"item":14047,"owner":"彩虹面料仓库","bid":285040,"buyout":285040,"quantity":20,"timeLeft":"VERY_LONG","rand":0,"seed":1606663680},
+	{"auc":1425908616,"item":76734,"owner":"秋月残红","bid":159975,"buyout":159975,"quantity":1,"timeLeft":"LONG","rand":0,"seed":933902464},
+	{"auc":1425586470,"item":76088,"owner":"唯唯诺诺","bid":580000,"buyout":580000,"quantity":2,"timeLeft":"VERY_LONG","rand":0,"seed":911359872},
+	{"auc":1425560836,"item":82800,"owner":"慕云儿","bid":4000100,"buyout":4880150,"quantity":1,"timeLeft":"VERY_LONG","rand":0,"seed":229504256,"petSpeciesId":175,"petBreedId":5,"petLevel":1,"petQualityId":3},
+"horde":{"auctions":[
+	{"auc":1425562999,"item":67487,"owner":"暗影战魂","bid":2880000,"buyout":2880000,"quantity":1,"timeLeft":"VERY_LONG","rand":0,"seed":2048243328},
+	{"auc":1424753062,"item":21949,"owner":"Yaojingmao","bid":333750,"buyout":440000,"quantity":1,"timeLeft":"LONG","rand":0,"seed":1484530688},
+	{"auc":1424571418,"item":82800,"owner":"筱刁","bid":2375000,"buyout":2500000,"quantity":1,"timeLeft":"MEDIUM","rand":0,"seed":1295209344,"petSpeciesId":43,"petBreedId":3,"petLevel":1,"petQualityId":2},
+	{"auc":1424823784,"item":72094,"owner":"杨司","bid":350000,"buyout":399999,"quantity":1,"timeLeft":"VERY_LONG","rand":0,"seed":1706243840},
+	{"auc":1425445146,"item":82800,"owner":"筱刁","bid":9990100,"buyout":9990150,"quantity":1,"timeLeft":"LONG","rand":0,"seed":1710164352,"petSpeciesId":846,"petBreedId":5,"petLevel":1,"petQualityId":2},
+	{"auc":1424652791,"item":21877,"owner":"魔兽仔六","bid":700000,"buyout":700000,"quantity":20,"timeLeft":"LONG","rand":0,"seed":1361218816},
+	{"auc":1425565505,"item":85691,"owner":"暗影战魂","bid":2880000,"buyout":2880000,"quantity":1,"timeLeft":"VERY_LONG","rand":0,"seed":1995303552},
+"neutral":{"auctions":[
+	{"auc":1425115599,"item":87900,"owner":"蜜露恩","bid":500000,"buyout":500000,"quantity":1,"timeLeft":"VERY_LONG","rand":0,"seed":1520256896},
+	{"auc":1425115538,"item":87898,"owner":"蜜露恩","bid":500000,"buyout":500000,"quantity":1,"timeLeft":"VERY_LONG","rand":0,"seed":1167354368},
+	{"auc":1425036232,"item":21887,"owner":"血域丶血蔷薇","bid":4074980,"buyout":0,"quantity":20,"timeLeft":"VERY_LONG","rand":0,"seed":2008650752},
+	{"auc":1425034943,"item":33568,"owner":"血域丶血蔷薇","bid":2480988,"buyout":0,"quantity":12,"timeLeft":"VERY_LONG","rand":0,"seed":1926649600},
+	{"auc":1424824721,"item":36926,"owner":"杨司","bid":40000,"buyout":50000,"quantity":1,"timeLeft":"VERY_LONG","rand":0,"seed":2088111232},
+	{"auc":1425035747,"item":15417,"owner":"血域丶血蔷薇","bid":60297,"buyout":0,"quantity":3,"timeLeft":"VERY_LONG","rand":0,"seed":1857948288},
+}
