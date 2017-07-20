@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2007-11-23 10:58:01.461.bdsproj,E:\My Documents\Borland Studio Projects\Project3.bdsproj=E:\My Documents\Borland Studio Projects\Project3.bdsproj</Transaction>
+    <Transaction>2007-11-25 11:39:16.224.bdsproj,E:\My Documents\Borland Studio Projects\Project3.bdsproj=E:\My Documents\Borland Studio Projects\新建文件夹\InjectDll.bdsproj</Transaction>
+    <Transaction>2007-11-25 11:39:37.024.pas,E:\My Documents\Borland Studio Projects\Unit3.pas=E:\My Documents\Borland Studio Projects\新建文件夹\Unit1.pas</Transaction>
+    <Transaction>2007-11-25 11:39:37.024.dfm,E:\My Documents\Borland Studio Projects\Unit3.dfm=E:\My Documents\Borland Studio Projects\新建文件夹\Unit1.dfm</Transaction>
+    <Transaction>2014-02-20 22:24:39.484.pas,D:\360data\重要数据\桌面\20093231715894\MemInfo.pas=</Transaction>
+    <Transaction>2014-02-20 22:24:39.578.pas,D:\360data\重要数据\桌面\20093231715894\ProcessInfo.pas=</Transaction>
+    <Transaction>2014-02-20 22:24:39.656.pas,D:\360data\重要数据\桌面\20093231715894\unitUseage.pas=</Transaction>
+    <Transaction>2014-02-20 22:24:39.781.pas,D:\360data\重要数据\桌面\20093231715894\uProcInfo.pas=</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="EnumStuff.pas"/>
+    <File Path="MemInfo.pas"/>
+    <File Path="ProcessInfo.pas"/>
+    <File Path="unitUseage.pas"/>
+    <File Path="uProcInfo.pas"/>
+    <File Path="Unit1.pas"/>
+    <File Path="Unit1.dfm"/>
+  </ProjectSortOrder>
+</BorlandProject>

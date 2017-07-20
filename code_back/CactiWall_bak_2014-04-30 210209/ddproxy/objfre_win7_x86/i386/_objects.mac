@@ -1,0 +1,17 @@
+
+
+386_OBJECTS=\
+ $(OBJ_PATH)\$O\dd_drv.obj \
+ $(OBJ_PATH)\$O\dd_proxy.obj \
+
+
+
+
+
+# lowercased
+BASEDIR=e:\winddk\7600.16385.1
+OBJECT_ROOT=e:\winddk\7600.16385.1
+MAKEDIR_LOWERCASE=i:\qq\ddproxy
+OBJ_PATH=i:\qq\ddproxy
+CONCURRENT_MIDL=0
+CONCURRENT_MANIFEST_BUILD=0

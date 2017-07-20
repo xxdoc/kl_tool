@@ -1,0 +1,41 @@
+#showtooltip 碧玉疾风
+/cast 碧玉疾风
+/cast [@mouseover]嚎镇八方
+/cast 逍遥酒
+/cast 壮胆酒
+/cast 豪能酒
+
+
+#showtooltip 禅意珠
+/cast 禅意珠
+/cast [@mouseover]嚎镇八方
+/cast 逍遥酒
+/cast 壮胆酒
+/cast 豪能酒
+
+#showtooltip 移花接木
+/cast 移花接木
+/cast [@mouseover]嚎镇八方
+/cast 逍遥酒
+/cast 壮胆酒
+/cast 豪能酒
+
+#showtooltip 嚎镇八方
+/cast [@mouseover]嚎镇八方
+/cast 逍遥酒
+/cast 壮胆酒
+/cast 豪能酒
+
+
+/use 可爱的情人符
+
+/run for i=1,GetMerchantNumItems() do if (string.find(GetMerchantItemLink(i),"爱情信物")) then BuyMerchantItem(i,1);end end
+
+
+
+
+/run for i=1,GetMerchantNumItems() do local c=GetItemCount(GetMerchantItemLink(i));if (string.find(GetMerchantItemLink(i),"药膏") and c<20 and c~=0) then BuyMerchantItem(i,20-c);end end
+
+
+
+

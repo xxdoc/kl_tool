@@ -1,0 +1,23 @@
+
+.ah-button { background: url("../../img/button.gif") no-repeat; }
+.time-short { background: url("../../img/time-short.gif") 0 50% no-repeat; }
+.time-medium { background: url("../../img/time-medium.gif") 0 50% no-repeat; }
+.time-long { background: url("../../img/time-long.gif") 0 50% no-repeat; }
+.time-verylong { background: url("../../img/time-verylong.gif") 0 50% no-repeat; }
+.dialog .close { background: url("../../img/close.gif") no-repeat; }
+#button-continue { background: url("../../img/close.gif") no-repeat; }
+#button-retry { background: url("../../img/retry.gif") no-repeat; }
+#button-continue { background: url("../../img/continue.gif") no-repeat; }
+
+.auction-house.summary,
+.dialog,
+.tip { zoom: 1; }
+.tip { position: relative; }
+.browse-form .column { margin-left: 10px; }
+
+.create { height: 700px; }
+.create #item-icon { left: -70px; top: 0; }
+.create .inventory { height: 650px; width: 375px; zoom: 1; position: relative; display: block; }
+.create .inventory table { width: 100%; }
+
+.auction-house-error { height: 500px; }

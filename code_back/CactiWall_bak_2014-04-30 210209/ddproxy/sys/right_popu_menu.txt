@@ -1,0 +1,24 @@
+
+log
+H:\项目\杂物\EverEdit\EverEdit.exe "D:\PHPweb\local\apache2\logs\error.log"
+C:\windows\system32\SHELL32.dll,134
+
+
+
+
+
+web
+explorer.exe "D:\PHPweb\www\aweb\ahwow\html"
+C:\windows\system32\SHELL32.dll,242
+
+
+
+EverEdit
+H:\项目\杂物\EverEdit\EverEdit.exe "%1"
+H:\项目\杂物\EverEdit\EverEdit.exe
+
+
+
+WinHex
+H:\项目\杂物\winhex\WinHex.exe "%1"
+H:\项目\杂物\winhex\WinHex.exe

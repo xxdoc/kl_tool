@@ -1,0 +1,3147 @@
+﻿<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+<!--STATUS OK-->
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 11">
+<meta name=Originator content="Microsoft Word 11">
+<link rel=File-List href="vb%20用代码创建右键菜单的问题.files/filelist.xml">
+<link rel=Edit-Time-Data href="vb%20用代码创建右键菜单的问题.files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title> vb 用代码创建右键菜单的问题 </title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>YlmF</o:Author>
+  <o:LastAuthor>YlmF</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>5</o:TotalTime>
+  <o:Created>2013-05-14T08:13:00Z</o:Created>
+  <o:LastSaved>2013-05-14T08:13:00Z</o:LastSaved>
+  <o:Pages>4</o:Pages>
+  <o:Words>3098</o:Words>
+  <o:Characters>17663</o:Characters>
+  <o:Company>WwW.YlmF.CoM</o:Company>
+  <o:Lines>147</o:Lines>
+  <o:Paragraphs>41</o:Paragraphs>
+  <o:CharactersWithSpaces>20720</o:CharactersWithSpaces>
+  <o:Version>11.9999</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:FormsDesign/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<link rel=Stylesheet type="text/css" media=all
+href="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\7100002.css">
+<link rel=Stylesheet type="text/css" media=all
+href="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\3059469.css">
+<link rel=Stylesheet type="text/css" media=all
+href="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\8890221.css">
+<link rel=Stylesheet type="text/css" media=all
+href="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\7318264.css">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-alt:SimSun;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 135135232 16 0 262145 0;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 135135232 16 0 262145 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+h1
+	{mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:24.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	font-weight:bold;}
+h2
+	{mso-pagination:widow-orphan;
+	mso-outline-level:2;
+	font-size:18.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	font-weight:bold;}
+h3
+	{mso-pagination:widow-orphan;
+	mso-outline-level:3;
+	font-size:13.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	font-weight:bold;}
+h4
+	{mso-pagination:widow-orphan;
+	mso-outline-level:4;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	font-weight:bold;}
+h5
+	{mso-pagination:widow-orphan;
+	mso-outline-level:5;
+	font-size:10.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	font-weight:bold;}
+h6
+	{mso-pagination:widow-orphan;
+	mso-outline-level:6;
+	font-size:7.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	font-weight:bold;}
+p
+	{mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-dialog, li.ui-dialog, div.ui-dialog
+	{mso-style-name:ui-dialog;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-mask, li.ui-mask, div.ui-mask
+	{mso-style-name:ui-mask;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-more, li.ui-more, div.ui-more
+	{mso-style-name:ui-more;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-more-arrow, li.ui-more-arrow, div.ui-more-arrow
+	{mso-style-name:ui-more-arrow;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-more-links, li.ui-more-links, div.ui-more-links
+	{mso-style-name:ui-more-links;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-more-link, li.ui-more-link, div.ui-more-link
+	{mso-style-name:ui-more-link;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-more-link-hover, li.ui-more-link-hover, div.ui-more-link-hover
+	{mso-style-name:ui-more-link-hover;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-gotop, li.ui-gotop, div.ui-gotop
+	{mso-style-name:ui-gotop;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-suggestion, li.ui-suggestion, div.ui-suggestion
+	{mso-style-name:ui-suggestion;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-quickdelete-button, li.ui-quickdelete-button, div.ui-quickdelete-button
+	{mso-style-name:ui-quickdelete-button;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.rotating, li.rotating, div.rotating
+	{mso-style-name:rotating;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.m-back-bar, li.m-back-bar, div.m-back-bar
+	{mso-style-name:m-back-bar;
+	font-size:13.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.m-back-button, li.m-back-button, div.m-back-button
+	{mso-style-name:m-back-button;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-qdetaillist, li.u-qdetaillist, div.u-qdetaillist
+	{mso-style-name:u-qdetaillist;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-qdetaillist-qt, li.u-qdetaillist-qt, div.u-qdetaillist-qt
+	{mso-style-name:u-qdetaillist-qt;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-qdetaillist-qtellipsis, li.u-qdetaillist-qtellipsis, div.u-qdetaillist-qtellipsis
+	{mso-style-name:u-qdetaillist-qtellipsis;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-qdetaillist-gold, li.u-qdetaillist-gold, div.u-qdetaillist-gold
+	{mso-style-name:u-qdetaillist-gold;
+	font-size:9.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-qdetaillist-qpic, li.u-qdetaillist-qpic, div.u-qdetaillist-qpic
+	{mso-style-name:u-qdetaillist-qpic;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-qdetaillist-qmb, li.u-qdetaillist-qmb, div.u-qdetaillist-qmb
+	{mso-style-name:u-qdetaillist-qmb;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-qdetaillist-info, li.u-qdetaillist-info, div.u-qdetaillist-info
+	{mso-style-name:u-qdetaillist-info;
+	font-size:9.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-qdetaillist-cont, li.u-qdetaillist-cont, div.u-qdetaillist-cont
+	{mso-style-name:u-qdetaillist-cont;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.m-submit-button, li.m-submit-button, div.m-submit-button
+	{mso-style-name:m-submit-button;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-subnav, li.u-subnav, div.u-subnav
+	{mso-style-name:u-subnav;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-refresh, li.u-refresh, div.u-refresh
+	{mso-style-name:u-refresh;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.u-loading, li.u-loading, div.u-loading
+	{mso-style-name:u-loading;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-vcode, li.w-vcode, div.w-vcode
+	{mso-style-name:w-vcode;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-new-search, li.w-new-search, div.w-new-search
+	{mso-style-name:w-new-search;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-msg, li.w-msg, div.w-msg
+	{mso-style-name:w-msg;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-msga, li.w-msga, div.w-msga
+	{mso-style-name:w-msg>a;
+	font-size:16.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-footer, li.w-footer, div.w-footer
+	{mso-style-name:w-footer;
+	font-size:9.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-product, li.w-product, div.w-product
+	{mso-style-name:w-product;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.mm-content-box, li.mm-content-box, div.mm-content-box
+	{mso-style-name:mm-content-box;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.mm-img-box, li.mm-img-box, div.mm-img-box
+	{mso-style-name:mm-img-box;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.mm-input-box, li.mm-input-box, div.mm-input-box
+	{mso-style-name:mm-input-box;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.mm-input-box-focus, li.mm-input-box-focus, div.mm-input-box-focus
+	{mso-style-name:mm-input-box-focus;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.mm-submit-button, li.mm-submit-button, div.mm-submit-button
+	{mso-style-name:mm-submit-button;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.mm-submit-buttondisabled, li.mm-submit-buttondisabled, div.mm-submit-buttondisabled
+	{mso-style-name:"mm-submit-button\[disabled\]";
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.floater-view-big, li.floater-view-big, div.floater-view-big
+	{mso-style-name:floater-view-big;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-adv-banner, li.w-adv-banner, div.w-adv-banner
+	{mso-style-name:w-adv-banner;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-answera, li.w-answera, div.w-answera
+	{mso-style-name:w-answer>a;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-content-meta, li.w-content-meta, div.w-content-meta
+	{mso-style-name:w-content-meta;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-lbstip, li.w-lbstip, div.w-lbstip
+	{mso-style-name:w-lbstip;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-question-appeal, li.w-question-appeal, div.w-question-appeal
+	{mso-style-name:w-question-appeal;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-question-box, li.w-question-box, div.w-question-box
+	{mso-style-name:w-question-box;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-reply-ask-submit-questioning, li.w-reply-ask-submit-questioning, div.w-reply-ask-submit-questioning
+	{mso-style-name:w-reply-ask-submit-questioning;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-reply-ask-submit-down, li.w-reply-ask-submit-down, div.w-reply-ask-submit-down
+	{mso-style-name:w-reply-ask-submit-down;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-reply-ask, li.w-reply-ask, div.w-reply-ask
+	{mso-style-name:w-reply-ask;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-reply-file, li.w-reply-file, div.w-reply-file
+	{mso-style-name:w-reply-file;
+	font-size:9.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-replydiv, li.w-replydiv, div.w-replydiv
+	{mso-style-name:w-reply>div;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-supplement, li.w-supplement, div.w-supplement
+	{mso-style-name:w-supplement;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-support, li.w-support, div.w-support
+	{mso-style-name:w-support;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-topic-recommend, li.w-topic-recommend, div.w-topic-recommend
+	{mso-style-name:w-topic-recommend;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.wrapper, li.wrapper, div.wrapper
+	{mso-style-name:wrapper;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.qb-icon, li.qb-icon, div.qb-icon
+	{mso-style-name:qb-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.vertical-link, li.vertical-link, div.vertical-link
+	{mso-style-name:vertical-link;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.back-to-list, li.back-to-list, div.back-to-list
+	{mso-style-name:back-to-list;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.bottom-search, li.bottom-search, div.bottom-search
+	{mso-style-name:bottom-search;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-dialog-title, li.ui-dialog-title, div.ui-dialog-title
+	{mso-style-name:ui-dialog-title;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-dialog-close, li.ui-dialog-close, div.ui-dialog-close
+	{mso-style-name:ui-dialog-close;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-dialog-content, li.ui-dialog-content, div.ui-dialog-content
+	{mso-style-name:ui-dialog-content;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-suggestion-result, li.ui-suggestion-result, div.ui-suggestion-result
+	{mso-style-name:ui-suggestion-result;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-suggestion-result-highlight, li.ui-suggestion-result-highlight, div.ui-suggestion-result-highlight
+	{mso-style-name:ui-suggestion-result-highlight;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-suggestion-button, li.ui-suggestion-button, div.ui-suggestion-button
+	{mso-style-name:ui-suggestion-button;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.split, li.split, div.split
+	{mso-style-name:split;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.cur, li.cur, div.cur
+	{mso-style-name:cur;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.arr, li.arr, div.arr
+	{mso-style-name:arr;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.search-input, li.search-input, div.search-input
+	{mso-style-name:search-input;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.header-wrap, li.header-wrap, div.header-wrap
+	{mso-style-name:header-wrap;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.search-wrap, li.search-wrap, div.search-wrap
+	{mso-style-name:search-wrap;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.user, li.user, div.user
+	{mso-style-name:user;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.copy, li.copy, div.copy
+	{mso-style-name:copy;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.list, li.list, div.list
+	{mso-style-name:list;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.adv-icon, li.adv-icon, div.adv-icon
+	{mso-style-name:adv-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.adv-info, li.adv-info, div.adv-info
+	{mso-style-name:adv-info;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.answer-area, li.answer-area, div.answer-area
+	{mso-style-name:answer-area;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.banner-list-dots, li.banner-list-dots, div.banner-list-dots
+	{mso-style-name:banner-list-dots;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.name, li.name, div.name
+	{mso-style-name:name;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.wap-icon, li.wap-icon, div.wap-icon
+	{mso-style-name:wap-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.header, li.header, div.header
+	{mso-style-name:header;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.special, li.special, div.special
+	{mso-style-name:special;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.expand, li.expand, div.expand
+	{mso-style-name:expand;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.collapse, li.collapse, div.collapse
+	{mso-style-name:collapse;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.hide, li.hide, div.hide
+	{mso-style-name:hide;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.title, li.title, div.title
+	{mso-style-name:title;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.info, li.info, div.info
+	{mso-style-name:info;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.reply-item, li.reply-item, div.reply-item
+	{mso-style-name:reply-item;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.load-more, li.load-more, div.load-more
+	{mso-style-name:load-more;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.reply, li.reply, div.reply
+	{mso-style-name:reply;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.erro, li.erro, div.erro
+	{mso-style-name:erro;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.corner, li.corner, div.corner
+	{mso-style-name:corner;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.reply-ask-wrapper, li.reply-ask-wrapper, div.reply-ask-wrapper
+	{mso-style-name:reply-ask-wrapper;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.reply-ask-wrapperdivspan, li.reply-ask-wrapperdivspan, div.reply-ask-wrapperdivspan
+	{mso-style-name:reply-ask-wrapper>div>span;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.chgbtn, li.chgbtn, div.chgbtn
+	{mso-style-name:chgbtn;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.chgwrap, li.chgwrap, div.chgwrap
+	{mso-style-name:chgwrap;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.reload, li.reload, div.reload
+	{mso-style-name:reload;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.finfo, li.finfo, div.finfo
+	{mso-style-name:finfo;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.fbtn, li.fbtn, div.fbtn
+	{mso-style-name:fbtn;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.fwrap, li.fwrap, div.fwrap
+	{mso-style-name:fwrap;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.fname, li.fname, div.fname
+	{mso-style-name:fname;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.fileicon, li.fileicon, div.fileicon
+	{mso-style-name:fileicon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.append, li.append, div.append
+	{mso-style-name:append;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.adopt, li.adopt, div.adopt
+	{mso-style-name:adopt;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.myans, li.myans, div.myans
+	{mso-style-name:myans;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.deleted, li.deleted, div.deleted
+	{mso-style-name:deleted;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.d-recommend-icon, li.d-recommend-icon, div.d-recommend-icon
+	{mso-style-name:d-recommend-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.remain, li.remain, div.remain
+	{mso-style-name:remain;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.topic-word, li.topic-word, div.topic-word
+	{mso-style-name:topic-word;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-qdetailmore, li.ui-qdetailmore, div.ui-qdetailmore
+	{mso-style-name:ui-qdetailmore;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.vertical-img11, li.vertical-img11, div.vertical-img11
+	{mso-style-name:vertical-img11;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.vertical-img21, li.vertical-img21, div.vertical-img21
+	{mso-style-name:vertical-img21;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.vertical-img22, li.vertical-img22, div.vertical-img22
+	{mso-style-name:vertical-img22;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.pic-icon, li.pic-icon, div.pic-icon
+	{mso-style-name:pic-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.noapprove, li.noapprove, div.noapprove
+	{mso-style-name:noapprove;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.header-icon, li.header-icon, div.header-icon
+	{mso-style-name:header-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.home, li.home, div.home
+	{mso-style-name:home;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.search, li.search, div.search
+	{mso-style-name:search;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.category, li.category, div.category
+	{mso-style-name:category;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.more, li.more, div.more
+	{mso-style-name:more;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.wise, li.wise, div.wise
+	{mso-style-name:wise;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.item, li.item, div.item
+	{mso-style-name:item;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.banner-list-dot, li.banner-list-dot, div.banner-list-dot
+	{mso-style-name:banner-list-dot;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.desc, li.desc, div.desc
+	{mso-style-name:desc;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.title-icon, li.title-icon, div.title-icon
+	{mso-style-name:title-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.score-icon, li.score-icon, div.score-icon
+	{mso-style-name:score-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-detail, li.w-detail, div.w-detail
+	{mso-style-name:w-detail;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.location, li.location, div.location
+	{mso-style-name:location;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.input, li.input, div.input
+	{mso-style-name:input;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.buttoncontent, li.buttoncontent, div.buttoncontent
+	{mso-style-name:buttoncontent;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ok, li.ok, div.ok
+	{mso-style-name:ok;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.more-icon, li.more-icon, div.more-icon
+	{mso-style-name:more-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.arrow-icon, li.arrow-icon, div.arrow-icon
+	{mso-style-name:arrow-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.product-icon, li.product-icon, div.product-icon
+	{mso-style-name:product-icon;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-dialog-title1, li.ui-dialog-title1, div.ui-dialog-title1
+	{mso-style-name:ui-dialog-title1;
+	text-align:center;
+	line-height:37.5pt;
+	mso-pagination:widow-orphan;
+	background:#373737;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:white;
+	font-weight:bold;}
+p.ui-dialog-close1, li.ui-dialog-close1, div.ui-dialog-close1
+	{mso-style-name:ui-dialog-close1;
+	line-height:22.5pt;
+	mso-pagination:widow-orphan;
+	font-size:13.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	font-weight:bold;}
+p.ui-dialog-content1, li.ui-dialog-content1, div.ui-dialog-content1
+	{mso-style-name:ui-dialog-content1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-suggestion-result1, li.ui-suggestion-result1, div.ui-suggestion-result1
+	{mso-style-name:ui-suggestion-result1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-suggestion-result-highlight1, li.ui-suggestion-result-highlight1, div.ui-suggestion-result-highlight1
+	{mso-style-name:ui-suggestion-result-highlight1;
+	mso-pagination:widow-orphan;
+	background:#EDEDED;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-suggestion-button1, li.ui-suggestion-button1, div.ui-suggestion-button1
+	{mso-style-name:ui-suggestion-button1;
+	line-height:24.75pt;
+	mso-pagination:widow-orphan;
+	background:#F7F7F7;
+	border:none;
+	mso-border-top-alt:solid #E7E7E7 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.split1, li.split1, div.split1
+	{mso-style-name:split1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#DDDDDD;}
+p.cur1, li.cur1, div.cur1
+	{mso-style-name:cur1;
+	mso-pagination:widow-orphan;
+	background:#DADADA;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.arr1, li.arr1, div.arr1
+	{mso-style-name:arr1;
+	margin-left:-2.25pt;
+	mso-pagination:widow-orphan;
+	background:#DADADA;
+	border:none;
+	mso-border-left-alt:solid #D4D3D3 .75pt;
+	mso-border-bottom-alt:solid #D4D3D3 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	display:none;
+	mso-hide:all;}
+p.arr2, li.arr2, div.arr2
+	{mso-style-name:arr2;
+	margin-left:-2.25pt;
+	mso-pagination:widow-orphan;
+	background:#DADADA;
+	border:none;
+	mso-border-left-alt:solid #D4D3D3 .75pt;
+	mso-border-bottom-alt:solid #D4D3D3 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-dialog-title2, li.ui-dialog-title2, div.ui-dialog-title2
+	{mso-style-name:ui-dialog-title2;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	background:white;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:black;
+	font-weight:bold;}
+p.ui-dialog-content2, li.ui-dialog-content2, div.ui-dialog-content2
+	{mso-style-name:ui-dialog-content2;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.buttoncontent1, li.buttoncontent1, div.buttoncontent1
+	{mso-style-name:buttoncontent1;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	background:#E4E4E4;
+	border:none;
+	mso-border-top-alt:solid #DFDFDF .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ok1, li.ok1, div.ok1
+	{mso-style-name:ok1;
+	mso-pagination:widow-orphan;
+	border:none;
+	mso-border-left-alt:solid #DFDFDF .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#225900;}
+p.search-input1, li.search-input1, div.search-input1
+	{mso-style-name:search-input1;
+	margin-right:62.25pt;
+	mso-pagination:widow-orphan;
+	background:white;
+	border:none;
+	mso-border-top-alt:solid #9A9A9A .75pt;
+	mso-border-left-alt:solid #9A9A9A .75pt;
+	mso-border-bottom-alt:solid #9A9A9A .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 8.0pt;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.header-wrap1, li.header-wrap1, div.header-wrap1
+	{mso-style-name:header-wrap1;
+	text-align:center;
+	line-height:31.5pt;
+	mso-pagination:widow-orphan;
+	background:#42C307;
+	border:none;
+	mso-border-top-alt:solid #38A70A .75pt;
+	mso-border-bottom-alt:solid #38A70A .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:13.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:white;
+	font-weight:bold;}
+p.header-icon1, li.header-icon1, div.header-icon1
+	{mso-style-name:header-icon1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.home1, li.home1, div.home1
+	{mso-style-name:home1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.header-icon2, li.header-icon2, div.header-icon2
+	{mso-style-name:header-icon2;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.search1, li.search1, div.search1
+	{mso-style-name:search1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.header-icon3, li.header-icon3, div.header-icon3
+	{mso-style-name:header-icon3;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.category1, li.category1, div.category1
+	{mso-style-name:category1;
+	line-height:22.5pt;
+	mso-pagination:widow-orphan;
+	background:#48D109;
+	border:none;
+	mso-border-alt:solid #34B100 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:white;}
+p.m-back-button1, li.m-back-button1, div.m-back-button1
+	{mso-style-name:m-back-button1;
+	text-indent:3.75pt;
+	line-height:22.5pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:white;}
+p.more1, li.more1, div.more1
+	{mso-style-name:more1;
+	line-height:15.75pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.more-icon1, li.more-icon1, div.more-icon1
+	{mso-style-name:more-icon1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.arrow-icon1, li.arrow-icon1, div.arrow-icon1
+	{mso-style-name:arrow-icon1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.wise1, li.wise1, div.wise1
+	{mso-style-name:wise1;
+	line-height:22.5pt;
+	mso-pagination:widow-orphan;
+	background:#48D109;
+	border:none;
+	mso-border-alt:solid #34B100 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:white;}
+p.header-icon4, li.header-icon4, div.header-icon4
+	{mso-style-name:header-icon4;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.search-wrap1, li.search-wrap1, div.search-wrap1
+	{mso-style-name:search-wrap1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-more1, li.ui-more1, div.ui-more1
+	{mso-style-name:ui-more1;
+	margin-top:.75pt;
+	mso-pagination:widow-orphan;
+	background:#F3F3F3;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.ui-more-arrow1, li.ui-more-arrow1, div.ui-more-arrow1
+	{mso-style-name:ui-more-arrow1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	display:none;
+	mso-hide:all;}
+p.user1, li.user1, div.user1
+	{mso-style-name:user1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.copy1, li.copy1, div.copy1
+	{mso-style-name:copy1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.list1, li.list1, div.list1
+	{mso-style-name:list1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.item1, li.item1, div.item1
+	{mso-style-name:item1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.product-icon1, li.product-icon1, div.product-icon1
+	{mso-style-name:product-icon1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.title1, li.title1, div.title1
+	{mso-style-name:title1;
+	text-align:center;
+	line-height:19.5pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#5B5B5B;
+	font-weight:bold;}
+p.adv-icon1, li.adv-icon1, div.adv-icon1
+	{mso-style-name:adv-icon1;
+	margin-right:5.25pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.adv-info1, li.adv-info1, div.adv-info1
+	{mso-style-name:adv-info1;
+	margin-right:5.25pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#969696;}
+p.answer-area1, li.answer-area1, div.answer-area1
+	{mso-style-name:answer-area1;
+	mso-pagination:widow-orphan;
+	background:#FAFAFA;
+	border:none;
+	mso-border-top-alt:solid #C6C6C6 .75pt;
+	padding:0cm;
+	mso-padding-alt:8.0pt 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+span.error1
+	{mso-style-name:error1;
+	mso-ansi-font-size:10.5pt;
+	mso-bidi-font-size:10.5pt;
+	color:red;
+	display:none;
+	mso-hide:all;}
+p.mm-submit-button1, li.mm-submit-button1, div.mm-submit-button1
+	{mso-style-name:mm-submit-button1;
+	margin-top:3.75pt;
+	mso-pagination:widow-orphan;
+	border:none;
+	mso-border-alt:solid #3EB809 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:white;}
+p.banner-list-dots1, li.banner-list-dots1, div.banner-list-dots1
+	{mso-style-name:banner-list-dots1;
+	text-align:center;
+	mso-line-height-alt:7.5pt;
+	mso-pagination:widow-orphan;
+	background:#F3F3F3;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.banner-list-dot1, li.banner-list-dot1, div.banner-list-dot1
+	{mso-style-name:banner-list-dot1;
+	margin-left:7.5pt;
+	mso-pagination:widow-orphan;
+	background:#C8C8C8;
+	border:none;
+	mso-border-alt:solid #B2B2B2 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.name1, li.name1, div.name1
+	{mso-style-name:name1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#545454;}
+p.wap-icon1, li.wap-icon1, div.wap-icon1
+	{mso-style-name:wap-icon1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#A3A3A3;}
+p.header1, li.header1, div.header1
+	{mso-style-name:header1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.special1, li.special1, div.special1
+	{mso-style-name:special1;
+	margin-left:33.0pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.desc1, li.desc1, div.desc1
+	{mso-style-name:desc1;
+	margin-top:1.5pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.expand1, li.expand1, div.expand1
+	{mso-style-name:expand1;
+	line-height:18.0pt;
+	mso-pagination:widow-orphan;
+	word-break:break-all;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#4466A9;}
+p.collapse1, li.collapse1, div.collapse1
+	{mso-style-name:collapse1;
+	line-height:18.0pt;
+	mso-pagination:widow-orphan;
+	word-break:break-all;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#4466A9;}
+p.hide1, li.hide1, div.hide1
+	{mso-style-name:hide1;
+	line-height:18.0pt;
+	mso-pagination:widow-orphan;
+	word-break:break-all;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	display:none;
+	mso-hide:all;}
+p.title2, li.title2, div.title2
+	{mso-style-name:title2;
+	margin-top:9.0pt;
+	margin-right:7.5pt;
+	margin-bottom:7.5pt;
+	margin-left:7.5pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.title-icon1, li.title-icon1, div.title-icon1
+	{mso-style-name:title-icon1;
+	margin-right:7.5pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.score-icon1, li.score-icon1, div.score-icon1
+	{mso-style-name:score-icon1;
+	mso-line-height-alt:9.75pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#A3A3A3;}
+p.w-content-meta1, li.w-content-meta1, div.w-content-meta1
+	{mso-style-name:w-content-meta1;
+	margin-top:9.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.info1, li.info1, div.info1
+	{mso-style-name:info1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.w-detail1, li.w-detail1, div.w-detail1
+	{mso-style-name:w-detail1;
+	margin-bottom:9.0pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.location1, li.location1, div.location1
+	{mso-style-name:location1;
+	margin-bottom:7.5pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#A3A3A3;}
+p.name2, li.name2, div.name2
+	{mso-style-name:name2;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#969696;}
+p.location2, li.location2, div.location2
+	{mso-style-name:location2;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#969696;}
+p.pic-icon1, li.pic-icon1, div.pic-icon1
+	{mso-style-name:pic-icon1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.noapprove1, li.noapprove1, div.noapprove1
+	{mso-style-name:noapprove1;
+	margin-right:43.5pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.reply-item1, li.reply-item1, div.reply-item1
+	{mso-style-name:reply-item1;
+	mso-pagination:widow-orphan;
+	border:none;
+	mso-border-bottom-alt:solid #E6E6E6 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.load-more1, li.load-more1, div.load-more1
+	{mso-style-name:load-more1;
+	text-align:center;
+	line-height:30.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#969696;}
+p.reply1, li.reply1, div.reply1
+	{mso-style-name:reply1;
+	margin-top:3.75pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.erro1, li.erro1, div.erro1
+	{mso-style-name:erro1;
+	margin-top:6.75pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:red;}
+p.corner1, li.corner1, div.corner1
+	{mso-style-name:corner1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.reply-ask-wrapper1, li.reply-ask-wrapper1, div.reply-ask-wrapper1
+	{mso-style-name:reply-ask-wrapper1;
+	mso-pagination:widow-orphan;
+	background:#F9F9F9;
+	border:none;
+	mso-border-alt:solid #EBEBEB .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.item2, li.item2, div.item2
+	{mso-style-name:item2;
+	margin-top:6.0pt;
+	margin-right:6.75pt;
+	margin-bottom:0cm;
+	margin-left:6.75pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	border:none;
+	mso-border-bottom-alt:dashed #EBEBEB .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 6.0pt 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.expand2, li.expand2, div.expand2
+	{mso-style-name:expand2;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#4466A9;}
+p.collapse2, li.collapse2, div.collapse2
+	{mso-style-name:collapse2;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#4466A9;}
+p.mm-img-box1, li.mm-img-box1, div.mm-img-box1
+	{mso-style-name:mm-img-box1;
+	margin-top:7.5pt;
+	margin-right:0cm;
+	margin-bottom:7.5pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.reply-ask-wrapperdivspan1, li.reply-ask-wrapperdivspan1, div.reply-ask-wrapperdivspan1
+	{mso-style-name:reply-ask-wrapper>div>span1;
+	text-align:center;
+	line-height:24.75pt;
+	mso-pagination:widow-orphan;
+	border:none;
+	mso-border-top-alt:solid #EBEBEB .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#999999;}
+p.hide2, li.hide2, div.hide2
+	{mso-style-name:hide2;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	display:none;
+	mso-hide:all;}
+p.input1, li.input1, div.input1
+	{mso-style-name:input1;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.5pt;
+	margin-left:6.75pt;
+	mso-pagination:widow-orphan;
+	background:white;
+	border:none;
+	mso-border-alt:solid #C1C1C1 .75pt;
+	padding:0cm;
+	mso-padding-alt:4.0pt 4.0pt 4.0pt 4.0pt;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.reply2, li.reply2, div.reply2
+	{mso-style-name:reply2;
+	margin-top:0cm;
+	margin-right:7.5pt;
+	margin-bottom:0cm;
+	margin-left:7.5pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.erro2, li.erro2, div.erro2
+	{mso-style-name:erro2;
+	margin-top:8.25pt;
+	margin-right:6.75pt;
+	margin-bottom:8.25pt;
+	margin-left:6.75pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:red;}
+p.chgbtn1, li.chgbtn1, div.chgbtn1
+	{mso-style-name:chgbtn1;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.chgwrap1, li.chgwrap1, div.chgwrap1
+	{mso-style-name:chgwrap1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	display:none;
+	mso-hide:all;}
+p.reload1, li.reload1, div.reload1
+	{mso-style-name:reload1;
+	margin-left:2.25pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.finfo1, li.finfo1, div.finfo1
+	{mso-style-name:finfo1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.fbtn1, li.fbtn1, div.fbtn1
+	{mso-style-name:fbtn1;
+	margin-left:3.75pt;
+	mso-pagination:widow-orphan;
+	background:#66AE0A;
+	border:none;
+	mso-border-alt:solid #5EA10A .75pt;
+	padding:0cm;
+	mso-padding-alt:2.0pt 6.0pt 2.0pt 6.0pt;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:white;}
+p.fwrap1, li.fwrap1, div.fwrap1
+	{mso-style-name:fwrap1;
+	line-height:15.75pt;
+	mso-pagination:widow-orphan;
+	word-break:break-all;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.fname1, li.fname1, div.fname1
+	{mso-style-name:fname1;
+	margin-right:3.0pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.fileicon1, li.fileicon1, div.fileicon1
+	{mso-style-name:fileicon1;
+	margin-right:6.0pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.append1, li.append1, div.append1
+	{mso-style-name:append1;
+	margin-top:5.25pt;
+	line-height:15.75pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.adopt1, li.adopt1, div.adopt1
+	{mso-style-name:adopt1;
+	margin-top:7.5pt;
+	margin-right:3.75pt;
+	margin-bottom:0cm;
+	margin-left:0cm;
+	margin-bottom:.0001pt;
+	line-height:18.0pt;
+	mso-pagination:widow-orphan;
+	border:none;
+	mso-border-alt:solid #CCCCCC .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 8.0pt 0cm 8.0pt;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#27A002;}
+p.myans1, li.myans1, div.myans1
+	{mso-style-name:myans1;
+	mso-pagination:widow-orphan;
+	background:#F3F9EE;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.deleted1, li.deleted1, div.deleted1
+	{mso-style-name:deleted1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#969696;}
+p.name3, li.name3, div.name3
+	{mso-style-name:name3;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#969696;}
+p.w-question-appeal1, li.w-question-appeal1, div.w-question-appeal1
+	{mso-style-name:w-question-appeal1;
+	margin-top:11.25pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#333333;}
+p.w-question-appeal2, li.w-question-appeal2, div.w-question-appeal2
+	{mso-style-name:w-question-appeal2;
+	margin-top:11.25pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#333333;}
+p.d-recommend-icon1, li.d-recommend-icon1, div.d-recommend-icon1
+	{mso-style-name:d-recommend-icon1;
+	margin-left:13.5pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.remain1, li.remain1, div.remain1
+	{mso-style-name:remain1;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	display:none;
+	mso-hide:all;}
+span.error2
+	{mso-style-name:error2;
+	mso-ansi-font-size:10.5pt;
+	mso-bidi-font-size:10.5pt;
+	color:red;
+	display:none;
+	mso-hide:all;}
+p.mm-submit-button2, li.mm-submit-button2, div.mm-submit-button2
+	{mso-style-name:mm-submit-button2;
+	margin-top:3.75pt;
+	mso-pagination:widow-orphan;
+	border:none;
+	mso-border-alt:solid #3EB809 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:white;}
+p.topic-word1, li.topic-word1, div.topic-word1
+	{mso-style-name:topic-word1;
+	mso-pagination:widow-orphan;
+	background:#FAFAFA;
+	border:none;
+	mso-border-bottom-alt:dashed #E6E6E6 .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.cur2, li.cur2, div.cur2
+	{mso-style-name:cur2;
+	mso-pagination:widow-orphan;
+	background:#F0F0F0;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#27A002;}
+p.ui-qdetailmore1, li.ui-qdetailmore1, div.ui-qdetailmore1
+	{mso-style-name:ui-qdetailmore1;
+	text-align:center;
+	line-height:30.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;
+	color:#969696;}
+p.vertical-img111, li.vertical-img111, div.vertical-img111
+	{mso-style-name:vertical-img111;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.vertical-img211, li.vertical-img211, div.vertical-img211
+	{mso-style-name:vertical-img211;
+	margin-right:3.75pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+p.vertical-img221, li.vertical-img221, div.vertical-img221
+	{mso-style-name:vertical-img221;
+	margin-left:3.75pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:宋体;
+	mso-bidi-font-family:宋体;}
+span.name4
+	{mso-style-name:name4;
+	color:#545454;}
+span.expand3
+	{mso-style-name:expand3;
+	color:#4466A9;}
+span.hide3
+	{mso-style-name:hide3;
+	display:none;
+	mso-hide:all;}
+span.collapse3
+	{mso-style-name:collapse3;
+	color:#4466A9;}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	mso-header-margin:42.55pt;
+	mso-footer-margin:49.6pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+<meta
+content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+name=viewport>
+<meta content="telephone=no" name=format-detection>
+<meta content="address=no" name=format-detection>
+<meta name=apple-mobile-web-app-capable content=no>
+<link rel=apple-touch-icon-precomposed
+href="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\294711.png">
+<link rel=apple-touch-icon-precomposed sizes=114x114
+href="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\3048861.png">
+
+<script>
+var PDC={_version:"0.1",_render_start:new Date().getTime(),_analyzer:{loaded:false,url:"http://static.tieba.baidu.com/tb/pms/wpo.mpda.js?v=0.1",callbacks:[]},_opt:{is_login:false,sample:0,product_id:0,page_id:0,common_resources:[],special_resources:[]},_timing:{},init:function(_){for(var A in _){this._opt[A]=_[A];}},mark:function(_){this._timing[_]=new Date().getTime();},view_start:function(){this.mark("vt");},tti:function(){this.mark("tti");},page_ready:function(){this.mark("fvt");},metadata:function(){var _=this._opt,A={env:{user:(_.is_login==true?1:0),product_id:_.product_id,page_id:_.page_id},common_resources:_.common_resources,special_resources:_.special_resources,render_start:this._render_start,timing:this._timing};return A;}};(function(){window.addEventListener("load",function(){PDC.mark("lt");},false);})();
+</script>
+
+<script  type="text/javascript" src="./vb 用代码创建右键菜单的问题_html/9131726.js">
+</script>
+
+<script  type="text/javascript">
+F._fileMap({'http://wapiknow.bdimg.com/static/common/pkg/stable_17e3908c.js' : ['/static/common/lib/gmu/zepto/zepto.js','/static/common/lib/gmu/uibase/uibase.js','/static/common/lib/gmu/base/base.js','/static/common/lib/gmu/uibase/widget/widget.js','/static/common/lib/gmu/uibase/control/control.js','/static/common/lib/gmu/gotop/gotop.js','/static/common/ui/alog/alog.js','/static/common/lib/gmu/dialog/dialog.js','/static/common/ui/event/event.js','/static/common/ui/storage/storage.js','/static/common/ui/log/log.js','/static/common/lib/gmu/more/more.js','/static/common/ui/more/more.js','/static/common/ui/string/string.js','/static/common/lib/fis/template/template.js','/static/common/ui/template/template.js','/static/common/lib/gmu/suggestion/suggestion.js','/static/common/lib/gmu/quickdelete/quickdelete.js','/static/common/lib/gmu/third-party/iscroll/iscroll.js']});
+</script>
+
+<script  type="text/javascript">
+F._fileMap({'http://wapiknow.bdimg.com/static/common/pkg/common_qb_2d70b4f5.js' : ['/static/common/ui/hunter/hunter.js','/static/common/ui/dialog/dialog.js','/static/common/ui/location/location.js','/static/common/ui/login/login.js','/static/common/ui/submit/submit.js','/static/common/ui/appeal/appeal.js','/static/common/ui/list/list.js','/static/common/ui/message/message.js','/static/common/ui/patch/patch.js','/static/widget/common/footer/footer.js','/static/widget/common/msg/msg.js','/static/widget/common/new-header/new-header.js','/static/widget/common/new-search/new-search.js','/static/widget/common/product/product.js','/static/widget/common/vcode/vcode.js']});
+</script>
+
+<script  type="text/javascript">
+F._fileMap({'http://wapiknow.bdimg.com/static/question/pkg/module_b10e478e.js' : ['/static/question/ui/alog/alog.js','/static/question/ui/file/file.js','/static/question/ui/antiCheat/antiCheat.js','/static/widget/question/answer/answer.js','/static/widget/question/bottom-banner/bottom-banner.js','/static/question/ui/floater/floater.js','/static/widget/question/detail/detail.js','/static/widget/question/lbsTip/lbsTip.js','/static/widget/question/question-appeal/question-appeal.js','/static/widget/question/relate-question/relate-question.js','/static/widget/question/reply-ask-submit/reply-ask-submit.js','/static/widget/question/reply-ask/reply-ask.js','/static/widget/question/reply-change/reply-change.js','/static/widget/question/supplement/supplement.js','/static/widget/question/support/support.js','/static/widget/question/topic-recommend/topic-recommend.js','/static/widget/question/wait-for-answer/wait-for-answer.js']});
+</script>
+
+<script  type="text/javascript">
+F._fileMap({'http://wapiknow.bdimg.com/static/question/index/webapp/webapp_b0900cb0.js' : ['/static/question/index/webapp/webapp.js']});
+</script>
+
+<script>
+PDC.mark("ht");PDC.ready=function(_){if(document.readyState=="complete"||document.readyState=="loaded"){_();}document.addEventListener("DOMContentLoaded",_,false);};PDC.ready(function(){PDC.mark("drt");});PDC.mark("vt");
+</script>
+
+<script  src="./vb 用代码创建右键菜单的问题_html/4048038.js">
+</script>
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1026"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body bgcolor="#EEEEEE" lang=ZH-CN link="#274E9C" vlink="#274E9C"
+style='tab-interval:21.0pt' alog-page-type=1>
+
+<div class=Section1>
+
+<p class=MsoNormal><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>提示：检测到您的浏览器未开启</span><span
+lang=EN-US style='font-family:Arial;color:black'>JavaScript</span><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，请开启后刷新页面重试</span><span lang=EN-US style='font-family:Arial;
+color:black'>:)</noscript> <script>
+if(typeof PDC != 'undefined'){PDC.view_start();}
+</script><script>
+(function(){var param = "?from=2001a&ssid=0&uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&fr=ala&bd_page_type=1&tj=zhidao_1_0_10&init=iphone&step=2".substr(1);F.context({user:{uid:"",user:"",ssid:"0"},paramURL:function(url){var urlParts = url.split("#");var url = urlParts[0];var hash = urlParts[1];var query = url.indexOf('?') === -1 ? '':url.substr(url.indexOf("?")+1);var origionParams = query.split(/=[^&]*&?/);var tmpParam = param;for(var i=0;i<origionParams.length;i++){if(origionParams[i])tmpParam = tmpParam.replace(new RegExp(origionParams[i]+"[^&]*"),"");}tmpParam = tmpParam.replace(/&+/g,"&").replace(/^&/,"");var res = url+(query?"&":"?")+tmpParam;hash && (res+=("#"+hash));return res;},isHybrid:0,config:{domain:{wappass:"http://wappass.baidu.com/passport",iknow:"http://wapiknow.baidu.com"}},cifr:"p_qb"});})();
+</script><script>
+F.context({question:{qid:'242182464',cid:'867',score:'80',title:'vb 用代码创建右键菜单的问题',lbsLon:"",lbsLat:"",replyNum:"1" }});
+</script><o:p></o:p></span></p>
+
+<div><header>
+
+<div style='border-top:solid #38A70A 1.0pt;border-left:none;border-bottom:solid #38A70A 1.0pt;
+border-right:none;mso-border-top-alt:solid #38A70A .75pt;mso-border-bottom-alt:
+solid #38A70A .75pt;padding:0cm 0cm 0cm 0cm'>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:31.5pt;
+background:#42C307'><b><span style='font-size:13.5pt;mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:white'>百度知道</span></b><b><span
+lang=EN-US style='font-size:13.5pt;font-family:Arial;color:white'><a
+href="http://wap.baidu.com/?from=iknow&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+alog-alias=comm-baidu><span lang=EN-US style='font-size:10.5pt;font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:white;
+border:solid #34B100 1.0pt;mso-border-alt:solid #34B100 .75pt;padding:0cm;
+background:#48D109'><span lang=EN-US>百度</span></span></a><o:p></o:p></span></b></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:31.5pt;
+background:#42C307'><b><span lang=EN-US style='font-size:13.5pt;font-family:
+Arial;color:white'><a
+href="http://wapiknow.baidu.com/?from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+alog-alias=comm-home><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
+宋体;font-weight:normal'><o:p></o:p></span></a></span></b></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:31.5pt;
+background:#42C307'><span lang=EN-US style='color:white'><o:p>&nbsp;</o:p></span></p>
+
+</div>
+
+</div>
+
+<div id=w-1>
+
+<p class=MsoNormal style='background:#EEEEEE'><b><span lang=EN-US
+style='font-size:13.5pt;font-family:Arial;color:white'><script>
+F.use("/static/widget/common/new-header/new-header.js",function(header){header.init($(".w-new-header"));});
+</script></span></b><span lang=EN-US style='font-family:Arial;color:black'><o:p>&nbsp;</o:p></span></p>
+
+<form>
+
+<div style='border:solid #9A9A9A 1.0pt;border-right:none;mso-border-top-alt:
+solid #9A9A9A .75pt;mso-border-left-alt:solid #9A9A9A .75pt;mso-border-bottom-alt:
+solid #9A9A9A .75pt;padding:0cm 0cm 0cm 8.0pt;margin-right:62.25pt'>
+
+<input type=button value=我想知道 data-action=search style="-webkit-tap-highlight-color: rgba(255, 255, 255, 0); "
+data-highlight-class-name=search-button-hover alog-alias=comm-search
+autocomplete=off autocorrect=off
+style="position: absolute; top: 0px; left: 0px; width: auto; right: 40px; ">
+
+<div id=ui-input-mask-1368518591358>
+
+<p class=MsoNormal style='background:white'><span lang=EN-US style='font-family:
+Arial;color:black'><INPUT TYPE="text" MAXLENGTH="100" NAME="word"><o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+</form>
+
+<div alog-alias=topBanner>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><script  type="text/javascript">
+F.use('/static/widget/common/new-search/new-search.js',function(search){search.init($("#w-1"));});
+</script></span><span lang=EN-US style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/board?next=http%253A%252F%252Fbcscdn.baidu.com%252Fbcs-cdn%252Fbaiduiknow%252FBaiduiknow_Android2.4.0.apk&amp;source=qb&amp;ua=android&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"></header><img
+border=0 width=32 height=32 id="_x0000_i1031"
+src="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\14065652"></a><o:p></o:p></span></p>
+
+</div>
+
+<div style='border-top:solid #C7C7C7 1.0pt;border-left:none;border-bottom:solid #C6C6C6 1.0pt;
+border-right:none;mso-border-top-alt:solid #C7C7C7 .75pt;mso-border-bottom-alt:
+solid #C6C6C6 .75pt;padding:0cm 0cm 0cm 0cm;margin-bottom:7.5pt'>
+
+<div style='margin-left:7.5pt;margin-top:9.0pt;margin-right:7.5pt;margin-bottom:
+7.5pt'>
+
+<p class=MsoNormal style='margin-right:6.75pt;line-height:16.5pt;mso-outline-level:
+3;background:white'><b><span lang=EN-US style='font-family:Arial;color:#333333'>vb
+</span></b><b><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:#333333'>用代码创建右键菜单的问题</span></b><b><span
+lang=EN-US style='font-family:Arial;color:#333333'><o:p></o:p></span></b></p>
+
+<div style='margin-top:9.0pt'>
+
+<p class=MsoNormal style='background:white'><span class=name4><span
+style='font-size:10.5pt;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial'>匿名</span></span><span style='font-size:10.5pt;
+font-family:Arial;color:black'> </span><span lang=EN-US style='font-size:10.5pt;
+font-family:Arial;color:#BCBCBC'>|</span><span lang=EN-US style='font-size:
+10.5pt;font-family:Arial;color:black'> </span><span lang=EN-US
+style='font-size:10.5pt;font-family:Arial;color:#A3A3A3'>2011-03-23</span><span
+lang=EN-US style='font-size:10.5pt;font-family:Arial;color:black'> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+<div>
+
+<div style='margin-bottom:9.0pt' id=w-2>
+
+<p class=MsoNormal style='line-height:18.0pt;background:white;word-break:break-all'><span
+style='font-size:10.5pt;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:#666666'>不用菜单编辑器来做</span><span lang=EN-US
+style='font-size:10.5pt;font-family:Arial;color:#666666'>! </span><span
+style='font-size:10.5pt;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:#666666'>我现在想做一个程序</span><span
+style='font-size:10.5pt;font-family:Arial;color:#666666'> </span><span
+style='font-size:10.5pt;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:#666666'>可以用代码创建菜单</span><span lang=EN-US
+style='font-size:10.5pt;font-family:Arial;color:#666666'>! </span><span
+style='font-size:10.5pt;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:#666666'>但是不知道怎么创建</span><span
+style='font-size:10.5pt;font-family:Arial;color:#666666'> </span><span
+style='font-size:10.5pt;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:#666666'>如果能创建的话</span><span style='font-size:
+10.5pt;font-family:Arial;color:#666666'> </span><span style='font-size:10.5pt;
+mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:#666666'>后面的工作就简单了</span><span lang=EN-US style='font-size:10.5pt;
+font-family:Arial;color:#666666'> <br>
+</span><span style='font-size:10.5pt;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:#666666'>问题补充：补充最好要有删除菜单主项或子项的删除代码这样既能添加也能删除不用的菜单项</span><span
+style='font-size:10.5pt;font-family:Arial;color:#666666'> <span lang=EN-US><o:p></o:p></span></span></p>
+
+</div>
+
+</div>
+
+</div>
+
+<h2 style='background:#EEEEEE'><span style='mso-ascii-font-family:Arial;
+mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black'>满意回答</span><span
+style='font-family:Arial;color:black'> <span lang=EN-US><o:p></o:p></span></span></h2>
+
+<div id=w-3>
+
+<p class=MsoNormal style='line-height:18.0pt;background:#EEEEEE;word-break:
+break-all'><span lang=EN-US style='font-family:Arial;color:black'>1</span><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>．模块代码如下：</span><span lang=EN-US style='font-family:Arial;
+color:black'><br>
+</span><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:black'>注意：因为有用到</span><span lang=EN-US
+style='font-family:Arial;color:black'>AddressOf OnMenu</span><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，函数</span><span lang=EN-US style='font-family:Arial;
+color:black'>OnMenu</span><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>只能放在模块部分。</span><span lang=EN-US
+style='font-family:Arial;color:black'><br>
+<br>
+Public Const MF_POPUP = &amp;H10&amp;<br>
+Public Const MF_STRING = &amp;H0&amp;<br>
+Public Const MF_DISABLED = &amp;H2&amp;<br>
+Public Const MF_SEPARATOR = &amp;H800&amp;<br>
+Public Const MF_CHECKED = &amp;H8&amp;<br>
+Public Const MF_GRAYED = &amp;H1&amp;<br>
+Public Const MF_BYCOMMAND = &amp;H0&amp;<br>
+Public Const GWL_WNDPROC = (-4)<br>
+Public Const WM_COMMAND = &amp;H111<br>
+Public Declare Function CreateMenu Lib &quot;user32&quot; () As Long<br>
+Public Declare Function GetMenu Lib &quot;user32&quot; (ByVal hwnd As Long) As
+Long<br>
+Public Declare Function GetMenuItemCount Lib &quot;user32&quot; (ByVal hMenu As
+Long) As Long<br>
+Public Declare Function GetSubMenu Lib &quot;user32&quot; (ByVal hMenu As Long,
+ByVal nPos As Long) As Long<br>
+Public Declare Function CreatePopupMenu Lib &quot;user32&quot; () As Long<br>
+Public Declare Function AppendMenu1 Lib &quot;user32&quot; Alias
+&quot;AppendMenuA&quot; (ByVal hMenu As Long, ByVal wFlags As Long, ByVal
+wIDNewItem As Long, ByVal lpNewItem As String) As Long<br>
+Public Declare Function SetMenu Lib &quot;user32&quot; (ByVal hwnd As Long,
+ByVal hMenu As Long) As Long<br>
+Public Declare Function DrawMenuBar Lib &quot;user32&quot; (ByVal hwnd As Long)
+As Long<br>
+Public Declare Function SetWindowLong Lib &quot;user32&quot; Alias
+&quot;SetWindowLongA&quot; (ByVal hwnd As Long, ByVal nIndex As Long, ByVal
+dwNewLong As Long) As Long<br>
+Public Declare Function CallWindowProc Lib &quot;user32&quot; Alias
+&quot;CallWindowProcA&quot; (ByVal lpPrevWndFunc As Long, ByVal hwnd As Long,
+ByVal Msg As Long, ByVal wPar<span class=suffix><span style='font-family:Arial;
+display:none;mso-hide:all'>...</span></span></span><span class=expand3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;display:none;mso-hide:all'>展开全部</span></span><span class=expand3><span
+lang=EN-US style='font-family:Arial;display:none;mso-hide:all'>&gt;</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>am As Long, ByVal lParam As Long) As Long</span></span><span lang=EN-US
+style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>Public MenuCount As Long '</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>菜单数量，不包括不能触发的菜单</span></span><span
+lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>Public MenuText() As String '</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>菜单文本，</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>ID=wParam</span></span><span class=hide3><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;
+mso-hide:none'>的菜单的文本为</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black;mso-hide:none'>MenuText(wParam - 1000)</span></span><span
+lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>Public OldWinProc As Long</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>Public Function OnMenu(ByVal hwnd
+As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As
+Long</span></span><br>
+<span class=hide3><span style='mso-hide:none'>'{</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>响应菜单事件</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>}</span></span><span lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>Select Case wMsg</span></span><br>
+<span class=hide3><span style='mso-hide:none'>Case WM_COMMAND</span></span><br>
+<span class=hide3><span style='mso-hide:none'>If wParam &gt; 1000 And wParam
+&lt;= 1000 + MenuCount Then</span></span><br>
+<span class=hide3><span style='mso-hide:none'>MsgBox MenuText(wParam - 1000)</span></span><br>
+<span class=hide3><span style='mso-hide:none'>End If</span></span><br>
+<span class=hide3><span style='mso-hide:none'>End Select</span></span><br>
+<span class=hide3><span style='mso-hide:none'>OnMenu =
+CallWindowProc(OldWinProc, hwnd, wMsg, wParam, lParam)</span></span><br>
+<span class=hide3><span style='mso-hide:none'>End Function </span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>2</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>．</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>Form1</span></span><span class=hide3><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;
+mso-hide:none'>代码如下：</span></span><span lang=EN-US style='font-family:Arial;
+color:black'><br>
+</span><span class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>设计窗体的</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>Negotiation=False</span></span><span class=hide3><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;
+mso-hide:none'>，以防止弹出对话框或响应</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black;mso-hide:none'>OnMenu</span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>后窗体上的菜单消失</span></span><span
+lang=EN-US style='font-family:Arial;color:black'><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>Private Sub Form_Load()</span></span><br>
+<span class=hide3><span style='mso-hide:none'>Call CreateActiveMenu</span></span><br>
+<span class=hide3><span style='mso-hide:none'>End Sub</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>Sub CreateActiveMenu()</span></span><br>
+<span class=hide3><span style='mso-hide:none'>Dim hMenu As Long, hSubMenu As
+Long</span></span><br>
+<span class=hide3><span style='mso-hide:none'>Dim hPopMenuTmp As Long</span></span><br>
+<span class=hide3><span style='mso-hide:none'>ReDim MenuText(0)</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>hMenu = GetMenu(Me.hwnd) '</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>窗体级菜单句柄</span></span><span
+lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>If hMenu = 0 Then</span></span><br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>窗体上没有菜单时，创建菜单。这种情况下需在设计阶段设置窗体的</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>NegotiatMenu=False</span></span><span class=hide3><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;
+mso-hide:none'>菜单才能显示出来。</span></span><span lang=EN-US style='font-family:Arial;
+color:black'><br>
+<span class=hide3><span style='mso-hide:none'>hMenu = CreateMenu()</span></span><br>
+<span class=hide3><span style='mso-hide:none'>End If</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>添加到</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>0</span></span><span class=hide3><span style='mso-ascii-font-family:Arial;
+mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;mso-hide:
+none'>级菜单</span></span><span lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>hSubMenu = hMenu</span></span><br>
+<span class=hide3><span style='mso-hide:none'>FullAllSubMenu hSubMenu</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>添加到</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>1</span></span><span class=hide3><span style='mso-ascii-font-family:Arial;
+mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;mso-hide:
+none'>级菜单</span></span><span lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>hSubMenu = GetSubMenu(hSubMenu,
+GetMenuItemCount(hSubMenu) - 1) '</span></span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black;mso-hide:none'>获取最后一个</span></span><span class=hide3><span
+lang=EN-US style='font-family:Arial;color:black;mso-hide:none'>0</span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>级菜单的句柄</span></span><span
+lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>FullAllSubMenu hSubMenu</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>添加到</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>2</span></span><span class=hide3><span style='mso-ascii-font-family:Arial;
+mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;mso-hide:
+none'>级菜单</span></span><span lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>hSubMenu = GetSubMenu(hSubMenu,
+GetMenuItemCount(hSubMenu) - 1)</span></span><br>
+<span class=hide3><span style='mso-hide:none'>FullAllSubMenu hSubMenu</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>添加到</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>3</span></span><span class=hide3><span style='mso-ascii-font-family:Arial;
+mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;mso-hide:
+none'>级菜单</span></span><span lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>hSubMenu = GetSubMenu(hSubMenu,
+GetMenuItemCount(hSubMenu) - 1)</span></span><br>
+<span class=hide3><span style='mso-hide:none'>FullAllSubMenu hSubMenu</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>SetMenu Me.hwnd, hMenu</span></span><br>
+<span class=hide3><span style='mso-hide:none'>DrawMenuBar Me.hwnd</span></span><br>
+<span class=hide3><span style='mso-hide:none'>Me.Refresh</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>OldWinProc =
+SetWindowLong(Me.hwnd, GWL_WNDPROC, AddressOf OnMenu)</span></span><br>
+<span class=hide3><span style='mso-hide:none'>End Sub</span></span><br>
+<br>
+<span class=hide3><span style='mso-hide:none'>Sub FullAllSubMenu(hFather As
+Long)</span></span><br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>加入全部子菜单</span></span><span
+lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>Dim hPopMenuTmp As Long</span></span><br>
+<span class=hide3><span style='mso-hide:none'>Dim i As Integer</span></span><br>
+<span class=hide3><span style='mso-hide:none'>hPopMenuTmp = CreatePopupMenu()</span></span><br>
+<span class=hide3><span style='mso-hide:none'>For i = 0 To 4</span></span><br>
+<span class=hide3><span style='mso-hide:none'>MenuCount = MenuCount + 1</span></span><br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>保存菜单文本，用于菜单事件触发时识别出被选择的菜单对象</span></span><span
+lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>ReDim Preserve
+MenuText(MenuCount)</span></span><br>
+<span class=hide3><span style='mso-hide:none'>MenuText(MenuCount) = &quot;</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>文件</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>&quot; &amp; MenuCount</span></span><span lang=EN-US style='font-family:
+Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>加入子菜单，令其</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>ID&gt;1000</span></span><span class=hide3><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;
+mso-hide:none'>，说明其为自动生成的菜单</span></span><span lang=EN-US style='font-family:
+Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>AppendMenu1 hPopMenuTmp,
+MF_STRING, 1000 + MenuCount, MenuText(MenuCount)</span></span><br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>如果是间隔线，则</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>wFlags=MF_SEPARATOR</span></span><span lang=EN-US style='font-family:
+Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>'</span></span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black;mso-hide:none'>如果要</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black;mso-hide:
+none'>Check</span></span><span class=hide3><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;
+mso-hide:none'>，则</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black;mso-hide:none'>wFlags=MF_STRING +
+MF_CHECKED</span></span><span class=hide3><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black;
+mso-hide:none'>，若令不可用，则再加</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black;mso-hide:none'>MF_GRAYED</span></span><span
+lang=EN-US style='font-family:Arial;color:black'><br>
+<span class=hide3><span style='mso-hide:none'>Next</span></span><br>
+<span class=hide3><span style='mso-hide:none'>AppendMenu1 hFather, MF_POPUP,
+hPopMenuTmp, &quot;&amp;Files&quot;</span></span><br>
+<span class=hide3><span style='mso-hide:none'>End Sub</span></span></span><span
+class=collapse3><span lang=EN-US style='font-family:Arial'>&lt;</span></span><span
+class=collapse3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial'>收起</span></span><span style='font-family:
+Arial;color:black'> <span lang=EN-US><o:p></o:p></span></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='line-height:15.75pt;background:#EEEEEE'><span
+lang=EN-US style='font-family:Arial;color:black'><script>
+F.use("/static/widget/question/detail/detail.js",function(detail){setTimeout(function(){detail.init($("#w-3"));},0)})
+</script></span><span lang=EN-US style='font-size:10.5pt;font-family:Arial;
+color:black'><a
+href="http://wapiknow.baidu.com/m/person?name=xielj65&amp;un=xielj65&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+alog-group=ansUser><span style='color:#545454'>xielj65</span></a> </span><span
+lang=EN-US style='font-size:10.5pt;font-family:Arial;color:#BCBCBC'>|</span><span
+lang=EN-US style='font-size:10.5pt;font-family:Arial;color:black'> </span><span
+lang=EN-US style='font-size:10.5pt;font-family:Arial;color:#A3A3A3'>2011-03-24</span><span
+lang=EN-US style='font-size:10.5pt;font-family:Arial;color:black'> <o:p></o:p></span></p>
+
+</div>
+
+<div data-rid=650061790 alog-action=support>
+
+<div>
+
+<p class=MsoNormal style='line-height:15.75pt;background:#EEEEEE'><b><span
+lang=EN-US style='font-family:Arial;color:black'>0</span></b><span lang=EN-US
+style='font-family:Arial;color:black'> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+<div>
+
+<h2 style='background:#EEEEEE'><span lang=EN-US style='font-family:Arial;
+color:black'><script>
+F.use("/static/widget/question/support/support.js",function(support){support.initOnce($(".w-special-answer,.w-replies"));})
+</script></span><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>其他回答</span><span
+style='font-family:Arial;color:black'> <span lang=EN-US><o:p></o:p></span></span></h2>
+
+<div>
+
+<div>
+
+<div>
+
+<div id=w-5>
+
+<p class=MsoNormal style='line-height:18.0pt;background:#EEEEEE;word-break:
+break-all'><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:black'>用类模块编写一个菜单类就可以了，网上找的。</span><span
+lang=EN-US style='font-family:Arial;color:black'><br>
+</span><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:black'>菜单类</span><span lang=EN-US
+style='font-family:Arial;color:black'><br>
+'</span><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:black'>类的名称为</span><span lang=EN-US
+style='font-family:Arial;color:black'>cPopupMenu<br>
+'</span><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;color:black'>类</span><span lang=EN-US
+style='font-family:Arial;color:black'> cPopupMenu<br>
+Option Explicit<br>
+<br>
+Private Type POINT<br>
+x As Long<br>
+y As Long<br>
+End Type<br>
+Private Const MF_BYPOSITION = &amp;H400&amp;<br>
+Private Const MF_ENABLED = &amp;H0&amp;<br>
+Private Const MF_SEPARATOR = &amp;H800&amp;<br>
+Private Const MF_STRING = &amp;H0&amp;<br>
+Private Const TPM_RIGHTBUTTON = &amp;H2&amp;<br>
+Private Const TPM_LEFTALIGN = &amp;H0&amp;<br>
+Private Const TPM_NONOTIFY = &amp;H80&amp;<br>
+Private Const TPM_RETURNCMD = &amp;H100&amp;<br>
+Private Const MF_CHECKED = &amp;H8&amp;<br>
+Private Const MF_APPEND = &amp;H100&amp;<br>
+Private Const MF_DISABLED = &amp;H2&amp;<br>
+Private Const MF_GRAYED = &amp;H1&amp;<br>
+Private Const MF_POPUP = &amp;H10&amp;<br>
+<br>
+Private Declare Function ModifyMenu Lib &quot;user32&quot; Alias
+&quot;ModifyMenuA&quot; (ByVal hMenu As Long, ByVal nPosition As Long, ByVal
+wFlags As Long, ByVal wIDNewItem As Long, ByVal lpString As Any) As Long<br>
+Private Declare Function GetForegroundWindow Lib &quot;user32&quot; () As Long<br>
+Private Declare Function CreatePopupMenu Lib &quot;user32&quot; () As Long<br>
+Private Declare Function AppendMenu Lib &quot;user32&quot; Alias
+&quot;AppendMenuA&quot; (ByVal hMenu As Long, ByVal wFlags As Long, ByVal
+wIDNewItem As Long, ByVal sCaption As String) As Long<br>
+Private Declare Function TrackPopupMenu Lib &quot;user32&quot; (ByVal hMenu As
+Long, ByVal wFlags As Long, ByVal x As Long, ByVal y As Long, ByVal nReserved
+As Long, ByVal hwnd As Long, nIgnored As Long) As Long<br>
+Private Declare Function DestroyMenu Lib &quot;user32&quot; (ByVal hMenu As
+Long) As Long<br>
+Private Declare Function GetCursorPos Lib &quot;user32&quot; <span
+class=suffix><span style='font-family:Arial'>...</span></span></span><span
+class=expand3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial'>展开全部</span></span><span class=expand3><span
+lang=EN-US style='font-family:Arial'>&gt;</span></span><span class=hide3><span
+lang=EN-US style='font-family:Arial;color:black'>(lpPoint As POINT) As Long</span></span><span
+lang=EN-US style='font-family:Arial;color:black;display:none;mso-hide:all'><br>
+<span class=hide3>Private C As New Collection</span><br>
+<span class=hide3>Private LMenu As String</span><br>
+<br>
+<span class=hide3>Public Function Popup(ParamArray param()) As Long</span><br>
+<span class=hide3>Dim iMenu As Long</span><br>
+<span class=hide3>Dim hMenu As Long</span><br>
+<span class=hide3>Dim nMenus As Long</span><br>
+<span class=hide3>Dim lMenus As Long</span><br>
+<span class=hide3>Dim hFileSubMenu As Long</span><br>
+<span class=hide3>Dim p As POINT</span><br>
+<span class=hide3>GetCursorPos p</span><br>
+<span class=hide3>hMenu = CreatePopupMenu()</span><br>
+<span class=hide3>nMenus = 1 + UBound(param)</span><br>
+<span class=hide3>lMenus = hMenu</span><br>
+<span class=hide3>hFileSubMenu = CreatePopupMenu()</span><br>
+<span class=hide3>C.Add hMenu</span><br>
+<span class=hide3>For iMenu = 1 To nMenus</span><br>
+<span class=hide3>InsertM CStr(param(iMenu - 1)), hMenu, iMenu, 1</span><br>
+<span class=hide3>Next iMenu</span><br>
+<span class=hide3>iMenu = TrackPopupMenu(hMenu, TPM_RIGHTBUTTON + TPM_LEFTALIGN
++ TPM_NONOTIFY + TPM_RETURNCMD, p.x, p.y, 0, GetForegroundWindow(), 0)</span><br>
+<span class=hide3>DestroyMenu hMenu</span><br>
+<span class=hide3>Popup = iMenu</span><br>
+<span class=hide3>End Function</span><br>
+<br>
+<span class=hide3>Public Function InsertM(Str As String, Mmenu As Long, iMenu
+As Long, Ci As Integer) As Long</span><br>
+<span class=hide3>Dim s As String</span><br>
+<span class=hide3>Dim i As Integer</span><br>
+<span class=hide3>If Trim$(Str) = &quot;-&quot; Or Trim$(Str) = &quot;&quot;
+Then</span><br>
+<span class=hide3>AppendMenu Mmenu, MF_SEPARATOR, iMenu, &quot;&quot;</span><br>
+<span class=hide3>LMenu = CStr(Trim(Str))</span><br>
+<span class=hide3>For i = C.Count To Ci + 1 Step -1</span><br>
+<span class=hide3>DestroyMenu C.Item(i)</span><br>
+<span class=hide3>C.Remove i</span><br>
+<span class=hide3>Next i</span><br>
+<span class=hide3>InsertM = Ci</span><br>
+<span class=hide3>Else</span><br>
+<span class=hide3>If Left(Trim(Str), 1) = &quot;.&quot; Then</span><br>
+<span class=hide3>If Ci = C.Count Then</span><br>
+<span class=hide3>Dim InsertMenu As Long</span><br>
+<span class=hide3>InsertMenu = CreatePopupMenu()</span><br>
+<span class=hide3>ModifyMenu Mmenu, iMenu - 1, MF_POPUP, InsertMenu, LMenu</span><br>
+<span class=hide3>C.Add InsertMenu</span><br>
+<span class=hide3>End If</span><br>
+<span class=hide3>Ci = Ci + 1</span><br>
+<span class=hide3>s = Right(Str, Len(Str) - 1)</span><br>
+<span class=hide3>InsertM = InsertM(s, C.Item(Ci), iMenu, Ci)</span><br>
+<span class=hide3>Else</span><br>
+<span class=hide3>AppendMenu Mmenu, MF_STRING + MF_ENABLED + MF_CHECKED, iMenu,
+CStr(Trim(Str))</span><br>
+<span class=hide3>LMenu = CStr(Trim(Str))</span><br>
+<span class=hide3>For i = C.Count To Ci + 1 Step -1</span><br>
+<span class=hide3>DestroyMenu C.Item(i)</span><br>
+<span class=hide3>C.Remove i</span><br>
+<span class=hide3>Next i</span><br>
+<span class=hide3>InsertM = Ci</span><br>
+<span class=hide3>End If</span><br>
+<span class=hide3>End If</span><br>
+<span class=hide3>End Function</span><br>
+<br>
+</span><span class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>用法：</span></span><span
+lang=EN-US style='font-family:Arial;color:black;display:none;mso-hide:all'><br>
+<span class=hide3>Dim oMenu As cPopupMenu</span><br>
+<span class=hide3>Dim lMenuChosen As Long</span><br>
+<span class=hide3>If Button = vbRightButton Then</span><br>
+<span class=hide3>Set oMenu = New cPopupMenu</span><br>
+<span class=hide3>lMenuChosen = oMenu.Popup(&quot;menu1&quot;,
+&quot;.menu2&quot;, &quot;..menu3&quot;, &quot;..-&quot;, &quot;..menu4&quot;,
+&quot;.menu5&quot;, &quot;.menu6&quot;, &quot;menu7&quot;, &quot;menu8&quot;,
+&quot;.menu9&quot;, &quot;..menu10&quot;)</span><br>
+<span class=hide3>End If</span><br>
+</span><span class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>返回值</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black'>lMenuChosen</span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>对应</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black'>(&quot;menu1&quot;,
+&quot;.menu2&quot;, &quot;..menu3&quot;, &quot;..-&quot;, &quot;..menu4&quot;,
+&quot;.menu5&quot;, &quot;.menu6&quot;, &quot;menu7&quot;, &quot;menu8&quot;,
+&quot;.menu9&quot;, &quot;..menu10&quot;)</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>的值分别为</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>1</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>2</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>3</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>4</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>5</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>6</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>7</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>8</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>9</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>，</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>10</span></span><span class=hide3><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>。这里，第四个是</span></span><span class=hide3><span lang=EN-US
+style='font-family:Arial;color:black'>&quot;-&quot;</span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>表示分栏，</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black'>
+&quot;.&quot;</span></span><span class=hide3><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black'>标识二级菜单，</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black'>&quot;..&quot;</span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>表示三级菜单。</span></span><span
+lang=EN-US style='font-family:Arial;color:black;display:none;mso-hide:all'><br>
+</span><span class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>要删除添加菜单，可以从新定义字符串，反正最后都是取</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black'>lMenuChosen</span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>返回值来做对应的</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black'>case</span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>，比用菜单编辑器的要输入一大堆的定义要来得有效。</span></span><span
+lang=EN-US style='font-family:Arial;color:black;display:none;mso-hide:all'><br>
+</span><span class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>如果要给菜单添加图标的话，可以用</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black'>SetMenuItemBitmaps
+Lib &quot;user32&quot; (ByVal hMenu As Long, ByVal nPosition As Long, ByVal
+wFlags As Long, ByVal hBitmapUnchecked As Long, ByVal hBitmapChecked As Long)
+As Long</span></span><span class=hide3><span style='mso-ascii-font-family:Arial;
+mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black'>函数给菜单添加图标。在创建菜单项的下一行添加就可以了。添加图标不能与</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black'>MF_CHECKED</span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>一起使用，所以要取消</span></span><span
+class=hide3><span lang=EN-US style='font-family:Arial;color:black'>MF_CHECKED</span></span><span
+class=hide3><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>这项。</span></span><span
+class=collapse3><span lang=EN-US style='font-family:Arial;display:none;
+mso-hide:all'>&lt;</span></span><span class=collapse3><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;display:none;
+mso-hide:all'>收起</span></span><span style='font-family:Arial;color:black'> <span
+lang=EN-US><o:p></o:p></span></span></p>
+
+</div>
+
+<div style='margin-top:5.25pt'>
+
+<div>
+
+<p class=MsoNormal style='line-height:15.75pt;background:#EEEEEE'><span
+lang=EN-US style='font-family:Arial;color:black'><script>
+F.use("/static/widget/question/detail/detail.js",function(detail){setTimeout(function(){detail.init($("#w-5"));},0)})
+</script></span><span lang=EN-US style='font-size:10.5pt;font-family:Arial;
+color:black'><a
+href="http://wapiknow.baidu.com/m/person?name=Zaxife&amp;un=Zaxife&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+alog-group=ansUser><span style='color:#545454'>Zaxife</span></a> </span><span
+lang=EN-US style='font-size:10.5pt;font-family:Arial;color:#BCBCBC'>|</span><span
+lang=EN-US style='font-size:10.5pt;font-family:Arial;color:black'> </span><span
+lang=EN-US style='font-size:10.5pt;font-family:Arial;color:#A3A3A3'>2011-03-24</span><span
+lang=EN-US style='font-size:10.5pt;font-family:Arial;color:black'> <o:p></o:p></span></p>
+
+</div>
+
+<div data-rid=649100425 alog-action=support>
+
+<div>
+
+<p class=MsoNormal style='line-height:15.75pt;background:#EEEEEE'><b><span
+lang=EN-US style='font-family:Arial;color:black'>0</span></b><span lang=EN-US
+style='font-family:Arial;color:black'> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div alog-alias=relate>
+
+<h2 style='background:#EEEEEE'><span style='mso-ascii-font-family:Arial;
+mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black'>相关内容</span><span
+lang=EN-US style='font-family:Arial;color:black'><o:p></o:p></span></h2>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/147307739.html?mzl=qb_xg_0&amp;log_pic=1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+log-pic=1 style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span style='color:black'>VB </span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>如何查看右键菜单的代码</span></span><span
+style='font-size:10.5pt;color:#666666'>1</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/226413873.html?mzl=qb_xg_1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black'><span
+lang=EN-US>如何用</span></span><span style='color:black'>VB6.0</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>代码解决管理员身份问题，而不需要由用户从弹出的右键菜单中点击</span></span><span
+style='color:black'>“</span><span lang=EN-US style='font-family:宋体;mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;color:black'><span lang=EN-US>以管理员身份运行</span></span><span
+style='color:black'>”</span><span lang=EN-US style='font-family:宋体;mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;color:black'><span lang=EN-US>？</span></span><span
+style='font-size:10.5pt;color:#666666'>2</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/139643295.html?mzl=qb_xg_2&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black'><span
+lang=EN-US>谁来给我的</span></span><span style='color:black'>VB</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>小程序加一个右键菜单</span></span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/61975033.html?mzl=qb_xg_3&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black'><span
+lang=EN-US>请高手帮忙编一个简单</span></span><span style='color:black'>VB</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>程序，实现简单的右键菜单功能</span></span><span
+style='font-size:10.5pt;color:#666666'>1</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/26541266.html?mzl=qb_xg_4&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black'><span
+lang=EN-US>如何用</span></span><span style='color:black'>VB</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>代码创建</span></span><span style='color:black'>mdb</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>数据库</span></span><span style='font-size:
+10.5pt;color:#666666'>7</span></a> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+<div id=w-7>
+
+<h2 style='background:#EEEEEE'><span lang=EN-US style='font-family:Arial;
+color:black'><script>
+F.use("/static/widget/question/relate-question/relate-question.js",function(relate){relate.init($(".w-related-questions"));})
+</script></span><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>主题推荐</span><span lang=EN-US
+style='font-family:Arial;color:black'><o:p></o:p></span></h2>
+
+<div alog-alias=tpWd>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black'>右键菜单</span><span
+lang=EN-US style='font-family:Arial;color:black'>:</span><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>新建</span><span style='font-family:Arial;color:black'> </span><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>右键菜单</span><span lang=EN-US style='font-family:Arial;
+color:black'>:</span><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>代码</span><span style='font-family:
+Arial;color:black'> <span lang=EN-US><o:p></o:p></span></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black'>右键菜单</span><span
+lang=EN-US style='font-family:Arial;color:black'>:</span><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>出错</span><span style='font-family:Arial;color:black'> </span><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>右键菜单</span><span lang=EN-US style='font-family:Arial;
+color:black'>:</span><span style='mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;color:black'>清理</span><span style='font-family:
+Arial;color:black'> <span lang=EN-US><o:p></o:p></span></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span style='mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;color:black'>右键菜单</span><span
+lang=EN-US style='font-family:Arial;color:black'>:</span><span
+style='mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;mso-bidi-font-family:
+Arial;color:black'>设置</span><span style='font-family:Arial;color:black'> <span
+lang=EN-US><o:p></o:p></span></span></p>
+
+</div>
+
+</div>
+
+<div alog-alias=tpQt1>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/1663984.html?mzl=qb_topic_0_0&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>右键菜单新建</span></span><span style='font-size:
+10.5pt;color:#666666'>59</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/235853542.html?mzl=qb_topic_0_1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black'><span
+lang=EN-US>右键菜单新建没有了</span></span><span style='font-size:10.5pt;color:#666666'>12</span></a>
+<o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/153443889.html?mzl=qb_topic_0_2&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span style='color:black'>win7</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>系统右键菜单</span></span><span lang=EN-US
+style='color:black'><span lang=EN-US> </span></span><span lang=EN-US
+style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+color:black'><span lang=EN-US>新建为</span></span><span style='color:black'>“</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>空</span></span><span style='color:black'>”</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>？</span></span><span style='font-size:10.5pt;
+color:#666666'>67</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/27456820.html?mzl=qb_topic_0_3&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black'><span
+lang=EN-US>右键菜单中新建</span></span><span style='color:black'>EXCEL</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>丢失解决办法</span></span><span style='font-size:
+10.5pt;color:#666666'>15</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/question/196499503.html?mzl=qb_topic_0_4&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black'><span
+lang=EN-US>右键菜单中的新建</span></span><span style='color:black'>&gt;</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>新建</span></span><span style='color:black'>BMP</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black'><span lang=EN-US>图像没了怎么弄回来？</span></span><span
+style='font-size:10.5pt;color:#666666'>11</span></a> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+<div alog-alias=tpQt2>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/92627706.html?mzl=qb_topic_1_0&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black;mso-hide:none'><span lang=EN-US>求</span></span><span
+style='color:black;mso-hide:none'>Flash</span><span lang=EN-US
+style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+color:black;mso-hide:none'><span lang=EN-US>右键菜单时间代码</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>13</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/111746581.html?mzl=qb_topic_1_1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>求清除所有多余的桌面右键菜单的批处理代码</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>37</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/23734460.html?mzl=qb_topic_1_2&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>怎样隐藏</span></span><span style='color:black;
+mso-hide:none'> Flash </span><span lang=EN-US style='font-family:宋体;mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;color:black;mso-hide:none'><span lang=EN-US>右键菜单，代码？？？</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>8</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/94520831.html?mzl=qb_topic_1_3&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>谁有他这样的</span></span><span style='color:black;
+mso-hide:none'>flash</span><span lang=EN-US style='font-family:宋体;mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;color:black;mso-hide:none'><span lang=EN-US>右键菜单代码</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>5</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/8382801.html?mzl=qb_topic_1_4&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>隐藏</span></span><span style='color:black;
+mso-hide:none'>windows media player</span><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>右键菜单代码</span></span><span style='font-size:
+10.5pt;color:#666666;mso-hide:none'>4</span></a> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+<div alog-alias=tpQt3>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/118965807.html?mzl=qb_topic_2_0&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black;mso-hide:none'><span lang=EN-US>笔记本</span></span><span
+lang=EN-US style='color:black;mso-hide:none'><span lang=EN-US> </span></span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black;mso-hide:none'><span lang=EN-US>右键菜单提示出错</span></span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/358328323.html?mzl=qb_topic_2_1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>右键菜单</span></span><span style='color:black;
+mso-hide:none'>“</span><span lang=EN-US style='font-family:宋体;mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial;color:black;mso-hide:none'><span lang=EN-US>使用迅雷下载</span></span><span
+style='color:black;mso-hide:none'>”</span><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>出错怎么办？</span></span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/196217377.html?mzl=qb_topic_2_2&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span style='color:black;mso-hide:none'>home.bmp</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black;mso-hide:none'><span lang=EN-US>出错，</span></span><span
+style='color:black;mso-hide:none'>home.bmp</span><span lang=EN-US
+style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+color:black;mso-hide:none'><span lang=EN-US>不是有效的</span></span><span
+style='color:black;mso-hide:none'>win32</span><span lang=EN-US
+style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+color:black;mso-hide:none'><span lang=EN-US>用程序</span></span><span
+style='color:black;mso-hide:none'>,</span><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>怎么去掉右键菜单中的病毒弄的，打开</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>8</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/129177358.html?mzl=qb_topic_2_3&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>删除右键菜单中的</span></span><span style='color:black;
+mso-hide:none'>Adobe Drive CS4</span><span lang=EN-US style='font-family:宋体;
+mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;mso-hide:
+none'><span lang=EN-US>快捷链接后系统出错</span></span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/106277413.html?mzl=qb_topic_2_4&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>取消右键菜单</span></span><span lang=EN-US
+style='color:black;mso-hide:none'><span lang=EN-US> </span></span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black;mso-hide:none'><span lang=EN-US>添加到</span></span><span
+style='color:black;mso-hide:none'>windows media player </span><span lang=EN-US
+style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
+color:black;mso-hide:none'><span lang=EN-US>时出错</span></span></a> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+<div alog-alias=tpQt4>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/133551082.html?mzl=qb_topic_3_0&amp;log_pic=1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black;mso-hide:none'><span lang=EN-US>右键菜单清理</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>198</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/3646270.html?mzl=qb_topic_3_1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>我的右键菜单如何清理</span></span><span style='color:
+black;mso-hide:none'>?</span><span style='font-size:10.5pt;color:#666666;
+mso-hide:none'>77</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/173414667.html?mzl=qb_topic_3_2&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span style='color:black;mso-hide:none'>win7</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black;mso-hide:none'><span lang=EN-US>右键菜单清理</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>54</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/120165123.html?mzl=qb_topic_3_3&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>桌面右键菜单清理</span></span><span style='font-size:
+10.5pt;color:#666666;mso-hide:none'>20</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/86561051.html?mzl=qb_topic_3_4&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>土豆右键菜单清理不干净</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>7</span></a> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+<div alog-alias=tpQt5>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/109567335.html?mzl=qb_topic_4_0&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black;mso-hide:none'><span lang=EN-US>右键菜单设置</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>21</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/5674596.html?mzl=qb_topic_4_1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>桌面右键菜单设置？</span></span><span style='font-size:
+10.5pt;color:#666666;mso-hide:none'>20</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/171855510.html?mzl=qb_topic_4_2&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span style='color:black;mso-hide:none'>win7</span><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:black;mso-hide:none'><span lang=EN-US>右键菜单设置</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>7</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/11100581.html?mzl=qb_topic_4_3&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>右键菜单的设置</span></span><span style='font-size:
+10.5pt;color:#666666;mso-hide:none'>5</span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><a
+href="http://wapiknow.baidu.com/question/82412032.html?mzl=qb_topic_4_4&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+style='-webkit-tap-highlight-color: rgba(255, 255, 255, 0)'
+data-highlight-class-name=ui-list-hover><span lang=EN-US style='font-family:
+宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:black;
+mso-hide:none'><span lang=EN-US>关于右键菜单的设置问题</span></span><span
+style='font-size:10.5pt;color:#666666;mso-hide:none'>3</span></a> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+</div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><script>
+F.use("/static/widget/question/topic-recommend/topic-recommend.js",function(recommend){recommend.init($("#w-7"));})
+</script></span><span lang=EN-US style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/browse/?fr=qbClass_ql&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2#867"
+alog-alias=toList><span lang=EN-US style='font-size:10.5pt;font-family:宋体;
+mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;color:#666666;
+border:solid #C6C6C6 1.0pt;mso-border-alt:solid #C6C6C6 .75pt;padding:0cm;
+background:white'><span lang=EN-US>查看</span></span><span style='font-size:10.5pt;
+color:#27A002;border:solid #C6C6C6 1.0pt;mso-border-alt:solid #C6C6C6 .75pt;
+padding:0cm;background:white'>&quot;VB&quot;</span><span lang=EN-US
+style='font-size:10.5pt;font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial;color:#666666;border:solid #C6C6C6 1.0pt;mso-border-alt:solid #C6C6C6 .75pt;
+padding:0cm;background:white'><span lang=EN-US>分类更多问题</span></span></a> <o:p></o:p></span></p>
+
+<div alog-alias=btmBanner>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://wapiknow.baidu.com/board?next=http%253A%252F%252Fsoftfile.3g.qq.com%252Fmsoft%252Frcps%252Fd%252F75718%252Fno30update_TxAppCenter3.4_channel_android_1.6_75718_20130319112514.apk&amp;source=qb&amp;ua=android&amp;from=qb_bb_0&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><span
+style='display:none;mso-hide:all'><img border=0 width=32 height=32
+id="_x0000_i1037"
+src="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\4688307"
+data-src="http://mt1.baidu.com/timg?wh_rate=0&amp;wapiknow&amp;quality=60&amp;size=w640&amp;sec=0&amp;di=fe3063321caf14e25971be8e722b8dc4&amp;src=http%3A%2F%2Fimg.baidu.com%2Fimg%2Fiknow%2Fwap%2Fpromotion%2Fyingyongbao640100.jpg"></span></a><a
+href="http://wapiknow.baidu.com/board?next=http%253A%252F%252Fm.anzhi.com%252Fredirect.php%253Fdo%253Ddlapk%2526puid%253D608&amp;source=qb&amp;ua=android&amp;from=qb_bb_1&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><span
+style='display:none;mso-hide:all'><img border=0 width=32 height=32
+id="_x0000_i1038"
+src="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\14818621"
+data-src="http://mt1.baidu.com/timg?wh_rate=0&amp;wapiknow&amp;quality=60&amp;size=w640&amp;sec=0&amp;di=93dbf9e11f708da0d2454c6912713e5d&amp;src=http%3A%2F%2Fwww.baidu.com%2Fsearch%2Fzhidao%2Fpromotion%2Fanzhibanner4.jpg"></span></a><a
+href="http://wapiknow.baidu.com/board?next=http%253A%252F%252Fdl.wandoujia.com%252Ffiles%252Fphoenix%252Flatest%252Fphoenix2-zhidao.apk&amp;source=qb&amp;ua=android&amp;from=qb_bb_2&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><img
+border=0 width=32 height=32 id="_x0000_i1039"
+src="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\10893195"
+data-src="http://mt1.baidu.com/timg?wh_rate=0&amp;wapiknow&amp;quality=60&amp;size=w640&amp;sec=0&amp;di=54ec70fe0bdd4c0371ad3146d0b66dbd&amp;src=http%3A%2F%2Fimg.baidu.com%2Fimg%2Fiknow%2Fwap%2Fpromotion%2Fwandoujiabanner0418.jpg"></a><a
+href="http://wapiknow.baidu.com/board?next=http%253A%252F%252Fapkupdate.miui.com%252Fmihome%252Fmihome2_latest%252FMiHome2_4063_2_android.apk&amp;source=qb&amp;ua=android&amp;from=qb_bb_3&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><span
+style='display:none;mso-hide:all'><img border=0 width=32 height=32
+id="_x0000_i1040"
+src="file:///I:\AnMath\C%20test\lua\%5b数据%5d宠物属性数据_html\vb%20用代码创建右键菜单的问题_html\7617959"
+data-src="http://mt1.baidu.com/timg?wh_rate=0&amp;wapiknow&amp;quality=60&amp;size=w640&amp;sec=0&amp;di=ecd473656a18b5e28e34633f11154aef&amp;src=http%3A%2F%2Fimg.baidu.com%2Fimg%2Fiknow%2Fwap%2Fpromotion%2Fmihomebanner.jpg"></span></a><o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+<div id=w-8>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><script>
+F.use("/static/widget/question/bottom-banner/bottom-banner.js",function(bottomBanner){bottomBanner.init($(".w-bottom-banner"));})
+</script><o:p>&nbsp;</o:p></span></p>
+
+<form>
+
+<div style='border:solid #9A9A9A 1.0pt;border-right:none;mso-border-top-alt:
+solid #9A9A9A .75pt;mso-border-left-alt:solid #9A9A9A .75pt;mso-border-bottom-alt:
+solid #9A9A9A .75pt;padding:0cm 0cm 0cm 8.0pt;margin-right:62.25pt'>
+
+<input type=button value=我想知道 data-action=search style="-webkit-tap-highlight-color: rgba(255, 255, 255, 0); "
+data-highlight-class-name=search-button-hover alog-alias=btmSearch
+autocomplete=off autocorrect=off
+style="position: absolute; top: 0px; left: 0px; width: auto; right: 40px; ">
+
+<div id=ui-input-mask-1368518591952>
+
+<p class=MsoNormal style='background:white'><span lang=EN-US style='font-family:
+Arial;color:black'><INPUT TYPE="text" MAXLENGTH="100" NAME="word"><o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+</form>
+
+<div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black;display:none;mso-hide:all'><script  type="text/javascript">
+F.use('/static/widget/common/new-search/new-search.js',function(search){search.init($("#w-8"));});
+</script><script  type="text/javascript">
+F.use('/static/question/index/webapp/webapp.js');
+</script></span><i><span lang=EN-US style='font-family:Arial;color:black'><a
+href="javascript:void(0);" alog-alias=comm-login><footer class="w-footer"><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial'><span lang=EN-US>登录</span></span></a></span></i><span lang=EN-US
+style='font-family:Arial;color:black'>| <a
+href="http://wapiknow.baidu.com/board?next=http%3A%2F%2Fwappass.baidu.com%2Fpassport%2Freg%3Fu%3Dhttp%253A%252F%252Fwapiknow.baidu.com%3Freg_success%3D1%26ssid%3D%26from%3D%26uid%3D%26pu%3D%26bd_page_type%3D1%26tn%3D%26tpl%3Dzd%26regtype%3D1%C2%AE_iphone=1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+alog-alias=comm-register><span lang=EN-US style='font-family:宋体;mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial'><span lang=EN-US>注册</span></span></a> <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+<div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'><a
+href="http://zhidao.baidu.com/?forcepc=1&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+alog-alias=comm-pc><span lang=EN-US style='font-family:宋体;mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial'><span lang=EN-US>电脑版</span></span></a>|<a
+href="http://zhidao.baidu.com/s/ikapp/index.html?fr=webapp&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial'><span lang=EN-US>客户端</span></span></a>|<a href="javascript:void(0);"><span
+lang=EN-US style='font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:
+Arial'><span lang=EN-US>联系我们</span></span></a>|<a
+href="http://wapp.baidu.com/f?word=%E7%99%BE%E5%BA%A6%E6%97%A0%E7%BA%BF%E7%9F%A5%E9%81%93&amp;tn6=bdISP&amp;tn4=bdKSW&amp;tn7=bdPSB&amp;type=1&amp;pinf=&amp;lp=1050&amp;sub4=%E8%BF%9B%E5%90%A7&amp;from=2001a&amp;ssid=0&amp;uid=4BCAD622F9B8293184A6C4CAAC2BF3FE&amp;pu=usm%400%2Csz%401320_1003%2Cta%40iphone_2_4.0_1_%2Cos%40android&amp;fr=ala&amp;bd_page_type=1&amp;tj=zhidao_1_0_10&amp;init=iphone&amp;step=2"
+alog-alias=comm-myRep><span lang=EN-US style='font-family:宋体;mso-ascii-font-family:
+Arial;mso-hansi-font-family:Arial'><span lang=EN-US>反馈</span></span></a> <o:p></o:p></span></p>
+
+</div>
+
+<div>
+
+<p class=MsoNormal style='background:#EEEEEE'><span lang=EN-US
+style='font-family:Arial;color:black'>©2013 Baidu <o:p></o:p></span></p>
+
+</div>
+
+</div>
+
+</footer>
+
+<div style='bottom: 8px;position:absolute;right:8px;top:3129px;visibility:visible;
+z-index:999' id=gotop>
+
+<p class=MsoNormal style='background:#454545'><span lang=EN-US
+style='font-family:Arial;color:black'><script>
+F.use("/static/widget/common/footer/footer.js");
+</script></span><span lang=EN-US style='font-family:Arial;color:white'>&nbsp;<o:p></o:p></span></p>
+
+</div>
+
+<p class=MsoNormal><span lang=EN-US style='font-family:Arial;color:white'><script>
+F.use("/static/common/lib/gmu/gotop/gotop.js",function(){$.ui.gotop('#gotop').fix({right: 8, bottom: 8});});
+</script><script>
+PDC._load_js=function(A,_){var B=document.createElement("script");B.setAttribute("type","text/javascript");B.setAttribute("src",A);B.onload=B.onreadystatechange=function(){if(!this.readyState||this.readyState=="loaded"||this.readyState=="complete"){B.onload=B.onreadystatechange=null;if(typeof _==="function"){_(A,true);}}};B.onerror=function(B){if(typeof _==="function"){_(A,false);}};document.getElementsByTagName("head")[0].appendChild(B);};PDC._load_analyzer=function(){if(PDC._is_sample()==false){return;}PDC._analyzer.loaded=true;PDC._load_js(PDC._analyzer.url,function(){var _=PDC._analyzer.callbacks;for(var A=0,B=_.length;A<B;A++){_[A]();}});};PDC.send=function(){if(PDC._analyzer.loaded==true){WPO_PDA.send();}else{PDC._analyzer.callbacks.push(function(){WPO_PDA.send();});}};PDC._is_sample=function(){var A=false,C=this._opt.sample,B=0;C=C>0.9?0.9:C;C=C<0.0001?0.0001:C;var _=document.cookie.match(/BAIDUID=(\w*):/);if(_){B=parseInt(_[1].slice(-4),16);B=isNaN(B)?0:B;}if(C<=0.5){A=(B%(parseInt(1/C))==1);}else{A=(B%(parseInt(1/(1-C)))!=1);}return A;};(function(){window.addEventListener("load",function(){PDC.mark("let");PDC.send();PDC._load_analyzer();});})();
+</script><script>
+(function(){var page_id,sample;if(location.pathname === "/"){page_id = 203;sample = 1;}else{var actions = /(\/question)|(\/index)|(\/browse)|(\/ask)|(\/ucenter)|(\/appwall)/;var samples = [0.05,0.3,1,1,1,1];var pageIds = [[101,102,104,106,105,107],[201,202,204,206,205,207]];var match = location.pathname.match(actions);if(match){match = match.splice(1);for(var i=0,j=match.length;i<j;i++){if(match[i]!==undefined)break;}page_id = pageIds[1][i];sample = samples[i];}}if(sample){PDC.init({is_login:F.context("user").uid>0?1:0,sample:sample,product_id:102,page_id:page_id});}})();
+</script><script>
+if(typeof PDC!="undefined"){PDC.tti();}
+</script><script>
+with(document)0[(getElementsByTagName('head')[0]).appendChild(createElement('script')).src='//img.baidu.com/hunter/m/zhidao-mobilemonkey-min.js?st='+~(new Date()/864e5)];
+</script><script  type="text/javascript">
+F.use("/static/common/ui/alog/alog.js",function(alog){alog.add();});
+</script><script>
+ var _trace_page_logid = 0227055775; 
+</script></span><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
+<!--02270557752148745482051416-->

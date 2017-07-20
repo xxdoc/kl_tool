@@ -1,0 +1,11 @@
+LIBRARY dll
+
+EXPORTS
+addMD5
+getMD5
+getStringSize
+MD5Initx
+MD5Updatex
+MD5Finalx
+MD5state
+

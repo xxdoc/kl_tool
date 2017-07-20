@@ -1,0 +1,233 @@
+来自 http://yaoqiaofeng.blog.163.com
+
+远程注入DLL方法有很多种，也是很多木马病毒所使用的隐藏进程的方法，因为通过程序加载的DLL在进程管理器是没有显示的．这里介绍一种用 CreateRemoteThread 远程建立线程的方式注入DLL．
+
+首先，我们要提升自己的权限，因为远程注入必不可免的要访问到目标进程的内存空间，如果没有足够的系统权限，将无法作任何事．下面是这个函数是用来提升我们想要的权限用的．
+
+function EnableDebugPriv: Boolean;
+var
+  hToken: THandle;
+  tp: TTokenPrivileges;
+  rl: Cardinal;
+begin
+  Result := false;
+
+  //打开进程令牌环
+  OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES or TOKEN_QUERY,
+    hToken);
+
+  //获得进程本地唯一ID
+  if LookupPrivilegeValue(nil, 'SeDebugPrivilege', tp.Privileges[0].Luid) then
+  begin
+    tp.PrivilegeCount           := 1;
+    tp.Privileges[0].Attributes := SE_PRIVILEGE_ENABLED;
+    //调整权限
+    Result := AdjustTokenPrivileges(hToken, false, tp, SizeOf(tp), nil, rl);
+  end;
+end;
+
+关于 OpenProcessToken() 和 AdjustTokenPrivileges() 两个 API 的简单介绍：
+
+OpenProcessToken()：获得进程访问令牌的句柄．
+  function OpenProcessToken(
+    ProcessHandle: THandle; //要修改访问权限的进程句柄
+    DesiredAccess: DWORD; //指定你要进行的操作类型
+    var TokenHandle: THandle//返回的访问令牌指针
+  ): BOOL; 
+
+AdjustTokenPrivileges() ：调整进程的权限．
+  function AdjustTokenPrivileges(
+    TokenHandle: THandle;  // 访问令牌的句柄
+    DisableAllPrivileges: BOOL; // 决定是进行权限修改还是除能（Disable）所有权限
+    const NewState: TTokenPrivileges;  
+    { 指明要修改的权限,是一个指向TOKEN_PRIVILEGES结构的指针，该结构包含一个数组，
+      数据组的每个项指明了权限的类型和要进行的操作; }
+    BufferLength: DWORD;  
+    //结构PreviousState的长度,如果PreviousState为空，该参数应为 0
+    var PreviousState: TTokenPrivileges; 
+    // 指向TOKEN_PRIVILEGES结构的指针，存放修改前的访问权限的信息
+    var ReturnLength: DWORD //实际PreviousState结构返回的大小
+  ) : BOOL;
+
+远程注入DLL其实是通过 CreateRemoteThread 建立一个远程线程调用 LoadLibrary 函数来加载我们指定的DLL，可是如何能让远程线程知道我要加载DLL呢，要知道在Win32系统下，每个进程都拥有自己的4G虚拟地址空间，各个进程之间都是相互独立的。所我们需要在远程进程的内存空间里申请一块内存空间，写入我们的需要注入的 DLL 的路径． 需要用到的 API 函数有：
+
+OpenProcess()：打开目标进程，得到目标进程的操作权限，详细参看MSDN
+  function OpenProcess(
+    dwDesiredAccess: DWORD;  // 希望获得的访问权限
+    bInheritHandle: BOOL;  // 指明是否希望所获得的句柄可以继承
+    dwProcessId: DWORD // 要访问的进程ID
+  ): THandle; 
+
+VirtualAllocEx()：用于在目标进程内存空间中申请内存空间以写入DLL的文件名
+  function VirtualAllocEx(
+    hProcess: THandle;  // 申请内存所在的进程句柄
+    lpAddress: Pointer;  // 保留页面的内存地址；一般用nil自动分配
+    dwSize,  // 欲分配的内存大小，字节单位；注意实际分 配的内存大小是页内存大小的整数倍
+    flAllocationType: DWORD; 
+    flProtect: DWORD
+  ): Pointer; 
+
+WriteProcessMemory()：往申请到的空间中写入DLL的文件名
+  function WriteProcessMemory(
+    hProcess: THandle;  //要写入内存数据的目标进程句柄
+    const lpBaseAddress: Pointer; //要写入的目标进程的内存指针, 需以 VirtualAllocEx() 来申请
+    lpBuffer: Pointer; //要写入的数据
+    nSize: DWORD; //写入数据的大小
+    var lpNumberOfBytesWritten: DWORD //实际写入的大小
+  ): BOOL; 
+
+然后就可以调用 CreateRemoteThread 建立远程线程调用 LoadLibrary 函数来加载我们指定的DLL．
+
+CreateRemoteThread()　//在一个远程进程中建立线程
+  function CreateRemoteThread(
+    hProcess: THandle;  //远程进程的句柄
+    lpThreadAttributes: Pointer; //线程安全描述字，指向SECURITY_ATTRIBUTES结构的指针
+    dwStackSize: DWORD;  //线程栈大小，以字节表示
+    lpStartAddress: TFNThreadStartRoutine;  
+    // 一个TFNThreadStartRoutine类型的指针，指向在远程进程中执行的函数地址
+    lpParameter: Pointer; //传入参数的指针
+    dwCreationFlags: DWORD;  //创建线程的其它标志
+    var lpThreadId: DWORD //线程身份标志，如果为0, 则不返回
+  ): THandle;
+
+整个远程注入DLL的具体实现代码如下：
+
+function InjectDll(const DllFullPath: string; const dwRemoteProcessId: Cardinal): Boolean;
+var
+  hRemoteProcess, hRemoteThread: THandle;
+  pszLibFileRemote: Pointer;
+  pszLibAFilename: PwideChar;
+  pfnStartAddr: TFNThreadStartRoutine;
+  memSize, WriteSize, lpThreadId: Cardinal;
+begin
+  Result := false;
+  // 调整权限，使程序可以访问其他进程的内存空间
+  if EnableDebugPriv then
+  begin
+    //打开远程线程 PROCESS_ALL_ACCESS 参数表示打开所有的权限
+    hRemoteProcess := OpenProcess(PROCESS_ALL_ACCESS, false, dwRemoteProcessId);
+
+    try
+
+      // 为注入的dll文件路径分配内存大小,由于为WideChar,故要乘2
+      GetMem(pszLibAFilename, Length(DllFullPath) * 2 + 1);
+      // 之所以要转换成 WideChar, 是因为当DLL位于有中文字符的路径下时不会出错
+      StringToWideChar(DllFullPath, pszLibAFilename, Length(DllFullPath) * 2 + 1);
+      // 计算 pszLibAFilename 的长度，注意，是以字节为单元的长度
+      memSize := (1 + lstrlenW(pszLibAFilename)) * SizeOf(WCHAR);
+
+      //使用VirtualAllocEx函数在远程进程的内存地址空间分配DLL文件名空间
+      pszLibFileRemote := VirtualAllocEx(hRemoteProcess, nil,
+        memSize, MEM_COMMIT, PAGE_READWRITE);
+
+      if Assigned(pszLibFileRemote) then
+      begin
+        //使用WriteProcessMemory函数将DLL的路径名写入到远程进程的内存空间
+        if WriteProcessMemory(hRemoteProcess, pszLibFileRemote,
+          pszLibAFilename, memSize, WriteSize) and
+
+          (WriteSize = memSize) then
+        begin
+          lpThreadId := 0;
+          // 计算LoadLibraryW的入口地址
+          pfnStartAddr := GetProcAddress(LoadLibrary('Kernel32.dll'),
+            'LoadLibraryW');
+          // 启动远程线程LoadLbraryW,通过远程线程调用创建新的线程
+          hRemoteThread := CreateRemoteThread(hRemoteProcess, nil,
+            0, pfnStartAddr, pszLibFileRemote, 0, lpThreadId);
+
+          // 如果执行成功返回　True;
+          if (hRemoteThread <> 0) then
+            Result := true;
+
+          // 释放句柄
+          CloseHandle(hRemoteThread);
+        end;
+      end;
+    finally
+      // 释放句柄
+      CloseHandle(hRemoteProcess);
+    end;
+  end;
+end;
+
+接下来要说的是如何卸载注入目标进程中的DLL，其实原理和注入DLL是完全相同的，只是远程调用调用的函数不同而已，这里要调用的是FreeLibrary，代码如下：
+
+function UnInjectDll(const DllFullPath: string; const dwRemoteProcessId: Cardinal): Boolean;
+  // 进程注入和取消注入其实都差不多，只是运行的函数不同而已
+var
+  hRemoteProcess, hRemoteThread: THandle;
+  pszLibFileRemote: PChar;
+  pszLibAFilename: PwideChar;
+  pfnStartAddr: TFNThreadStartRoutine;
+  memSize, WriteSize, lpThreadId, dwHandle: Cardinal;
+begin
+  Result := false;
+
+  // 调整权限，使程序可以访问其他进程的内存空间
+  if EnableDebugPriv then
+  begin
+    //打开远程线程 PROCESS_ALL_ACCESS 参数表示打开所有的权限
+    hRemoteProcess := OpenProcess(PROCESS_ALL_ACCESS, false, dwRemoteProcessId);
+
+    try
+
+      // 为注入的dll文件路径分配内存大小,由于为WideChar,故要乘2
+      GetMem(pszLibAFilename, Length(DllFullPath) * 2 + 1);
+      // 之所以要转换成 WideChar, 是因为当DLL位于有中文字符的路径下时不会出错
+      StringToWideChar(DllFullPath, pszLibAFilename, Length(DllFullPath) * 2 + 1);
+      // 计算 pszLibAFilename 的长度，注意，是以字节为单元的长度
+      memSize := (1 + lstrlenW(pszLibAFilename)) * SizeOf(WCHAR);
+
+      //使用VirtualAllocEx函数在远程进程的内存地址空间分配DLL文件名空间
+      pszLibFileRemote := VirtualAllocEx(hRemoteProcess, nil,
+        memSize, MEM_COMMIT, PAGE_READWRITE);
+
+      if Assigned(pszLibFileRemote) then
+      begin
+        //使用WriteProcessMemory函数将DLL的路径名写入到远程进程的内存空间
+        if WriteProcessMemory(hRemoteProcess, pszLibFileRemote,
+          pszLibAFilename, memSize, WriteSize) and
+
+          (WriteSize = memSize) then
+        begin
+          // 计算GetModuleHandleW的入口地址
+          pfnStartAddr := GetProcAddress(LoadLibrary('Kernel32.dll'),
+            'GetModuleHandleW');
+          //使目标进程调用GetModuleHandleW，获得DLL在目标进程中的句柄
+          hRemoteThread := CreateRemoteThread(hRemoteProcess, nil,
+            0, pfnStartAddr, pszLibFileRemote, 0, lpThreadId);
+          // 等待GetModuleHandle运行完毕
+          WaitForSingleObject(hRemoteThread, INFINITE);
+          // 获得GetModuleHandle的返回值,存在dwHandle变量中
+          GetExitCodeThread(hRemoteThread, dwHandle);
+
+          // 计算FreeLibrary的入口地址
+          pfnStartAddr := GetProcAddress(LoadLibrary('Kernel32.dll'),
+            'FreeLibrary');
+          // 使目标进程调用FreeLibrary，卸载DLL
+          hRemoteThread := CreateRemoteThread(hRemoteProcess, nil,
+            0, pfnStartAddr, Pointer(dwHandle), 0, lpThreadId);
+          // 等待FreeLibrary卸载完毕
+          WaitForSingleObject(hRemoteThread, INFINITE);
+
+          // 如果执行成功返回　True;
+          if hRemoteProcess <> 0 then
+            Result := true;
+
+          // 释放目标进程中申请的空间
+          VirtualFreeEx(hRemoteProcess, pszLibFileRemote,
+            Length(DllFullPath) + 1, MEM_DECOMMIT);
+          // 释放句柄
+          CloseHandle(hRemoteThread);
+        end;
+      end;
+    finally
+      // 释放句柄
+      CloseHandle(hRemoteProcess);
+    end;
+  end;
+end;
+
+>> 点击下载完整的例子
+注意：例程里注入的DLL为例程目录下的DLL.dll，由DLL.dpr编译而来．
