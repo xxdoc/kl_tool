@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
-import requests
-import chardet
-import lxml
-import time
 import datetime
-import re
-from bs4 import BeautifulSoup
+
+from tool_copy import (
+    get_url
+)
 
 def _LOG(msg_in, time_now=True, new_line=True):
     if time_now:
@@ -24,37 +22,20 @@ def _LOG(msg_in, time_now=True, new_line=True):
     else:
         print msg_in,
 
-_split_url = lambda href: href.split('?')[0].split('@')[0].split(',')[0].split(';')[0].split('#')[0]
-
 def get_page(page_html):
-    page_html = BeautifulSoup(page_html, 'html.parser', from_encoding=None).prettify()
-    soup = BeautifulSoup(page_html, 'html.parser', from_encoding=None)
-    _get_links = lambda s:[_split_url(i.attrs['href']) for i in s.findAll('a') if getattr(i, 'attrs', None)  and getattr(i.attrs, 'href', None)]
-    link_list = _get_links(soup)
+    pass
 
-    _get_css = lambda s:[_split_url(i.attrs['href']) for i in s.findAll('link') if getattr(i, 'attrs', None)  and getattr(i.attrs, 'href', None)]
-    css_list = _get_css(soup)
-    link_list
-
-def load_str(file_name):
-    with open(file_name, 'r') as rf:
-        return rf.read()
-
-def dump_str(file_str, file_name):
-    with open(file_name, 'w') as wf:
-        wf.write(file_str)
 
 def main():
+    main_start = datetime.datetime.now()
+
     url = 'http://zyy.loewenw.com/'
-    tmp_file = os.path.join(os.getcwd(), 'tmp_html.tmp')
-    if os.path.isfile(tmp_file):
-        page_html = load_str(tmp_file)
-    else:
-        res = requests.get(url)
-        page_html = res.content if res.ok else ''
-        dump_str(page_html, tmp_file)
+    tmp_path = os.path.join(os.getcwd(), 'tmp')
+    page_html = get_url(url, tmp_path)
+
     get_page(page_html)
-    _LOG('end')
+
+    print 'USE Time : ', str(datetime.datetime.now() - main_start)
 
 if __name__ == '__main__':
     main()

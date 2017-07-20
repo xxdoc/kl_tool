@@ -120,18 +120,24 @@ def strToUnicode(html, decoding=None):
     if not isinstance(html, unicode):
         if not decoding:
             decoding, charJust = '', chardet.detect(html)
-            try: decoding = 'gbk' if charJust['encoding'].lower() == 'gb2312' else charJust['encoding']
-            except Exception, e: print 'strToUnicode chardet detect error:', Exception, '->', e
+            try: 
+                decoding = 'gbk' if charJust['encoding'].lower() == 'gb2312' else charJust['encoding']
+            except Exception, e: 
+                print 'strToUnicode chardet detect error:', Exception, '->', e
         decoding = 'utf-8' if not decoding else decoding
-        if decoding: html = html.decode(decoding, 'ignore')
+        if decoding: 
+            html = html.decode(decoding, 'ignore')
     return html
 
 def unicodeToStr(html, encoding='utf-8'):
     if not isinstance(html, unicode):
         decoding, charJust = '', chardet.detect(html)
-        try: decoding = 'gbk' if charJust['encoding'].lower() == 'gb2312' else charJust['encoding']
-        except Exception, e: print 'unicodeToStr chardet detect error:', Exception, '->', e
-        if encoding and decoding and decoding!=encoding : html = html.decode(decoding, 'ignore').encode(encoding, 'ignore')
+        try: 
+            decoding = 'gbk' if charJust['encoding'].lower() == 'gb2312' else charJust['encoding']
+        except Exception, e: 
+            print 'unicodeToStr chardet detect error:', Exception, '->', e
+        if encoding and decoding and decoding!=encoding : 
+            html = html.decode(decoding, 'ignore').encode(encoding, 'ignore')
     else:
         if encoding: html = html.encode(encoding, 'ignore')
     return html
@@ -255,4 +261,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
