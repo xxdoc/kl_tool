@@ -1,0 +1,23 @@
+﻿<Window x:Class="TorrnetGet.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TorrnetGet"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="382.333" Width="536.317">
+    <Grid Margin="0,0,12.8,4.4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="235*"/>
+            <ColumnDefinition Width="21*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="btnSelectFile" Content="选择文件" HorizontalAlignment="Left" Height="29" Margin="431,10,0,0" VerticalAlignment="Top" Width="76" Click="btnSelectFile_Click" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="lbxMagnet" HorizontalAlignment="Left" Height="208" Margin="10,104,0,0" VerticalAlignment="Top" Width="498" Grid.ColumnSpan="2"/>
+        <Label x:Name="lblState" Content="" HorizontalAlignment="Left" Height="33" Margin="10,317,0,0" VerticalAlignment="Top" Width="431"/>
+        <TextBlock x:Name="tbkFileName" TextWrapping="Wrap" Margin="5,10,52.4,296"/>
+        <TextBlock x:Name="tbkSaveDir" HorizontalAlignment="Left" Height="44" Margin="5,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="417"/>
+        <Button x:Name="btnSelectSaveDir" Grid.ColumnSpan="2" Content="保存目录" HorizontalAlignment="Left" Height="29" Margin="431,54,0,0" VerticalAlignment="Top" Width="76" Click="btnSelectSaveDir_Click"/>
+        <Button x:Name="btnGetTorrnet" Grid.ColumnSpan="2" Content="下载" HorizontalAlignment="Left" Height="33" Margin="446,317,0,0" VerticalAlignment="Top" Width="61" Click="btnGetTorrnet_Click"/>
+
+    </Grid>
+</Window>
