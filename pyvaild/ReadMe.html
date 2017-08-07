@@ -1,0 +1,408 @@
+@summary: 验证器
+该模块提供了一个装饰器用于验证参数是否合法，使用方法为：
+ 
+from pyvaild import validParam, nullOk, multiType
+
+可能抛出的异常：
+class ValiDateException(Error): #参数验证失败时抛出
+    pass
+
+class ValiConditionError(Error): #参数条件编译失败时抛出
+    pass
+
+
+@validParam(i=int)
+def foo(i):
+    return i+1
+ 
+编写验证器：
+ 
+1. 仅验证类型：
+@validParam(type, ...)
+例如：
+检查第一个位置的参数是否为int类型：
+@validParam(int)
+检查名为x的参数是否为int类型：
+@validParam(x=int)
+ 
+验证多个参数：
+@validParam(int, int)
+指定参数名验证：
+@validParam(int, s=str)
+ 
+针对*和**参数编写的验证器将验证这些参数实际包含的每个元素：
+@validParam(varargs=int)
+def foo(*varargs): pass
+ 
+@validParam(kws=int)
+def foo7(s, **kws): pass
+ 
+2. 带有条件的验证：
+@validParam((type, condition), ...)
+其中，condition是一个表达式字符串，使用x引用待验证的对象；
+根据bool(表达式的值)判断是否通过验证，若计算表达式时抛出异常，视为失败。
+例如：
+验证一个10到20之间的整数：
+@validParam(i=(int, '10<x<20'))
+验证一个长度小于20的字符串：
+@validParam(s=(str, 'len(x)<20'))
+验证一个年龄小于20的学生：
+@validParam(stu=(Student, 'x.age<20'))
+ 
+另外，如果类型是字符串，condition还可以使用斜杠开头和结尾表示正则表达式匹配。
+验证一个由数字组成的字符串：
+@validParam(s=(str, '/^\d*$/'))
+ 
+3. 以上验证方式默认为当值是None时验证失败。如果None是合法的参数，可以使用nullOk()。
+nullOk()接受一个验证条件作为参数。
+例如：
+@validParam(i=nullOk(int))
+@validParam(i=nullOk((int, '10<x<20')))
+也可以简写为：
+@validParam(i=nullOk(int, '10<x<20'))
+ 
+4. 如果参数有多个合法的类型，可以使用multiType()。
+multiType()可接受多个参数，每个参数都是一个验证条件。
+例如：
+@validParam(s=multiType(int, str))
+@validParam(s=multiType((int, 'x>20'), nullOk(str, '/^\d+$/')))
+ 
+5. 如果有更复杂的验证需求，还可以编写一个函数作为验证函数传入。
+这个函数接收待验证的对象作为参数，根据bool(返回值)判断是否通过验证，抛出异常视为失败。
+例如：
+def validFunction(x):
+    return isinstance(x, int) and x>0
+@validParam(i=validFunction)
+def foo(i): pass
+ 
+这个验证函数等价于：
+@validParam(i=(int, 'x>0'))
+def foo(i): pass
+
+6. 使用 validParamd 可以设置默认值，当参数验证不通过时，使用默认值代替原参数。
+无默认值时会抛出异常。
+
+例如：
+@validParamd(i=(int, 'x>=0', 0))
+def foo(i):
+    return i + 1
+
+foo(8)
+>>9
+foo('1')
+>>1
+foo(-1)
+>>1
+
+@author: HUXI
+@since: 2011-3-22
+@change: 2015-8-1
+
+
+#===============================================================================
+#=================================TEST==========================================
+#===============================================================================
+*** Python 2.7.9 (default, Dec 10 2014, 12:24:55) [MSC v.1500 32 bit (Intel)] on win32. ***
+>>> 
+*** 远程解释器再初始化了  ***
+>>> 
+
+
+>>_test2_condition
+
+ValidInfo(varargs=(), keywords={'i': (<type 'int'>, ['10<x<20', 'x%2==1'])}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['x', 'i'], None, None, None), all_valid=True, use_default=False)
+True -> foo1(args=(1, 11),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'i': (<type 'int'>, ['10<x<20', 'x%2==1'])}, fix_dctCallArgs={}, dctCallArgs={'i': 11, 'x': 1}, tupArgSpec=(['x', 'i'], None, None, None), all_valid=True, use_default=False)
+False -> foo1(args=(1, 'a'),kws={})
+False -> __main__.ValiDateException:foo1 failed:i=`a`<str> with [type(`a`<str>) is int]
+
+
+ValidInfo(varargs=(), keywords={'i': (<type 'int'>, ['10<x<20', 'x%2==1'])}, fix_dctCallArgs={}, dctCallArgs={'i': 'a', 'x': 1}, tupArgSpec=(['x', 'i'], None, None, None), all_valid=True, use_default=False)
+False -> foo1(args=(1, 12),kws={})
+False -> __main__.ValiDateException:foo1 failed:i=`12`<int> with [eval(x%2==1) x=`12`<int>]
+
+
+ValidInfo(varargs=(), keywords={'i': (<type 'int'>, ['10<x<20', 'x%2==1'])}, fix_dctCallArgs={}, dctCallArgs={'i': 12, 'x': 1}, tupArgSpec=(['x', 'i'], None, None, None), all_valid=True, use_default=False)
+False -> foo1(args=(1, 1),kws={})
+False -> __main__.ValiDateException:foo1 failed:i=`1`<int> with [eval(10<x<20) x=`1`<int>]
+
+
+ValidInfo(varargs=(), keywords={'s': (<type 'str'>, 'len(x)<20')}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['a', 's'], None, None, None), all_valid=True, use_default=False)
+True -> foo2(args=(1, 'a'),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'s': (<type 'str'>, 'len(x)<20')}, fix_dctCallArgs={}, dctCallArgs={'a': 1, 's': 'a'}, tupArgSpec=(['a', 's'], None, None, None), all_valid=True, use_default=False)
+False -> foo2(args=(1, 1),kws={})
+False -> __main__.ValiDateException:foo2 failed:s=`1`<int> with [type(`1`<int>) is str]
+
+
+ValidInfo(varargs=(), keywords={'s': (<type 'str'>, 'len(x)<20')}, fix_dctCallArgs={}, dctCallArgs={'a': 1, 's': 1}, tupArgSpec=(['a', 's'], None, None, None), all_valid=True, use_default=False)
+False -> foo2(args=(1, 'aaaaaaaaaaaaaaaaaaaa'),kws={})
+False -> __main__.ValiDateException:foo2 failed:s=`aaaaaaaaaaaaaaaaaaaa`<str> with [eval(len(x)<20) x=`aaaaaaaaaaaaaaaaaaaa`<str>]
+
+
+ValidInfo(varargs=(), keywords={'stu': (<class '__main__.Student'>, 'x.age<20')}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['stu'], None, None, None), all_valid=True, use_default=False)
+True -> foo3(args=(<__main__.Student object at 0x02FDF970>,),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'stu': (<class '__main__.Student'>, 'x.age<20')}, fix_dctCallArgs={}, dctCallArgs={'stu': <__main__.Student object at 0x02FDF970>}, tupArgSpec=(['stu'], None, None, None), all_valid=True, use_default=False)
+False -> foo3(args=(1,),kws={})
+False -> __main__.ValiDateException:foo3 failed:stu=`1`<int> with [type(`1`<int>) is Student]
+
+
+ValidInfo(varargs=(), keywords={'stu': (<class '__main__.Student'>, 'x.age<20')}, fix_dctCallArgs={}, dctCallArgs={'stu': 1}, tupArgSpec=(['stu'], None, None, None), all_valid=True, use_default=False)
+False -> foo3(args=(<__main__.Student object at 0x02FF5DF0>,),kws={})
+False -> __main__.ValiDateException:foo3 failed:stu=`<__main__.Student object at 0x02FF5DF0>`<Student> with [eval(x.age<20) x=`<__main__.Student object at 0x02FF5DF0>`<Student>]
+
+
+ValidInfo(varargs=(), keywords={'s': (<type 'str'>, '/^\\d*$/')}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+True -> foo4(args=('1234',),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'s': (<type 'str'>, '/^\\d*$/')}, fix_dctCallArgs={}, dctCallArgs={'s': '1234'}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+False -> foo4(args=(1,),kws={})
+False -> __main__.ValiDateException:foo4 failed:s=`1`<int> with [type(`1`<int>) is str]
+
+
+ValidInfo(varargs=(), keywords={'s': (<type 'str'>, '/^\\d*$/')}, fix_dctCallArgs={}, dctCallArgs={'s': 1}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+False -> foo4(args=('a1234',),kws={})
+False -> __main__.ValiDateException:foo4 failed:s=`a1234`<str> with [`a1234`<str> re.match(^\d*$)]
+
+
+
+>>_test_py3
+
+ValidInfo(varargs=(), keywords={'a': <type 'int'>, '__return__': <type 'int'>, 'b': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['a', 'b'], None, None, None), all_valid=True, use_default=False)
+True -> gcd(args=(1125, 495),kws={})
+=45
+
+ValidInfo(varargs=(), keywords={'a': <type 'int'>, '__return__': <type 'int'>, 'b': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={'a': 1125, 'b': 495}, tupArgSpec=(['a', 'b'], None, None, None), all_valid=True, use_default=False)
+False -> gcd(args=(6756, '342'),kws={})
+False -> __main__.ValiDateException:gcd failed:b=`342`<str> with [type(`342`<str>) is int]
+
+
+ValidInfo(varargs=(), keywords={'a': <type 'int'>, '__return__': <type 'int'>, 'b': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={'a': 6756, 'b': '342'}, tupArgSpec=(['a', 'b'], None, None, None), all_valid=True, use_default=False)
+False -> gcd(args=(1.0, 9),kws={})
+False -> __main__.ValiDateException:gcd failed:a=`1.0`<float> with [type(`1.0`<float>) is int]
+
+
+
+>>_test3_nullok
+
+ValidInfo(varargs=(), keywords={'i': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02FE41B0>, 'type(@x) is int'),)}}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+True -> foo1(args=(1,),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'i': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02FE41B0>, 'type(@x) is int'),)}}, fix_dctCallArgs={}, dctCallArgs={'i': 1}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+False -> foo1(args=('a',),kws={})
+False -> __main__.ValiDateException:foo1 failed:i=`a`<str> with [type(`a`<str>) is int]
+
+
+ValidInfo(varargs=(), keywords={'i': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02FE41B0>, 'type(@x) is int'),)}}, fix_dctCallArgs={}, dctCallArgs={'i': 'a'}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+True -> foo1(args=(None,),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'i': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02E189F0>, 'type(@x) is int'), (<function <lambda> at 0x02E18830>, 'eval(10<x<20) x=@x'))}}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+True -> foo2(args=(11,),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'i': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02E189F0>, 'type(@x) is int'), (<function <lambda> at 0x02E18830>, 'eval(10<x<20) x=@x'))}}, fix_dctCallArgs={}, dctCallArgs={'i': 11}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+False -> foo2(args=('a',),kws={})
+False -> __main__.ValiDateException:foo2 failed:i=`a`<str> with [type(`a`<str>) is int]
+
+
+ValidInfo(varargs=(), keywords={'i': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02E189F0>, 'type(@x) is int'), (<function <lambda> at 0x02E18830>, 'eval(10<x<20) x=@x'))}}, fix_dctCallArgs={}, dctCallArgs={'i': 'a'}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+True -> foo2(args=(None,),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'i': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02E189F0>, 'type(@x) is int'), (<function <lambda> at 0x02E18830>, 'eval(10<x<20) x=@x'))}}, fix_dctCallArgs={}, dctCallArgs={'i': None}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+False -> foo2(args=(1,),kws={})
+False -> __main__.ValiDateException:foo2 failed:i=`1`<int> with [eval(10<x<20) x=`1`<int>]
+
+
+
+>>_test1_simple
+
+ValidInfo(varargs=(<type 'int'>,), keywords={}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+True -> foo1(args=(1,),kws={})
+=None
+
+ValidInfo(varargs=(<type 'int'>,), keywords={}, fix_dctCallArgs={}, dctCallArgs={'i': 1}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+False -> foo1(args=('s',),kws={})
+False -> __main__.ValiDateException:foo1 failed:i=`s`<str> with [type(`s`<str>) is int]
+
+
+ValidInfo(varargs=(<type 'int'>,), keywords={}, fix_dctCallArgs={}, dctCallArgs={'i': 's'}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=False)
+False -> foo1(args=(None,),kws={})
+False -> __main__.ValiDateException:foo1 failed:i=`None`<NoneType> with [type(`None`<NoneType>) is int]
+
+
+ValidInfo(varargs=(), keywords={'x': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['s', 'x'], None, None, None), all_valid=True, use_default=False)
+True -> foo2(args=(1, 2),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'x': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={'x': 2, 's': 1}, tupArgSpec=(['s', 'x'], None, None, None), all_valid=True, use_default=False)
+False -> foo2(args=('s', 's'),kws={})
+False -> __main__.ValiDateException:foo2 failed:x=`s`<str> with [type(`s`<str>) is int]
+
+
+ValidInfo(varargs=(<type 'int'>, <type 'int'>), keywords={}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['s', 'x'], None, None, None), all_valid=True, use_default=False)
+True -> foo3(args=(1, 2),kws={})
+=None
+
+ValidInfo(varargs=(<type 'int'>, <type 'int'>), keywords={}, fix_dctCallArgs={}, dctCallArgs={'x': 2, 's': 1}, tupArgSpec=(['s', 'x'], None, None, None), all_valid=True, use_default=False)
+False -> foo3(args=('s', 2),kws={})
+False -> __main__.ValiDateException:foo3 failed:s=`s`<str> with [type(`s`<str>) is int]
+
+
+ValidInfo(varargs=(<type 'int'>,), keywords={'s': <type 'str'>}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['i', 's'], None, None, None), all_valid=True, use_default=False)
+True -> foo4(args=(1, 'a'),kws={})
+=None
+
+ValidInfo(varargs=(<type 'int'>,), keywords={'s': <type 'str'>}, fix_dctCallArgs={}, dctCallArgs={'i': 1, 's': 'a'}, tupArgSpec=(['i', 's'], None, None, None), all_valid=True, use_default=False)
+False -> foo4(args=('s', 1),kws={})
+False -> __main__.ValiDateException:foo4 failed:i=`s`<str> with [type(`s`<str>) is int]
+
+
+ValidInfo(varargs=(), keywords={'varargs': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=([], 'varargs', None, None), all_valid=True, use_default=False)
+True -> foo5(args=(1, 2, 3, 4, 5),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'varargs': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={'varargs': [1, 2, 3, 4, 5]}, tupArgSpec=([], 'varargs', None, None), all_valid=True, use_default=False)
+False -> foo5(args=('a', 1),kws={})
+False -> __main__.ValiDateException:foo5 failed:varargs=`a`<str> with [type(`a`<str>) is int]
+
+
+ValidInfo(varargs=(), keywords={'kws': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=([], None, 'kws', None), all_valid=True, use_default=False)
+True -> foo6(args=(),kws={'a': 1, 'b': 2})
+=None
+
+ValidInfo(varargs=(), keywords={'kws': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={'kws': {'a': 1, 'b': 2}}, tupArgSpec=([], None, 'kws', None), all_valid=True, use_default=False)
+False -> foo6(args=(),kws={'a': 'a', 'b': 2})
+False -> __main__.ValiDateException:foo6 failed:kws=`a`<str> with [type(`a`<str>) is int]
+
+
+ValidInfo(varargs=(), keywords={'kws': <type 'int'>}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['s'], None, 'kws', None), all_valid=True, use_default=False)
+True -> foo7(args=(),kws={'a': 1, 's': 'a', 'b': 2})
+=None
+
+
+>>_testd1_simple
+
+ValidInfo(varargs=((<type 'int'>, '', 3),), keywords={'__return__': <type 'str'>, 's': (<type 'str'>, 'len(x)>1', 'xxx')}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['i', 's', 'c'], None, None, (0,)), all_valid=True, use_default=True)
+True -> foo4(args=(1, 'aa'),kws={})
+fix:i=1,s='aa'
+='aa'
+
+ValidInfo(varargs=((<type 'int'>, '', 3),), keywords={'__return__': <type 'str'>, 's': (<type 'str'>, 'len(x)>1', 'xxx')}, fix_dctCallArgs={'i': 1, 'c': 0, 's': 'aa'}, dctCallArgs={'i': 1, 'c': 0, 's': 'aa'}, tupArgSpec=(['i', 's', 'c'], None, None, (0,)), all_valid=True, use_default=True)
+True -> foo4(args=(3, ''),kws={})
+fix:i=3,s='xxx'
+='xxxxxxxxx'
+
+ValidInfo(varargs=((<type 'int'>, 'x>=3', 3),), keywords={'__return__': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02FE40F0>, 'type(@x) is int'),)}}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=True)
+True -> foo1(args=(1,),kws={})
+fix:3
+=None
+
+ValidInfo(varargs=((<type 'int'>, 'x>=3', 3),), keywords={'__return__': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02FE40F0>, 'type(@x) is int'),)}}, fix_dctCallArgs={'i': 3}, dctCallArgs={'i': 1}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=True)
+True -> foo1(args=(3,),kws={})
+fix:3
+=None
+
+ValidInfo(varargs=((<type 'int'>, 'x>=3', 3),), keywords={'__return__': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02FE40F0>, 'type(@x) is int'),)}}, fix_dctCallArgs={'i': 3}, dctCallArgs={'i': 3}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=True)
+True -> foo1(args=(9,),kws={})
+fix:9
+=1
+
+ValidInfo(varargs=((<type 'int'>, 'x>=3', 3),), keywords={'__return__': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02FE40F0>, 'type(@x) is int'),)}}, fix_dctCallArgs={'i': 9}, dctCallArgs={'i': 9}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=True)
+True -> foo1(args=('s',),kws={})
+fix:3
+=None
+
+ValidInfo(varargs=((<type 'int'>, 'x>=3', 3),), keywords={'__return__': {'default': (), '_multiType': False, '_nullOk': True, 'func': ((<function <lambda> at 0x02FE40F0>, 'type(@x) is int'),)}}, fix_dctCallArgs={'i': 3}, dctCallArgs={'i': 's'}, tupArgSpec=(['i'], None, None, None), all_valid=True, use_default=True)
+True -> foo1(args=(None,),kws={})
+fix:3
+=None
+
+ValidInfo(varargs=(), keywords={'x': (<type 'int'>, 'x>2', 3)}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['s', 'x'], None, None, None), all_valid=True, use_default=True)
+True -> foo2(args=(1, 0),kws={})
+fix:s=1,x=3
+=None
+
+ValidInfo(varargs=(), keywords={'x': (<type 'int'>, 'x>2', 3)}, fix_dctCallArgs={'x': 3, 's': 1}, dctCallArgs={'x': 0, 's': 1}, tupArgSpec=(['s', 'x'], None, None, None), all_valid=True, use_default=True)
+True -> foo2(args=('s', 's'),kws={})
+fix:s='s',x=3
+=None
+
+ValidInfo(varargs=((<type 'int'>, 'x>2', 3), (<type 'int'>, 'x>2', 4)), keywords={}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['s', 'x'], None, None, None), all_valid=True, use_default=True)
+True -> foo3(args=(1, 2),kws={})
+fix:s=3,x=4
+=None
+
+ValidInfo(varargs=((<type 'int'>, 'x>2', 3), (<type 'int'>, 'x>2', 4)), keywords={}, fix_dctCallArgs={'x': 4, 's': 3}, dctCallArgs={'x': 2, 's': 1}, tupArgSpec=(['s', 'x'], None, None, None), all_valid=True, use_default=True)
+True -> foo3(args=('s', 9),kws={})
+fix:s=3,x=9
+=None
+
+ValidInfo(varargs=(), keywords={'varargs': (<type 'int'>, '4>x>2', 3)}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=([], 'varargs', None, None), all_valid=True, use_default=True)
+True -> foo5(args=(1, 2, 3, 4, 5),kws={})
+fix:varargs=(3, 3, 3, 3, 3)
+=None
+
+ValidInfo(varargs=(), keywords={'varargs': (<type 'int'>, '4>x>2', 3)}, fix_dctCallArgs={'varargs': [3, 3, 3, 3, 3]}, dctCallArgs={'varargs': [1, 2, 3, 4, 5]}, tupArgSpec=([], 'varargs', None, None), all_valid=True, use_default=True)
+True -> foo5(args=('a', 'b', 'c', 1),kws={})
+fix:varargs=(3, 3, 3, 3)
+=None
+
+
+>>_test4_multitype
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': False, 'func': (((<function <lambda> at 0x02FF90F0>, 'type(@x) is int'),), ((<function <lambda> at 0x02FF9870>, 'type(@x) is str'),))}}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+True -> foo1(args=(1,),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': False, 'func': (((<function <lambda> at 0x02FF90F0>, 'type(@x) is int'),), ((<function <lambda> at 0x02FF9870>, 'type(@x) is str'),))}}, fix_dctCallArgs={}, dctCallArgs={'s': 1}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+True -> foo1(args=('a',),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': False, 'func': (((<function <lambda> at 0x02FF90F0>, 'type(@x) is int'),), ((<function <lambda> at 0x02FF9870>, 'type(@x) is str'),))}}, fix_dctCallArgs={}, dctCallArgs={'s': 'a'}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+False -> foo1(args=(None,),kws={})
+False -> __main__.ValiDateException:foo1 failed:s=`None`<NoneType> with [type(`None`<NoneType>) is int | type(`None`<NoneType>) is str]
+
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': False, 'func': (((<function <lambda> at 0x02FF90F0>, 'type(@x) is int'),), ((<function <lambda> at 0x02FF9870>, 'type(@x) is str'),))}}, fix_dctCallArgs={}, dctCallArgs={'s': None}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+False -> foo1(args=(1.1,),kws={})
+False -> __main__.ValiDateException:foo1 failed:s=`1.1`<float> with [type(`1.1`<float>) is int | type(`1.1`<float>) is str]
+
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': True, 'func': (((<function <lambda> at 0x02E18D30>, 'type(@x) is int'), (<function <lambda> at 0x02E18930>, 'eval(x>20) x=@x')), ((<function <lambda> at 0x02E18B70>, 'type(@x) is str'), (<function <lambda> at 0x02E18C30>, '@x re.match(^\\d+$)')))}}, fix_dctCallArgs={}, dctCallArgs={}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+False -> foo2(args=(1,),kws={})
+False -> __main__.ValiDateException:foo2 failed:s=`1`<int> with [type(`1`<int>) is int,eval(x>20) x=`1`<int> | type(`1`<int>) is str,`1`<int> re.match(^\d+$)]
+
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': True, 'func': (((<function <lambda> at 0x02E18D30>, 'type(@x) is int'), (<function <lambda> at 0x02E18930>, 'eval(x>20) x=@x')), ((<function <lambda> at 0x02E18B70>, 'type(@x) is str'), (<function <lambda> at 0x02E18C30>, '@x re.match(^\\d+$)')))}}, fix_dctCallArgs={}, dctCallArgs={'s': 1}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+False -> foo2(args=('a',),kws={})
+False -> __main__.ValiDateException:foo2 failed:s=`a`<str> with [type(`a`<str>) is int,eval(x>20) x=`a`<str> | type(`a`<str>) is str,`a`<str> re.match(^\d+$)]
+
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': True, 'func': (((<function <lambda> at 0x02E18D30>, 'type(@x) is int'), (<function <lambda> at 0x02E18930>, 'eval(x>20) x=@x')), ((<function <lambda> at 0x02E18B70>, 'type(@x) is str'), (<function <lambda> at 0x02E18C30>, '@x re.match(^\\d+$)')))}}, fix_dctCallArgs={}, dctCallArgs={'s': 'a'}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+True -> foo2(args=(None,),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': True, 'func': (((<function <lambda> at 0x02E18D30>, 'type(@x) is int'), (<function <lambda> at 0x02E18930>, 'eval(x>20) x=@x')), ((<function <lambda> at 0x02E18B70>, 'type(@x) is str'), (<function <lambda> at 0x02E18C30>, '@x re.match(^\\d+$)')))}}, fix_dctCallArgs={}, dctCallArgs={'s': None}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+False -> foo2(args=(1.1,),kws={})
+False -> __main__.ValiDateException:foo2 failed:s=`1.1`<float> with [type(`1.1`<float>) is int,eval(x>20) x=`1.1`<float> | type(`1.1`<float>) is str,`1.1`<float> re.match(^\d+$)]
+
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': True, 'func': (((<function <lambda> at 0x02E18D30>, 'type(@x) is int'), (<function <lambda> at 0x02E18930>, 'eval(x>20) x=@x')), ((<function <lambda> at 0x02E18B70>, 'type(@x) is str'), (<function <lambda> at 0x02E18C30>, '@x re.match(^\\d+$)')))}}, fix_dctCallArgs={}, dctCallArgs={'s': 1.1}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+True -> foo2(args=(21,),kws={})
+=None
+
+ValidInfo(varargs=(), keywords={'s': {'default': (), '_multiType': True, '_nullOk': True, 'func': (((<function <lambda> at 0x02E18D30>, 'type(@x) is int'), (<function <lambda> at 0x02E18930>, 'eval(x>20) x=@x')), ((<function <lambda> at 0x02E18B70>, 'type(@x) is str'), (<function <lambda> at 0x02E18C30>, '@x re.match(^\\d+$)')))}}, fix_dctCallArgs={}, dctCallArgs={'s': 21}, tupArgSpec=(['s'], None, None, None), all_valid=True, use_default=False)
+True -> foo2(args=('21',),kws={})
+=None
+
+==========END===========
+>>> 
