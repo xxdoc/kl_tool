@@ -1,0 +1,53 @@
+简单的json解析器
+
+
+>>> import pyjson
+>>> json_str = "{'test':['fgh',7  656,N  one,  Tr  ue,False  ,12  3.03  74,   7472e-9,98  e12,[1,2,'daw\"', [None, True,], {'a0':.5346}]  ,{'a':1,'b':2,'c':3,},]  }"
+>>> print pyjson.load(json_str)
+{'test': ['fgh', 7656, None, True, False, 123.0374, 7.472e-06, 98000000000000.0, [1, 2, 'daw"', [None, True], {'a0': 0.5346}], {'a': 1, 'c': 3, 'b': 2}]}
+
+
+#===========TEST==========
+>>_test3
+
+False -> load(args=('[34,4.56,],:{',),kws={})
+False -> <class '__main__.PyjsonError'>:[34, 4.56] undo list:[',', ':', '{']
+
+False -> load(args=('[ture,]',),kws={})
+False -> <class '__main__.PyjsonError'>:Error value:ture@(1, 5) -> invalid literal for int() with base 10: 'ture',could not convert string to float: ture.
+
+True -> load(args=('[34,4.56,],:{', False),kws={})
+=[34, 4.56]
+
+True -> load(args=("   ['fgh',7  656,N  one,  Tr  ue,False  ,12  3.03  74,   7472e-9,98  e12,[]  ,{},]  ",),kws={})
+=['fgh', 7656, None, True, False, 123.0374, 7.472e-06, 98000000000000.0, [], {}]
+
+>>_test2
+
+False -> load(args=('{76:554}',),kws={})
+False -> <class '__main__.PyjsonError'>:assert fails:76@(1, 3, 76) is not str.
+
+False -> load(args=("{'a':4,'a':[],}",),kws={})
+False -> <class '__main__.PyjsonError'>:assert fails:a@(8, 9) is repkey in {'a': 4}.
+
+True -> load(args=('{}',),kws={})
+={}
+
+True -> load(args=("{'fg':556,}",),kws={})
+={'fg': 556}
+
+>>_test1
+
+False -> load(args=('[34,,56]',),kws={})
+False -> <class '__main__.PyjsonError'>:can not match:,@(4,).
+
+False -> load(args=('[,]',),kws={})
+False -> <class '__main__.PyjsonError'>:can not match:,@(1,).
+
+True -> load(args=('[45,]',),kws={})
+=[45]
+
+True -> load(args=("['fgh',7656,None,True,False,123.0374,7472e-9,98e12,[],{},]",),kws={})
+=['fgh', 7656, None, True, False, 123.0374, 7.472e-06, 98000000000000.0, [], {}]
+
+==========END===========
