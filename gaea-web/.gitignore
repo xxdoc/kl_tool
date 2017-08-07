@@ -1,0 +1,13 @@
+*.md.html
+.idea/
+.vscode/
+config/*.json
+markdown/
+vendor/
+node_modules/
+build/
+
+*.pyc
+*.pyo
+
+composer.lock

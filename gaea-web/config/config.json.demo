@@ -1,0 +1,12 @@
+{
+    'ENV_MYSQL_DB': 'dbname',
+    'ENV_MYSQL_USER': 'dbuser',
+    'ENV_MYSQL_PASS': 'dbpass',
+    'ENV_MYSQL_HOST': '127.0.0.1',
+    'ENV_MYSQL_PORT': 3306,
+    'ENV_REDIS_HOST': '127.0.0.1',
+    'ENV_REDIS_PORT': 6379,
+    'ENV_REDIS_PASS': 'redisauth',
+    'ENV_CRYPT_KEY': 'longlonglongkey',
+    'ENV_DEVELOP_KEY': 'GaeaWebDev'
+}

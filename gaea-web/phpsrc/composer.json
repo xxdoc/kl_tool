@@ -1,0 +1,29 @@
+{
+  "name": "sqlcodegen/graphql-phpsrc",
+  "type": "library",
+  "description": "test",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.5",
+    "illuminate/database": "5.2.*",
+    "phpFastCache/phpFastCache": "^5.0",
+    "webonyx/graphql-php": "^0.9"
+  },
+  "require-dev": {
+    "php-console/php-console": "^3.1",
+    "phpunit/phpunit": "4.8.*",
+    "php-mock/php-mock-phpunit": "^1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "MyGraphQL\\": "GraphQL/",
+      "TinyWeb\\": "TinyWeb/",
+      "tiny_app\\": "demo/",
+      "tiny_tests\\": "tests/"
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "secure-http": false
+  }
+}
