@@ -2,13 +2,13 @@
 import re
 import os
 import csv
+import sys
 
-def run(url_file, save_seq = 10000):
+def run(url_file, save_seq=10000):
     '''
        log_format main  '$remote_addr $host [$time_local] "$request" '
                      '$status $request_length $body_bytes_sent "$http_referer" "$http_user_agent" '
                      '"$server_addr" "$upstream_addr" "$http_x_forwarded_for" "$upstream_cache_status" $upstream_response_time $request_time';
-                     
     '''
     reg_str = r'^([\S]+)\s([\S]+)\s(\[(.*)\])\s\"([A-Z]+)\s([\S]+)\s([^"]+)\"\s([\d]+)\s([\d]+)\s([\d]+)\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s([0-9.]+)\s([0-9.]+)$'
     reg = re.compile(reg_str)
@@ -49,7 +49,6 @@ def run(url_file, save_seq = 10000):
                     'total_body_bytes_sent': float(body_bytes_sent),
                 })
 
-
             if idx % save_seq == 1:
                 print '.',
 
@@ -67,7 +66,6 @@ def writeCsv(csv_file, ret_data):
     with open(csv_file, 'wb') as csvfile:
         fieldnames = ['url', ] + ret_data[ ret_data.keys()[0] ].keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
         writer.writeheader()
         for url, item in ret_data.iteritems():
             item['url'] = url
@@ -75,16 +73,15 @@ def writeCsv(csv_file, ret_data):
 
 def main():
     print '\n---------------Start-------------------\n'
-
-    _url_file = 'access.log'
-    _csv_file = _url_file + '.csv'
-    
-    csv_file = os.path.join(os.getcwd(), _csv_file)
-    url_file = os.path.join(os.getcwd(), _url_file)
-    
+    url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'access.log')
+    if not os.path.isfile(url_file):
+        print 'No input specified, use as python xx.py abc.log.'
+        return
+        
+    csv_file = url_file + '.csv'
     ret_data = run(url_file)
     writeCsv(csv_file, ret_data)
-    
+    print '\nwrite file', csv_file
     print '\n---------------End--------------------\n'
 
 if __name__ == '__main__':
