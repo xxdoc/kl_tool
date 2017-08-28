@@ -1,26 +1,15 @@
 # -*- coding: utf-8 -*-
-
 import re
 import os
-import cPickle
+import csv
 
-def dump_obj(file_name, obj):
-    with open(file_name, 'wb') as wf:
-        cPickle.dump(obj, wf)
-
-def load_obj(file_name):
-    if not os.path.isfile(file_name):
-        return None
-    with open(file_name, 'rb') as rf:
-        return cPickle.load(rf)
-
-
-def run(url_file, obj_file, save_seq = 10000):
+def run(url_file, save_seq = 10000):
     '''
-    log_format main  '$remote_addr $host [$time_local] "$request" '
+       log_format main  '$remote_addr $host [$time_local] "$request" '
                      '$status $request_length $body_bytes_sent "$http_referer" "$http_user_agent" '
-                     '"$server_addr" "$upstream_addr" "$http_x_forwarded_for" "$upstream_cache_status" $upstream_response_time $request_time';'''
-
+                     '"$server_addr" "$upstream_addr" "$http_x_forwarded_for" "$upstream_cache_status" $upstream_response_time $request_time';
+                     
+    '''
     reg_str = r'^([\S]+)\s([\S]+)\s(\[(.*)\])\s\"([A-Z]+)\s([\S]+)\s([^"]+)\"\s([\d]+)\s([\d]+)\s([\d]+)\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s([0-9.]+)\s([0-9.]+)$'
     reg = re.compile(reg_str)
     ret_data = {}
@@ -62,13 +51,9 @@ def run(url_file, obj_file, save_seq = 10000):
 
 
             if idx % save_seq == 1:
-                ret_data = calculateAverage(ret_data)
                 print '.',
-                dump_obj(obj_file, ret_data)
 
     return calculateAverage(ret_data)
-
-
 
 def calculateAverage(ret_data):
     for key, val in ret_data.iteritems():
@@ -79,9 +64,8 @@ def calculateAverage(ret_data):
     return ret_data
 
 def writeCsv(csv_file, ret_data):
-    import csv
     with open(csv_file, 'wb') as csvfile:
-        fieldnames = ['url', ] + ret_data['/'].keys()
+        fieldnames = ['url', ] + ret_data[ ret_data.keys()[0] ].keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -90,22 +74,18 @@ def writeCsv(csv_file, ret_data):
             writer.writerow(item)
 
 def main():
-    csv_file = 'access_20170627.csv'
-    url_file = 'access_20170627.access_log'
-    obj_file = '_tmp_access_log.obj'
-    csv_file = os.path.join(os.getcwd(), csv_file)
-    url_file = os.path.join(os.getcwd(), url_file)
-    obj_file = os.path.join(os.getcwd(), obj_file)
-
-
     print '\n---------------Start-------------------\n'
-    ret_data = run(url_file, obj_file)
-    print '\n---------------End--------------------\n'
-    dump_obj(obj_file, ret_data)
 
-    ret_data = load_obj(obj_file)
+    _url_file = 'access.log'
+    _csv_file = _url_file + '.csv'
+    
+    csv_file = os.path.join(os.getcwd(), _csv_file)
+    url_file = os.path.join(os.getcwd(), _url_file)
+    
+    ret_data = run(url_file)
     writeCsv(csv_file, ret_data)
-    return
+    
+    print '\n---------------End--------------------\n'
 
 if __name__ == '__main__':
     main()
