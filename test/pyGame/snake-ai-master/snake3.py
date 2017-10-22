@@ -73,7 +73,7 @@ def runGame(ai=None, test=False):
 
 
     while True:
-        if len(wormCoods)>=CELL_NUMS-5:
+        if len(wormCoods)>=CELL_NUMS-1:
             return True #game restart
 
         move = None

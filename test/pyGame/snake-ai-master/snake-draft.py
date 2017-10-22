@@ -164,7 +164,7 @@ def new_food(snake, snake_size):
         h = randint(1, HEIGHT-2)
         food = h * WIDTH + w
         if is_cell_free(food, snake_size, snake):
-    		return food
+            return food
 
 # 真正的蛇在这个函数中，朝pbest_move走1步
 def make_move(snake, board, snake_size, pbest_move):
@@ -230,78 +230,78 @@ def _LOG(msg_in, time_now=True, new_line=True):
 
         
 def main():
-	# 用一维数组来表示二维的东西
-	# board表示蛇运动的矩形场地
-	# 初始化蛇头在(1,1)的地方，第0行，HEIGHT行，第0列，WIDTH列为围墙，不可用
-	# 初始蛇长度为1
-	board = [0] * FIELD_SIZE
-	snake = [0] * (FIELD_SIZE+1)
-	snake[HEAD] = 1*WIDTH+1
-	snake_size = 1
-	# 与上面变量对应的临时变量，蛇试探性地移动时使用
-	tmpboard = [0] * FIELD_SIZE
-	tmpsnake = [0] * (FIELD_SIZE+1)
-	tmpsnake[HEAD] = 1*WIDTH+1
-	tmpsnake_size = 1
+    # 用一维数组来表示二维的东西
+    # board表示蛇运动的矩形场地
+    # 初始化蛇头在(1,1)的地方，第0行，HEIGHT行，第0列，WIDTH列为围墙，不可用
+    # 初始蛇长度为1
+    board = [0] * FIELD_SIZE
+    snake = [0] * (FIELD_SIZE+1)
+    snake[HEAD] = 1*WIDTH+1
+    snake_size = 1
+    # 与上面变量对应的临时变量，蛇试探性地移动时使用
+    tmpboard = [0] * FIELD_SIZE
+    tmpsnake = [0] * (FIELD_SIZE+1)
+    tmpsnake[HEAD] = 1*WIDTH+1
+    tmpsnake_size = 1
 
-	# food:食物位置(0~FIELD_SIZE-1),初始在(3, 3)
-	# best_move: 运动方向
-	food = 3 * WIDTH + 3
-	best_move = None
-	key = None  
-	                                                  
-	curses.initscr()
-	win = curses.newwin(HEIGHT, WIDTH, 0, 0)
-	win.keypad(1)
-	curses.noecho()
-	curses.curs_set(0)
-	win.border(0)
-	win.nodelay(1)
-	win.addch(food/WIDTH, food%WIDTH, '@')
+    # food:食物位置(0~FIELD_SIZE-1),初始在(3, 3)
+    # best_move: 运动方向
+    food = 3 * WIDTH + 3
+    best_move = None
+    key = None  
+                                                      
+    curses.initscr()
+    win = curses.newwin(HEIGHT, WIDTH, 0, 0)
+    win.keypad(1)
+    curses.noecho()
+    curses.curs_set(0)
+    win.border(0)
+    win.nodelay(1)
+    win.addch(food/WIDTH, food%WIDTH, '@')
 
-	while snake_size < FIELD_SIZE-2:
-	    win.border(0)
-	    win.addstr(0, 2, 's:' + str(snake_size) + ' ')               
-	    #win.addstr(0, WIDTH/2-3, ' SNAKE ')                                 
-	    win.timeout(10)
-	    # 接收键盘输入，同时也使显示流畅
-	    event = win.getch()
-	    key = key if event == -1 else event
-	    if key==27:
-		    break
-		    
-	    # 重置矩阵
-	    board_reset(snake, snake_size, board)
-	    # 如果蛇可以吃到食物，board_refresh返回true
-	    # 并且board中除了蛇身(=SNAKE)，其它的元素值表示从该点运动到食物的最短路径长
-	    if board_refresh(food, snake, board):
-	        best_move  = find_safe_way(snake, board) # find_safe_way的唯一调用处
-	        _LOG('find safe way: ' + str(best_move))
-	    else:
-	        best_move = follow_tail()
-	        _LOG('follow tail: ' + str(best_move))
-	            
-	    if best_move is None:
-		    best_move = any_possible_move(food , snake, snake_size, board)
-	        _LOG('any possible move: ' + str(best_move))
-	    # 上面一次思考，只得出一个方向，运行一步
-	    if best_move is not None: 
-	    	tmp = make_move(snake, board, snake_size, best_move)
-	    	snake_size += tmp
-	    	win.addch(snake[HEAD]/WIDTH, snake[HEAD]%WIDTH, '*')
-	    	if (tmp==1):
-		    	food = new_food(snake, snake_size)
-		    	win.addch(food/WIDTH, food%WIDTH, '@')
-	    else: 
-	    	break        
-	        
-	curses.endwin()
-	print("\nScore - " + str(score))
+    while snake_size < FIELD_SIZE-2:
+        win.border(0)
+        win.addstr(0, 2, 's:' + str(snake_size) + ' ')               
+        #win.addstr(0, WIDTH/2-3, ' SNAKE ')                                 
+        win.timeout(10)
+        # 接收键盘输入，同时也使显示流畅
+        event = win.getch()
+        key = key if event == -1 else event
+        if key==27:
+            break
+            
+        # 重置矩阵
+        board_reset(snake, snake_size, board)
+        # 如果蛇可以吃到食物，board_refresh返回true
+        # 并且board中除了蛇身(=SNAKE)，其它的元素值表示从该点运动到食物的最短路径长
+        if board_refresh(food, snake, board):
+            best_move  = find_safe_way(snake, board) # find_safe_way的唯一调用处
+            _LOG('find safe way: ' + str(best_move))
+        else:
+            best_move = follow_tail()
+            _LOG('follow tail: ' + str(best_move))
+                
+        if best_move is None:
+            best_move = any_possible_move(food , snake, snake_size, board)
+            _LOG('any possible move: ' + str(best_move))
+        # 上面一次思考，只得出一个方向，运行一步
+        if best_move is not None: 
+            tmp = make_move(snake, board, snake_size, best_move)
+            snake_size += tmp
+            win.addch(snake[HEAD]/WIDTH, snake[HEAD]%WIDTH, '*')
+            if (tmp==1):
+                food = new_food(snake, snake_size)
+                win.addch(food/WIDTH, food%WIDTH, '@')
+        else: 
+            break        
+            
+    curses.endwin()
+    print("\nScore - " + str(score))
 
 
 if __name__ == '__main__':
-	_LOG.log_file = file('snake.log', 'a')
-	try:
-    	main()
+    _LOG.log_file = file('snake.log', 'a')
+    try:
+        main()
     finally:
-    	_LOG.log_file.close()
+        _LOG.log_file.close()
