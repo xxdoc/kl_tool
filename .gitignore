@@ -17,3 +17,4 @@ test_api/api_args.txt
 
 *.rdb
 *.access_log
+*.ignore.*
