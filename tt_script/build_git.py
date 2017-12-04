@@ -13,6 +13,8 @@ def main():
 def fix_config(config):
     cfg = {}
     for key, val in config.items():
+        if not key:
+            continue
         path = val.pop('WorkPath', '')
         remote = dict(val)
         if not path or not os.path.isdir(path) or not remote:
@@ -40,6 +42,8 @@ def build_push(cfg):
                 'git push {repo} --all'.format(repo=k),
                 'git push {repo} --tags'.format(repo=k),
                 'git remote remove {repo}'.format(repo=k),
+                'echo "done {repo}"'.format(repo=k),
+                'echo " "',
             ])
     str_list.append('exit')
     ret_list = []
