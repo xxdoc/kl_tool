@@ -1,0 +1,30 @@
+{
+  "host": "192.*",
+  "inHost": "192.*",
+  "port": 1883,
+  "wsPort": 9123,
+  "cdnPort": 9122,
+  "securePort": 0,
+  "wsSecurePort": 0,
+  "topicQueueSize": 128,
+  "region": "杭州",
+  "netType": "全网",
+  "connInterval": 6,
+  "connLimitNum": 60000,
+  "connRefuse": 0,
+  "useCdnMsgNum": 0,
+  "cacheCdnMsgNum": 10,
+  "clientPublish": 1,
+  "jsonpCallback": "ROP_JSONP_C",
+  "apiKey": "2b284b8794e233e1f24b0c1fff2c5444",
+  "ossConfig": "oss://LTAIdJAfptW2zFAH:mwoc7bEImYZCqmDFr6FLPXgjIBRgqZ@oss-cn-hangzhou.aliyuncs.com/bda",
+  "msgPushRedisUri": "redis://:ySJ7zZSQI9zMmPwR@r-bp1280b50a705714.redis.rds.aliyuncs.com:6379/0?key=mrq:q:mqtt_raw&action=push",
+  "WorkerPoolNum": 5,
+  "redisAddr": "127.0.0.1:6379",
+  "redisPassword": "wstest",
+  "redisDb": 17,
+  "redisMaxActive": 30,
+  "expireTime": 60
+}
+
+

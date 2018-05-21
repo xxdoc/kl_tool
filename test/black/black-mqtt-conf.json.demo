@@ -1,0 +1,135 @@
+{
+  "host":"60.176.205.205",
+  "inHost":"192.168.*",
+  "port":1883,   // tcp mqtt 链接处理 监听端口  默认 1883  【一般不需要修改】
+  "wsPort":9123,   // ws mqtt 链接处理 监听端口  http API  共用此接口  默认 9123  【一般不需要修改】
+  "cdnPort": 9122,   // http 接口 拉取消息切片 监听端口  默认 9122  【一般不需要修改】
+  "securePort":0,   // tls mqtt 链接处理 监听端口  默认 0  【一般不需要修改】
+  "wsSecurePort":0,   // wss mqtt 链接处理 监听端口  https API  共用此接口  为0表示关闭  默认 0  【一般不需要修改】
+  "topicQueueSize":128,   // 话题 队列 最大长度  默认为 128    【一般不需要修改】
+  "region":"杭州",
+  "netType":"全网",
+  "connInterval": 4,  // 单个IP 单位时间 尝试新建链接 时间间隔  单位为秒  默认为 4    【一般不需要修改】
+  "connLimitNum": 100,   // 单个IP 单位时间 尝试新建链接 最大次数限制  默认为 100   【一般不需要修改】
+  "connRefuse": 20,  // 单个IP 单位时间 尝试新建链接 超出最大次数后  屏蔽时长  单位为秒  设置为0将关闭 mqtt 认证  默认为 20    【一般不需要修改】
+  "useCdnMsgNum": 1,  // 话题消息 触发使用 CDN 的消息量上限  为 话题人数*每秒消息数  小于这个限制的消息 直接发送  超出限制的会使用 CDN 推荐设置为 房间人数峰值*10   默认为 0  表示关闭该功能
+  "cacheCdnMsgNum": 10,  // LRU缓存 http 接口消息切片数量  未使用  不需要设置  默认为  30   【一般不需要修改】
+  "clientPublish": 0,  // 连接 DMS 的客户端是否允许发送消息  关闭状态下只可以通过 http 接口 发送消息   0 不允许  1 允许  默认为 0   【一般不需要修改】
+  "jsonpCallback": "ROP_JSONP_C",  // oss 拉取消息切片 jsonp 请求的 回调函数  需要和客户端中一致   默认为  ROP_JSONP_C   【一般不需要修改】
+  "ossConfig": "oss://{ak}:{sk}@{endpoint}/{bucket}", // oss 对象存储 配置  优先使用内网 域名
+  "WorkerPoolNum": 5,  // 写入 oss 协程并发数量  推荐数量为  5 - 30  集群上 话题数越多 需要的 workers 越多
+  "redisAddr":"121.40.59.3:6379",   // redis 地址及端口号
+  "redisPassword":"aaaa",  // redis 密码
+  "redisDb":7,  // redis DB
+  "redisMaxActive":30,  // redis 连接池 最大连接数量  默认为 30  【一般不需要修改】
+  "expireTime":60  // comet 信息 有效期  默认为 60  【一般不需要修改】
+}
+
+
+/*    以下为 初始化配置代码  不要放放入配置文件中    */
+
+
+// 读取配置 接口
+// http://101.37.131.26:9123/mqtt/config?key=2b284b8794e233e1f24b0c1fff2c5444
+
+// 查看集群 所有节点 接口
+// http://101.37.131.26:9123/mqtt/peers?key=2b284b8794e233e1f24b0c1fff2c5444
+
+// 修改配置 接口  目前支持修改  clientPublish   useCdnMsgNum  connRefuse  connLimitNum  connInterval
+// http://101.37.131.26:9123/mqtt/edit?key=2b284b8794e233e1f24b0c1fff2c5444&field={A}&value={B}
+
+type Config struct {
+	//ID        int
+	TopicQueueSize    int    `json:"topicQueueSize"`
+	Host              string `json:"host"`
+	InHost            string `json:"inHost"`
+	Port              int    `json:"port"`
+	CdnPort           int    `json:"cdnPort"`
+	WsPort            int    `json:"wsPort"`
+	SecurePort        int    `json:"securePort"`
+	WsSecurePort      int    `json:"wsSecurePort"`
+	AuthUrl           string `json:"authUrl"`
+	TlsCertFile       string `json:"tlsCertFile"`
+	TlsPrivateKeyFile string `json:"tlsPrivateKeyFile"`
+	MaxClient         int    `json:"maxClient"`
+	Region            string `json:"region"`
+	PullPort          int    `json:"-"`
+	RedisAddr         string `json:"redisAddr"`
+	RedisPassword     string `json:"redisPassword"`
+	RedisDb           int    `json:"redisDb"`
+	RedisMaxActive    int    `json:"redisMaxActive"`
+	ExpireTime        int    `json:"expireTime"`
+	ApiKey            string `json:"apiKey"`
+	ConnInterval      int    `json:"connInterval"`
+	ConnLimitNum      int    `json:"connLimitNum"`
+	ConnRefuse        int    `json:"connRefuse"`
+	UseCdnMsgNum      int64  `json:"useCdnMsgNum"`   // 使用 CDN 消息转发  最大消息数  默认为 0
+	CacheCdnMsgNum    int    `json:"cacheCdnMsgNum"` // CDN LRU 缓存消息数  默认为 30
+	ClientPublish     int    `json:"clientPublish"`  // 是否允许 客户端直接发布消息  0 不允许  1允许  默认为 0
+	WorkerPoolNum     int    `json:"WorkerPoolNum"`  // 并发写入 OSS 协程池  数量  默认 5
+	OssConfig         string `json:"ossConfig"`      // 阿里云 OSS 相关配置
+	// 格式为  oss://ak:sk@oss-cn-hangzhou-internal.aliyuncs.com/bucket
+	JsonpCallback     string `json:"jsonpCallback"`  // 阿里云 OSS http jsonp 请求 callback  默认为  ROP_JSONP_C
+}
+
+func (c *Config) Init() {
+	l, _ := net.Listen("tcp", ":0") // listen on localhost
+	c.PullPort = l.Addr().(*net.TCPAddr).Port
+	l.Close()
+	if c.MaxClient == 0 {
+		c.MaxClient = runtime.NumCPU() * 5000
+	}
+	if c.ApiKey == "" {
+		c.ApiKey = "2b284b8794e233e1f24b0c1fff2c5444"
+	}
+	if c.ConnInterval <= 0 {
+		c.ConnInterval = 4
+	}
+	if c.ConnLimitNum <= 0 {
+		c.ConnLimitNum = 100
+	}
+	if c.ConnRefuse <= 0 {
+		c.ConnRefuse = 0
+	}
+	if c.UseCdnMsgNum <= 0 {
+		c.UseCdnMsgNum = 0
+	}
+	// 默认缓存 最近 30 秒的 消息列表
+	if c.CacheCdnMsgNum <= 0 {
+		c.CacheCdnMsgNum = 30
+	}
+	if c.WorkerPoolNum <= 0 {
+		c.WorkerPoolNum = 5
+	}
+	if c.JsonpCallback == "" {
+		c.JsonpCallback = "ROP_JSONP_C"
+	}
+
+	if c.ClientPublish <= 0 {
+		c.ClientPublish = 0
+	}
+	if c.CdnPort <= 0 {
+		c.CdnPort = 9122
+	}
+	ipList := localNetInterfaceAddrs()
+
+	if c.Host == "" || c.Host == "*" {
+		c.Host = ipList[len(ipList)-1]
+	} else {
+		idx := strings.Index(c.Host, "*")
+		if idx >= 1 {
+			c.Host = preMatch(ipList, c.Host[:idx])
+		}
+	}
+
+	if c.InHost == "" || c.InHost == "*" {
+		c.InHost = ipList[len(ipList)-1]
+	} else {
+		idx := strings.Index(c.InHost, "*")
+		if idx >= 1 {
+			c.InHost = preMatch(ipList, c.InHost[:idx])
+		}
+	}
+	fmt.Printf("localNetInterfaceAddrs:%v, Host:%s, InHost:%s", ipList, c.Host, c.InHost)
+}
+
