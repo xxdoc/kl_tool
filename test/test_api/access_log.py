@@ -16,7 +16,7 @@ def dump_obj(obj, file_name):
 def load_obj(file_name):
     with open(file_name, 'rb') as rf:
         return marshal.load(rf)
-        
+
 def fn_cache(key=None):
     _default_key_func = lambda args, kwargs: '<args:%r,kwargs:%r>' % (args, kwargs)
     _key_func = _default_key_func if key is None else key
@@ -72,6 +72,8 @@ def _run(url_file, save_seq, interval, group_path_func):
     reg_str = r'^([\S]+)\s([\S]+)\s(\[(.*)\])\s\"([A-Z]+)\s([\S]+)\s([^"]+)\"\s([\d]+)\s([\d]+)\s([\d]+)\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s\"([^"]+)\"\s([0-9.]+)\s([0-9.]+)$'
     reg = re.compile(reg_str)
     ret_data, ret_group = {}, {}
+    url_data = []
+
     with open(url_file, 'r') as rf:
         for idx, line in enumerate(rf):
             tmp = reg.match(line)
@@ -93,22 +95,31 @@ def _run(url_file, save_seq, interval, group_path_func):
             update_count_item(ret_data, request_path, request_time, request_length, body_bytes_sent, status, timer_count)
 
             group_path = group_path_func(request_path) if group_path_func else request_path
+            url_data.append(dict(
+                group_path=group_path, request_path=request_path, request_time=request_time, time_local=parse_time(time_local),\
+                status=status, request_length=request_length, http_referer=http_referer, http_x_forwarded_for=http_x_forwarded_for,\
+                body_bytes_sent=body_bytes_sent, request_method=request_method, request_protocol=request_protocol,\
+                upstream_cache_status=upstream_cache_status, \
+                upstream_response_time=upstream_response_time, timer_count=timer_count
+            ))
             update_count_item(ret_group, group_path, request_time, request_length, body_bytes_sent, status, timer_count)
 
             if idx % save_seq == 1:
                 print '.',
 
-    return ret_data, ret_group
-    
-def run(url_file, save_seq=10000, interval=300, group_path_func=None):
+    return ret_data, ret_group, url_data
+
+def run(url_file, save_seq=10000, interval=60, group_path_func=None):
     tmp_ret = url_file + '.ret.tmp'
     tmp_group = url_file + '.group.tmp'
+    tmp_url_data = url_file + '.url_data.tmp'
     if os.path.isfile(tmp_ret) and os.path.isfile(tmp_ret):
         ret_data, ret_group = load_obj(tmp_ret), load_obj(tmp_group)
     else:
-        ret_data, ret_group = _run(url_file, save_seq, interval, group_path_func)
+        ret_data, ret_group, url_data = _run(url_file, save_seq, interval, group_path_func)
         dump_obj(ret_data, tmp_ret)
         dump_obj(ret_group, tmp_group)
+        dump_obj(url_data, tmp_url_data)
 
     ret_data, ret_group = calculateAverage(ret_data), calculateAverage(ret_group)
     ret_data, ret_group = listIntervalMap(ret_data), listIntervalMap(ret_group)
@@ -119,7 +130,7 @@ def listIntervalMap(ret_data):
     for url, item in ret_data.iteritems():
         data_map = item.get(key, {})
         s_func = lambda l: sorted(l, key=lambda t: t[0])
-        f_func = lambda k: '2017-11-06 20:00:00' <= k <= '2017-11-06 22:00:00'
+        f_func = lambda k: k
         r_func = lambda k, v: ( "%s#%s" % (k, v) ).replace(':00#', '#').split(' ', 1)[-1]
         ret_data[url][key] = fix_ret_map(data_map, s_func, r_func, f_func, '\n')
 
@@ -130,7 +141,7 @@ def listIntervalMap(ret_data):
         f_func = lambda k: k
         r_func = lambda k, v: "%s#%s" % (k, v)
         ret_data[url][key] = fix_ret_map(data_map, s_func, r_func, f_func, '\n')
-        
+
     return ret_data
 
 def fix_ret_map(data_map, s_func, r_func, f_func, seq=','):
@@ -142,7 +153,7 @@ def fix_ret_map(data_map, s_func, r_func, f_func, seq=','):
             tmp_str = r_func(k, v)
             ret_list.append(tmp_str)
     return seq.join(ret_list)
-    
+
 def update_count_item(obj, url, request_time, request_length, body_bytes_sent, status, timer_count):
     item = obj.get(url, {
         'num': 0,
@@ -170,7 +181,7 @@ def update_count_item(obj, url, request_time, request_length, body_bytes_sent, s
         item['min_request_time'] = request_time if request_time < item['min_request_time'] else item['min_request_time']
         item['min_request_length'] = request_length if request_length < item['min_request_length'] else item['min_request_length']
         item['min_body_bytes_sent'] = body_bytes_sent if body_bytes_sent < item['min_body_bytes_sent'] else item['min_body_bytes_sent']
-    
+
     item['status_map'][ status ] = item['status_map'].get(status, 0) + 1
     item['interval_map'][ timer_count ] = item['interval_map'].get(timer_count, 0) + 1
 
@@ -190,7 +201,7 @@ def writeCsv(csv_file, obj):
         for k, v in replace_map.items():
             str_k = str_k.replace(k, v)
         return str_k
-        
+
     with open(csv_file, 'wb') as csvfile:
         fieldnames = ['url', ] + obj[ obj.keys()[0] ].keys()
         fieldnames = [_fix(i, s_map) for i in fieldnames]
@@ -200,35 +211,40 @@ def writeCsv(csv_file, obj):
             item['url'] = url[:50]
             writer.writerow({_fix(k, s_map): v for k, v in item.items()})
 
+def group_path_func(uri):
+    _g_map = {
+        '/admin': '/admin/(.*)',
+        '/super': '/super/(.*)',
+        '/v/': '/v/(.*)',
+        '/user/': '/user/(\d+)',
+        '/verify/': '/verify/(\d+)',
+        '/siteurl/': '/siteurl/(\d+)',
+    }
+
+    for pre_key, group in _g_map.iteritems():
+        if uri.startswith(pre_key):
+            return group
+
+    _d_list = ['live', 'gift', 'chat', 'iframe']
+    for reg_d in _d_list:
+        reg = re.compile(r'^/%s/([A-Za-z0-9]+)/(\d+)$' % (reg_d, ))
+        tmp = reg.match(uri)
+        if tmp:
+            ctrl = tmp.groups()[0]
+            return '/%s/%s/(\d+)' % (reg_d, ctrl)
+    return uri
+
 def main():
     print '\n---------------Start-------------------\n'
     url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'access.log')
+
+    defult_file = '0809.log'
+    if os.path.isfile(os.path.join(os.getcwd(), defult_file)):
+        url_file = os.path.join(os.getcwd(), defult_file)
+
     if not os.path.isfile(url_file):
         print 'No input specified, use as python xx.py abc.log.'
         return
-
-    def group_path_func(uri):
-        _g_map = {
-            '/admin': '/admin/(.*)',
-            '/super': '/super/(.*)',
-            '/v/': '/user/(.*)',
-            '/user/': '/user/(\d+)',
-            '/verify/': '/verify/(\d+)',
-            '/siteurl/': '/siteurl/(\d+)',
-        }
-
-        for pre_key, group in _g_map.iteritems():
-            if uri.startswith(pre_key):
-                return group
-
-        _d_list = ['live', 'gift', 'chat', 'iframe']
-        for reg_d in _d_list:
-            reg = re.compile(r'^/%s/([A-Za-z0-9]+)/(\d+)$' % (reg_d, ))
-            tmp = reg.match(uri)
-            if tmp:
-                ctrl = tmp.groups()[0]
-                return '/%s/%s/(\d+)' % (reg_d, ctrl)
-        return uri
 
     ret_data, ret_group = run(url_file, group_path_func=group_path_func)
 

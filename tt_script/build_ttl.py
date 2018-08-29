@@ -6,7 +6,9 @@ import json
 
 def main():
     config = load_json( cwd('server_config.ignore') )
-    cfg = fix_config(config)
+    _config = ext_config(config)
+    cfg = fix_config(_config)
+
     for key, item in cfg.items():
         dump_file(cwd(key+'.ttl'), connect_ttl(key, item))
         dump_file(cwd('clear_log', key+'_clear.ttl'), clear_log_ttl(key, item))
@@ -27,6 +29,23 @@ def load_file(file_name):
         return ''
     with open(file_name, 'r') as rf:
         return rf.read()
+
+def ext_config(config):
+    del_set = set()
+    for key, item in config.items():
+        if isinstance(item['Host'], dict):
+            del_set.add(key)
+            for kport, iplist in item['Host'].items():
+                for ip in set(iplist):
+                    fix_key = (key if key.startswith('_') else key + '_')+ ip.split('.')[-1]
+                    copy_item = dict(item)
+                    copy_item['Host'] = ip + ':' + kport
+                    config[fix_key] = copy_item
+
+    for key in del_set:
+        del config[key]
+
+    return config
 
 def load_json(file_name):
     with open(file_name, 'r') as rf:
@@ -49,16 +68,22 @@ def _append(str_list, *str_append):
     return str_list
 
 def base_ttl(key, item):
-    tmp_list = [
-        "SET_Title ='%s' \n" % (key, ),
-        "SET_Prompt = '%s' \n" % (item['Prompt'], ),
-        "SET_Host = '%s' \n" % (item['Host'], ),
-        "SET_User = '%s' \n" % (item['User'], ),
-        "SET_Password = '%s' \n" % (item['Password'], ),
-        "SET_Ini = '%s' \n" % (item['Ini'], ),
-        "SET_FirstCmd  = '%s' \n" % (item['FirstCmd'], ),
-        "SET_WorkPath = '%s' \n" % (item['WorkPath'], ),
-        """
+    if item['Password'].endswith('.pem'):
+        connect_cmd = """
+;++++++++++++++++++++++++++++++++++++++++++++
+tmp_connect_cmd = ''
+strconcat tmp_connect_cmd SET_Host
+strconcat tmp_connect_cmd ' /ssh /2 /auth=publickey '
+strconcat tmp_connect_cmd ' /user='
+strconcat tmp_connect_cmd SET_User
+strconcat tmp_connect_cmd ' /keyfile='
+strconcat tmp_connect_cmd SET_Password
+strconcat tmp_connect_cmd ' /f='
+strconcat tmp_connect_cmd SET_Ini
+connect tmp_connect_cmd
+"""
+    else:
+        connect_cmd = """
 ;++++++++++++++++++++++++++++++++++++++++++++
 tmp_connect_cmd = ''
 strconcat tmp_connect_cmd SET_Host
@@ -70,7 +95,18 @@ strconcat tmp_connect_cmd SET_Password
 strconcat tmp_connect_cmd ' /f='
 strconcat tmp_connect_cmd SET_Ini
 connect tmp_connect_cmd
-""",
+"""
+
+    tmp_list = [
+        "SET_Title ='%s' \n" % (key, ),
+        "SET_Prompt = '%s' \n" % (item['Prompt'], ),
+        "SET_Host = '%s' \n" % (item['Host'], ),
+        "SET_User = '%s' \n" % (item['User'], ),
+        "SET_Password = '%s' \n" % (item['Password'], ),
+        "SET_Ini = '%s' \n" % (item['Ini'], ),
+        "SET_FirstCmd  = '%s' \n" % (item['FirstCmd'], ),
+        "SET_WorkPath = '%s' \n" % (item['WorkPath'], ),
+        connect_cmd,
     ]
     if item.get('Sudo', None):
         tmp_list.extend([
