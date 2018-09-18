@@ -4,10 +4,14 @@ import os
 import csv
 import sys
 import time
+from ipip import IP
+
 
 from functools import wraps
 
 import marshal
+
+IP.load(os.path.join(os.getcwd(), "17monipdb.dat"))
 
 def dump_obj(obj, file_name):
     with open(file_name, 'wb') as wf:
@@ -59,9 +63,19 @@ def parse_time(date_str, reg=re.compile(r'^(\d+)\/([A-Za-z]+)\/(\d+):([0-9]+):(\
 
 @fn_cache(lambda args, kwargs: _args_n(args, kwargs, 0, 'timestamp', 0))
 def format_time(timestamp):
-    timestruct = time.localtime(timestamp)
+    timestruct = time.localtime(timestamp * 1.0)
     ret = time.strftime('%Y-%m-%d %H:%M:%S', timestruct)
     return ret
+
+@fn_cache(lambda args, kwargs: _args_n(args, kwargs, 0, 'ip', 0))
+def ip_location(ip):
+    ip = ip.split(',')[-1].strip()
+    ret = IP.find(ip)
+    while("\t\t" in ret):
+        ret = ret.replace("\t\t", "\t")
+    return ret
+
+
 
 def _run(url_file, save_seq, interval, group_path_func):
     '''
@@ -89,6 +103,9 @@ def _run(url_file, save_seq, interval, group_path_func):
             if request_uri == '-':
                 continue
 
+            ip = http_x_forwarded_for.split(',')[-1].strip()
+            ip_loc = ip_location(ip)
+
             timer_count = format_time( int(parse_time(time_local) / interval) * interval + interval)
 
             request_path = request_uri.split('?', 1)[0]
@@ -96,6 +113,7 @@ def _run(url_file, save_seq, interval, group_path_func):
 
             group_path = group_path_func(request_path) if group_path_func else request_path
             url_data.append(dict(
+                ip=ip, ip_loc=ip_loc, time_str = format_time(parse_time(time_local)), \
                 group_path=group_path, request_path=request_path, request_time=request_time, time_local=parse_time(time_local),\
                 status=status, request_length=request_length, http_referer=http_referer, http_x_forwarded_for=http_x_forwarded_for,\
                 body_bytes_sent=body_bytes_sent, request_method=request_method, request_protocol=request_protocol,\
@@ -113,8 +131,9 @@ def run(url_file, save_seq=10000, interval=60, group_path_func=None):
     tmp_ret = url_file + '.ret.tmp'
     tmp_group = url_file + '.group.tmp'
     tmp_url_data = url_file + '.url_data.tmp'
-    if os.path.isfile(tmp_ret) and os.path.isfile(tmp_ret):
-        ret_data, ret_group = load_obj(tmp_ret), load_obj(tmp_group)
+
+    if os.path.isfile(tmp_ret) and os.path.isfile(tmp_ret) and os.path.isfile(tmp_url_data):
+        ret_data, ret_group, url_data = load_obj(tmp_ret), load_obj(tmp_group), load_obj(tmp_url_data)
     else:
         ret_data, ret_group, url_data = _run(url_file, save_seq, interval, group_path_func)
         dump_obj(ret_data, tmp_ret)
@@ -123,7 +142,7 @@ def run(url_file, save_seq=10000, interval=60, group_path_func=None):
 
     ret_data, ret_group = calculateAverage(ret_data), calculateAverage(ret_group)
     ret_data, ret_group = listIntervalMap(ret_data), listIntervalMap(ret_group)
-    return ret_data, ret_group
+    return ret_data, ret_group, url_data
 
 def listIntervalMap(ret_data):
     key = 'interval_map'
@@ -234,11 +253,23 @@ def group_path_func(uri):
             return '/%s/%s/(\d+)' % (reg_d, ctrl)
     return uri
 
+def writeDataCsv(csv_file, data):
+    data.sort(key = lambda i: i.get('time_local', 0), cmp = lambda a,b: 1 if a > b else -1)
+    with open(csv_file, 'wb') as csvfile:
+        fieldnames = ['time_str', 'request_path', 'ip', 'ip_loc', 'status', 'http_referer']
+        fieldnames = fieldnames + [i for i in data[0].keys() if i not in fieldnames]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for item in data:
+            item['request_path'] = item['request_path'][:50]
+            item['http_referer'] = item['http_referer'][:50]
+            writer.writerow(item)
+
 def main():
     print '\n---------------Start-------------------\n'
-    url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'access.log')
+    url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'zxc.log')
 
-    defult_file = '0809.log'
+    defult_file = 'zxc.log'
     if os.path.isfile(os.path.join(os.getcwd(), defult_file)):
         url_file = os.path.join(os.getcwd(), defult_file)
 
@@ -246,12 +277,15 @@ def main():
         print 'No input specified, use as python xx.py abc.log.'
         return
 
-    ret_data, ret_group = run(url_file, group_path_func=group_path_func)
+    ret_data, ret_group, url_data = run(url_file, group_path_func=group_path_func)
 
     csv_file = url_file + '.csv'
     writeCsv(csv_file, ret_data)
     group_file = url_file + '.group.csv'
     writeCsv(group_file, ret_group)
+
+    data_file = url_file + '.data.csv'
+    writeDataCsv(data_file, url_data)
 
     print '\nwrite file', csv_file
     print '\n---------------End--------------------\n'
