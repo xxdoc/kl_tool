@@ -103,8 +103,8 @@ def main():
     print '\n---------------Start-------------------\n'
     url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'access.log')
 
-    url_file = 'tmp_0122_2.log'
-    out_file = 'tmp_0122_2_out.log'
+    url_file = 'zxc.log'
+    out_file = 'zxc_out.log'
 
     if not os.path.isfile(url_file):
         print 'No input specified, use as python xx.py abc.log.'

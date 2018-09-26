@@ -134,7 +134,7 @@ def main():
             self.__dict__.update(kwgs)
 
     my_app_config = Config(**{
-        'dms_host': '127.0.0.1',
+        'dms_host': 'dms.wenshunsoft.com',
         'dms_port': 1883,
         'dms_key': '2b284b8794e233e1f24b0c1fff2c5444',
         'topics': [
@@ -143,9 +143,10 @@ def main():
     })
 
     my_app = DmsAnalysis(my_app_config.dms_host, my_app_config.dms_port, my_app_config.dms_key, my_app_config.topics)
-    atexit.register(my_app.close)
+
     my_app.run()
 
+    #atexit.register(my_app.close)
 
 if __name__ == '__main__':
     main()
