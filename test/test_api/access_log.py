@@ -70,7 +70,12 @@ def format_time(timestamp):
 @fn_cache(lambda args, kwargs: _args_n(args, kwargs, 0, 'ip', 0))
 def ip_location(ip):
     ip = ip.split(',')[-1].strip()
-    ret = IP.find(ip)
+    ret = ''
+    try:
+        ret = IP.find(ip)
+    except Exception as ex:
+        print 'x',
+        
     while("\t\t" in ret):
         ret = ret.replace("\t\t", "\t")
     return ret
@@ -115,7 +120,7 @@ def _run(url_file, save_seq, interval, group_path_func):
             url_data.append(dict(
                 ip=ip, ip_loc=ip_loc, time_str = format_time(parse_time(time_local)), \
                 group_path=group_path, request_path=request_path, request_time=request_time, time_local=parse_time(time_local),\
-                status=status, request_length=request_length, http_referer=http_referer, http_x_forwarded_for=http_x_forwarded_for,\
+                status=status, request_length=request_length, http_referer=http_referer, http_user_agent=http_user_agent, http_x_forwarded_for=http_x_forwarded_for,\
                 body_bytes_sent=body_bytes_sent, request_method=request_method, request_protocol=request_protocol,\
                 upstream_cache_status=upstream_cache_status, \
                 upstream_response_time=upstream_response_time, timer_count=timer_count
@@ -132,7 +137,7 @@ def run(url_file, save_seq=10000, interval=60, group_path_func=None):
     tmp_group = url_file + '.group.tmp'
     tmp_url_data = url_file + '.url_data.tmp'
 
-    if os.path.isfile(tmp_ret) and os.path.isfile(tmp_ret) and os.path.isfile(tmp_url_data):
+    if os.path.isfile(tmp_ret) and os.path.isfile(tmp_ret) and os.path.isfile(tmp_url_data) and 0:
         ret_data, ret_group, url_data = load_obj(tmp_ret), load_obj(tmp_group), load_obj(tmp_url_data)
     else:
         ret_data, ret_group, url_data = _run(url_file, save_seq, interval, group_path_func)
@@ -287,6 +292,10 @@ def main():
     data_file = url_file + '.data.csv'
     writeDataCsv(data_file, url_data)
 
+    agent_set = set((i.get('http_user_agent', '') for i in url_data if i.get('http_user_agent', '')))
+    for agent in agent_set:
+        print agent
+        
     print '\nwrite file', csv_file
     print '\n---------------End--------------------\n'
 
