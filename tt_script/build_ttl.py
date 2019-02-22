@@ -13,6 +13,7 @@ def main():
         dump_file(cwd(key+'.ttl'), connect_ttl(key, item))
         dump_file(cwd('clear_log', key+'_clear.ttl'), clear_log_ttl(key, item))
         dump_file(cwd('glances', key+'_glances.ttl'), glances_ttl(key, item))
+        dump_file(cwd('update', key+'_update.ttl'), update_ttl(key, item))
 
 def cwd(*f):
     return os.path.join(os.getcwd(), *f)
@@ -181,6 +182,27 @@ settitle SET_Title
 restoresetup SET_Ini
 disconnect
 """ )
+
+def update_ttl(key, item):
+    return _append(base_ttl(key, item), """
+;++++++++++++++++++++++++++++++++++++++++++++
+tmp_cd_cmd = 'cd '
+strconcat tmp_cd_cmd SET_WorkPath
+
+wait SET_Prompt
+sendln tmp_cd_cmd
+wait SET_Prompt
+sendln 'pwd'
+wait SET_Prompt
+sendln './update.sh'
+wait 'clear:'
+wait SET_Prompt
+;++++++++++++++++++++++++++++++++++++++++++++
+settitle SET_Title
+restoresetup SET_Ini
+disconnect
+closett
+""")
 
 if __name__ == '__main__':
     main()
