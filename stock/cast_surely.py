@@ -180,7 +180,7 @@ def main():
 
     start_s = '2016-05-31'
     end_s = '2019-03-04'
-    step = 2
+    step = 3
     for code, data in stock_data.items():
         # 获取数据集特征  数据标签
         # X, y = build_matrix_data_pre(start_s, end_s, data, step)  ##  前%d天 同一指数 数据预测
@@ -189,7 +189,7 @@ def main():
             continue
 
         # 划分数据集
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1.0 / 3.0, random_state=10)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1.0 / 4.0, random_state=10)
 
         model_dict = {
             u'KNN': KNeighborsClassifier(n_neighbors=7),
