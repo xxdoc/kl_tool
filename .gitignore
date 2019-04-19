@@ -21,3 +21,4 @@ test_api/api_args.txt
 
 *.tmp
 *.csv
+stock/iview-admin/
