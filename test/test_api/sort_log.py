@@ -101,10 +101,10 @@ def run(url_file):
 
 def main():
     print '\n---------------Start-------------------\n'
-    url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'access.log')
+    url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'log.txt')
 
-    url_file = 'zxc.log'
-    out_file = 'zxc_out.log'
+    url_file = 'log.txt'
+    out_file = 'log_out.txt'
 
     if not os.path.isfile(url_file):
         print 'No input specified, use as python xx.py abc.log.'

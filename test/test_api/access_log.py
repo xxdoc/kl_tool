@@ -272,9 +272,9 @@ def writeDataCsv(csv_file, data):
 
 def main():
     print '\n---------------Start-------------------\n'
-    url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'zxc.log')
+    url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'log.txt')
 
-    defult_file = 'zxc.log'
+    defult_file = 'hzlog.txt'
     if not os.path.isfile(url_file) and os.path.isfile(os.path.join(os.getcwd(), defult_file)):
         url_file = os.path.join(os.getcwd(), defult_file)
 
