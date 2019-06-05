@@ -7,8 +7,16 @@ import json
 def main():
     config = load_json( cwd('gitrepo_config.ignore') )
     cfg = fix_config(config)
-    str_list = build_push(cfg)
-    dump_file(cwd('gitrepo.gitbash'), [line + '\n' for line in str_list])
+
+    str_map = build_push_map(cfg)
+
+    bat_lines = ['@ECHO ON']
+    for repo, str_list in str_map.items():
+        sh = cwd('gitrepo', '%s.gitbash' % (repo, ))
+        dump_file(sh, [line + '\n' for line in str_list])
+        bat_lines.append('D:\\Git\\git-bash.exe %s' % (sh, ))
+
+    dump_file(cwd('git-push.bat'), [line + '\n' for line in bat_lines])
 
 def fix_config(config):
     cfg = {}
@@ -26,9 +34,10 @@ def _fix_path(path):
     tmp_list = path.split(':\\', 1)
     return '/{drive}/{dirpath}'.format(drive=tmp_list[0].lower(), dirpath=tmp_list[1].replace('\\', '/'))
 
-def build_push(cfg):
-    str_list =[]
+def build_push_map(cfg):
+    repo_map = {}
     for name, item in cfg.items():
+        str_list =[]
         remote = item['remote']
         str_list.extend([
             'cd {path}'.format(path=item['path']),
@@ -39,18 +48,23 @@ def build_push(cfg):
         for k,v in remote.items():
             str_list.extend([
                 'git remote add {repo} {url}'.format(repo=k, url=v),
-                'git push {repo} --all'.format(repo=k),
-                'git push {repo} --tags'.format(repo=k),
+                'git push {repo} --all -f'.format(repo=k),
+                'git push {repo} --tags -f'.format(repo=k),
                 'git remote remove {repo}'.format(repo=k),
                 'echo "done {repo}"'.format(repo=k),
                 'echo " "',
             ])
-    str_list.append('exit')
-    ret_list = []
-    for line in str_list:
-        ret_list.append('echo "> {cmd}"'.format(cmd=line))
-        ret_list.append(line)
-    return ret_list
+
+        str_list.append('exit')
+        ret_list = []
+        for line in str_list:
+            if not line.startswith('echo'):
+                ret_list.append('echo "> {cmd}"'.format(cmd=line))
+            ret_list.append(line)
+
+        repo_map[name] = ret_list
+
+    return repo_map
 
 def cwd(*f):
     return os.path.join(os.getcwd(), *f)
