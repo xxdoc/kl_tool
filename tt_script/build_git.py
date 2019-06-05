@@ -11,11 +11,16 @@ def main():
     str_map = build_push_map(cfg)
 
     bat_lines = ['@ECHO ON']
+    idx, seq = 0, 6
+    bash = 'D:\\Git\\git-bash.exe'
     for repo, str_list in str_map.items():
+        idx += 1
         sh = cwd('gitrepo', '%s.gitbash' % (repo, ))
+        is_wait = '/wait' if idx % seq == 0 or idx == len(str_map)  else ''
         dump_file(sh, [line + '\n' for line in str_list])
-        bat_lines.append('D:\\Git\\git-bash.exe %s' % (sh, ))
+        bat_lines.append('start %s %s %s' % (is_wait, bash, sh))
 
+    bat_lines.append('PAUSE')
     dump_file(cwd('git-push.bat'), [line + '\n' for line in bat_lines])
 
 def fix_config(config):
