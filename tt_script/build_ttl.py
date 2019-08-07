@@ -38,7 +38,7 @@ def ext_config(config):
             del_set.add(key)
             for kport, iplist in item['Host'].items():
                 for ip in set(iplist):
-                    fix_key = (key if key.startswith('_') else key + '_')+ ip.split('.')[-1]
+                    fix_key = (key if key.startswith('_') else key + '_')+ ip.split('.')[-2] + '_' + ip.split('.')[-1]
                     copy_item = dict(item)
                     copy_item['Host'] = ip + ':' + kport
                     config[fix_key] = copy_item
