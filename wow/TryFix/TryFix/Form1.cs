@@ -28,9 +28,9 @@ namespace TryFix
 
         private void TryFix_Load(object sender, EventArgs e)
         {
-            setStatus("读取配置文件" + configFile);
+            FixConfig.WriteLog("读取配置文件：" + configFile);
             cfg = FixConfig.loadFromJsonFile(configFile);
-
+            FixConfig.WriteLog("当前配置：" + cfg.dumps());
             initByCfg(cfg);
             setStatus("程序已就绪");
         }
@@ -112,7 +112,7 @@ namespace TryFix
             int iInt;
             if (_fishSecText != null && _fishSecText.Length > 0)
             {
-                if(int.TryParse(_fishSecText, out iInt) && iInt > 0 && iInt < 60)
+                if (int.TryParse(_fishSecText, out iInt) && iInt > 0 && iInt < 60)
                 {
                     fishSecText = _fishSecText;
                 }
