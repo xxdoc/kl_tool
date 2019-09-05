@@ -23,3 +23,9 @@ test_api/api_args.txt
 *.csv
 stock/iview-admin/
 tt_script/git-push.bat
+
+
+wow/TryFix/TryFix/obj/
+wow/TryFix/packages/
+wow/TryFix/TryFix/bin/
+wow/TryFix/.vs/
