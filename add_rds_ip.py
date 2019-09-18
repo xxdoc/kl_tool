@@ -89,11 +89,12 @@ class Api(object):
         info = DBInstanceIPArray if DBInstanceIPArray else []
         return info
 
-    def apiModifySecurityIpsRequest(self, dBInstanceId, iPArrayName, ip, modifyMode="Append"):
+    def apiModifySecurityIpsRequest(self, dBInstanceId, iPArrayName, ip, modifyMode="Append", whitelistNetworkType="Classic"):
         client = self.client
         request = ModifySecurityIpsRequest.ModifySecurityIpsRequest()
         request.set_DBInstanceId(dBInstanceId)
         request.set_SecurityIps(ip)
+        request.set_WhitelistNetworkType(whitelistNetworkType)
         request.set_DBInstanceIPArrayName(iPArrayName)
         request.set_ModifyMode(modifyMode)
         response = client.do_action_with_exception(request)
