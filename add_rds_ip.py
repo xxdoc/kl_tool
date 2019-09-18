@@ -104,7 +104,23 @@ def main():
     config = load_json( cwd('rds_config.ignore') )
     dBInstanceId = config.get("dBInstanceId", "")
     iPArrayName = config.get("iPArrayName", "")
+
+    if not dBInstanceId or not iPArrayName or \
+        not config.get("accessKeyId", "") or \
+        not config.get("secretAccessKey", "") or \
+        not config.get("regionId", ""):
+        print "config error, config:", repr(config)
+        return
+
+    ip = get_this_ip()
+    print "this ip:", ip
+    if not ip or ip == "127.0.0.1":
+        print "get ip error, ip", ip
+        return
+
+    print "load config:", json.dumps(config, indent=2)
     api = Api(config)
+
     info = api.apiDescribeDBInstances(dBInstanceId) if dBInstanceId else None
     attr = api.apiDescribeDBInstanceAttribute(dBInstanceId) if dBInstanceId else None
     if not info or not attr:
@@ -126,11 +142,8 @@ def main():
     print "rds ipa:", json.dumps(ipa, indent=2)
     ips = set(ipa.get("SecurityIPList", "").split(","))
 
-    ip = get_this_ip()
-    print "this ip:", ip
-
     if ip in ips:
-        print "skip with this ip in ips", ips
+        print "skip with this ip:", ip, " in ips:", ",".join(ips)
         return
 
     print "try add ip:", ip, " to:", ips
