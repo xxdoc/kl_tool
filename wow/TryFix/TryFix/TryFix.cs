@@ -21,31 +21,11 @@ namespace TryFix
             FixConfig.AutoRegCom("regsvr32 -s dm.dll");
 
             string cwd = Directory.GetCurrentDirectory();
+            FixConfig.WriteLog("当前目录：" + cwd);
+
             configFile = cwd + "\\config.json";
 
             dm = new Dm.dmsoft();
-        }
-
-        private void TryFix_Load(object sender, EventArgs e)
-        {
-            FixConfig.WriteLog("读取配置文件：" + configFile);
-            cfg = FixConfig.loadFromJsonFile(configFile);
-            FixConfig.WriteLog("当前配置：" + cfg.dumps());
-            initByCfg(cfg);
-            setStatus("程序已就绪");
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (isRun)
-            {
-                DialogResult ret = MessageBox.Show("当前正在运行中，确定关闭？", "确定关闭", MessageBoxButtons.OKCancel);
-                if (ret == DialogResult.Cancel)
-                {
-                    e.Cancel = true;
-                }
-            }
-
         }
 
         private void initByCfg(FixConfig cfg)
@@ -59,24 +39,66 @@ namespace TryFix
 
         public void setStatus(string msg, string tag = "info")
         {
-            statusLable.Text = msg;
             FixConfig.WriteLog(msg, tag);
+            statusLable.Text = msg;
+        }
+
+        public void errMsgBox(string msg, string tag = "error")
+        {
+            FixConfig.WriteLog(msg, tag);
+            MessageBox.Show(msg, "错误", MessageBoxButtons.OK);
+        }
+
+        private void TryFix_Load(object sender, EventArgs e)
+        {
+            FixConfig.WriteLog("读取配置文件：" + configFile);
+            cfg = FixConfig.loadFromJsonFile(configFile);
+            FixConfig.WriteLog("当前配置：" + cfg.dumps());
+
+            initByCfg(cfg);
+            setStatus("程序已就绪");
+        }
+
+        private void TryFix_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isRun)
+            {
+                DialogResult ret = MessageBox.Show("当前正在运行中，确定关闭？", "确定关闭", MessageBoxButtons.OKCancel);
+                if (ret == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+            setStatus("程序退出");
         }
 
         private void startBtn_Click(object sender, EventArgs e)
         {
             if (isRun)
             {
+                errMsgBox("程序在运行中");
+                return;
 
             }
             if (dm == null)
             {
-                setStatus("插件加载失败");
+                errMsgBox("插件加载失败");
                 return;
             }
 
             isRun = true;
             setStatus("开始运行");
+        }
+
+        private void TryFix_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            FixConfig.WriteLog("保存配置文件：" + configFile);
+            FixConfig.WriteLog("当前配置：" + cfg.dumps());
+
+            FixConfig.dumpToJsonFile(configFile, cfg);
+
+            FixConfig.WriteLog("程序已退出");
         }
     }
 
@@ -112,7 +134,7 @@ namespace TryFix
             int iInt;
             if (_fishSecText != null && _fishSecText.Length > 0)
             {
-                if (int.TryParse(_fishSecText, out iInt) && iInt > 0 && iInt < 60)
+                if(int.TryParse(_fishSecText, out iInt) && iInt > 0 && iInt < 60)
                 {
                     fishSecText = _fishSecText;
                 }
@@ -172,14 +194,14 @@ namespace TryFix
 
         public static void WriteLog(string strLog, string tag = "info")
         {
-            string line = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [" + tag.ToUpper() + "]" + strLog;
+            int pid = Process.GetCurrentProcess().Id;
+
+            string line = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " <" + pid + "> [" + tag.ToUpper() + "] " + strLog;
             Console.WriteLine();
 
             string cwd = Directory.GetCurrentDirectory();
-            int pid = Process.GetCurrentProcess().Id;
-
             string sFilePath = cwd + "\\logs";
-            string sFileName = "log_" + DateTime.Now.ToString("yyyy_MM_dd") + "_" + pid + ".log";
+            string sFileName = "log_" + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
             sFileName = sFilePath + "\\" + sFileName; //文件的绝对路径
             if (!Directory.Exists(sFilePath))
             {

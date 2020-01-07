@@ -46,88 +46,99 @@
             // fishKey
             // 
             this.fishKey.AutoSize = true;
-            this.fishKey.Location = new System.Drawing.Point(15, 20);
+            this.fishKey.Location = new System.Drawing.Point(20, 25);
+            this.fishKey.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.fishKey.Name = "fishKey";
-            this.fishKey.Size = new System.Drawing.Size(65, 12);
+            this.fishKey.Size = new System.Drawing.Size(82, 15);
             this.fishKey.TabIndex = 0;
             this.fishKey.Text = "钓鱼按键：";
             // 
             // fishKeyText
             // 
-            this.fishKeyText.Location = new System.Drawing.Point(88, 13);
+            this.fishKeyText.Location = new System.Drawing.Point(117, 16);
+            this.fishKeyText.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.fishKeyText.Name = "fishKeyText";
-            this.fishKeyText.Size = new System.Drawing.Size(100, 21);
+            this.fishKeyText.Size = new System.Drawing.Size(132, 25);
             this.fishKeyText.TabIndex = 3;
             // 
             // baitKey
             // 
             this.baitKey.AutoSize = true;
-            this.baitKey.Location = new System.Drawing.Point(15, 51);
+            this.baitKey.Location = new System.Drawing.Point(20, 64);
+            this.baitKey.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.baitKey.Name = "baitKey";
-            this.baitKey.Size = new System.Drawing.Size(65, 12);
+            this.baitKey.Size = new System.Drawing.Size(82, 15);
             this.baitKey.TabIndex = 0;
             this.baitKey.Text = "鱼饵按键：";
             // 
             // baitKeyText
             // 
-            this.baitKeyText.Location = new System.Drawing.Point(88, 45);
+            this.baitKeyText.Location = new System.Drawing.Point(117, 56);
+            this.baitKeyText.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.baitKeyText.Name = "baitKeyText";
-            this.baitKeyText.Size = new System.Drawing.Size(100, 21);
+            this.baitKeyText.Size = new System.Drawing.Size(132, 25);
             this.baitKeyText.TabIndex = 4;
             // 
             // fishSec
             // 
             this.fishSec.AutoSize = true;
-            this.fishSec.Location = new System.Drawing.Point(15, 82);
+            this.fishSec.Location = new System.Drawing.Point(20, 102);
+            this.fishSec.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.fishSec.Name = "fishSec";
-            this.fishSec.Size = new System.Drawing.Size(65, 12);
+            this.fishSec.Size = new System.Drawing.Size(82, 15);
             this.fishSec.TabIndex = 0;
             this.fishSec.Text = "钓鱼周期：";
             // 
             // fishSecText
             // 
-            this.fishSecText.Location = new System.Drawing.Point(88, 77);
+            this.fishSecText.Location = new System.Drawing.Point(117, 96);
+            this.fishSecText.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.fishSecText.Name = "fishSecText";
-            this.fishSecText.Size = new System.Drawing.Size(100, 21);
+            this.fishSecText.Size = new System.Drawing.Size(132, 25);
             this.fishSecText.TabIndex = 5;
             // 
             // baitSec
             // 
             this.baitSec.AutoSize = true;
-            this.baitSec.Location = new System.Drawing.Point(15, 113);
+            this.baitSec.Location = new System.Drawing.Point(20, 141);
+            this.baitSec.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.baitSec.Name = "baitSec";
-            this.baitSec.Size = new System.Drawing.Size(65, 12);
+            this.baitSec.Size = new System.Drawing.Size(82, 15);
             this.baitSec.TabIndex = 0;
             this.baitSec.Text = "鱼饵周期：";
             // 
             // scanCfg
             // 
             this.scanCfg.AutoSize = true;
-            this.scanCfg.Location = new System.Drawing.Point(15, 144);
+            this.scanCfg.Location = new System.Drawing.Point(20, 180);
+            this.scanCfg.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.scanCfg.Name = "scanCfg";
-            this.scanCfg.Size = new System.Drawing.Size(65, 12);
+            this.scanCfg.Size = new System.Drawing.Size(82, 15);
             this.scanCfg.TabIndex = 0;
             this.scanCfg.Text = "扫描参数：";
             // 
             // baitSecText
             // 
-            this.baitSecText.Location = new System.Drawing.Point(88, 109);
+            this.baitSecText.Location = new System.Drawing.Point(117, 136);
+            this.baitSecText.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.baitSecText.Name = "baitSecText";
-            this.baitSecText.Size = new System.Drawing.Size(100, 21);
+            this.baitSecText.Size = new System.Drawing.Size(132, 25);
             this.baitSecText.TabIndex = 6;
             // 
             // scanCfgText
             // 
-            this.scanCfgText.Location = new System.Drawing.Point(88, 141);
+            this.scanCfgText.Location = new System.Drawing.Point(117, 176);
+            this.scanCfgText.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.scanCfgText.Name = "scanCfgText";
-            this.scanCfgText.Size = new System.Drawing.Size(100, 21);
+            this.scanCfgText.Size = new System.Drawing.Size(132, 25);
             this.scanCfgText.TabIndex = 7;
             // 
             // startBtn
             // 
-            this.startBtn.Location = new System.Drawing.Point(17, 178);
+            this.startBtn.Location = new System.Drawing.Point(23, 222);
+            this.startBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.startBtn.Name = "startBtn";
-            this.startBtn.Size = new System.Drawing.Size(75, 23);
+            this.startBtn.Size = new System.Drawing.Size(100, 29);
             this.startBtn.TabIndex = 1;
             this.startBtn.Text = "开始";
             this.startBtn.UseVisualStyleBackColor = true;
@@ -135,9 +146,10 @@
             // 
             // stopBtn
             // 
-            this.stopBtn.Location = new System.Drawing.Point(113, 178);
+            this.stopBtn.Location = new System.Drawing.Point(151, 222);
+            this.stopBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.stopBtn.Name = "stopBtn";
-            this.stopBtn.Size = new System.Drawing.Size(75, 23);
+            this.stopBtn.Size = new System.Drawing.Size(100, 29);
             this.stopBtn.TabIndex = 2;
             this.stopBtn.Text = "停止";
             this.stopBtn.UseVisualStyleBackColor = true;
@@ -145,17 +157,18 @@
             // statusLable
             // 
             this.statusLable.AutoSize = true;
-            this.statusLable.Location = new System.Drawing.Point(-2, 241);
+            this.statusLable.Location = new System.Drawing.Point(-3, 301);
+            this.statusLable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.statusLable.Name = "statusLable";
-            this.statusLable.Size = new System.Drawing.Size(65, 12);
+            this.statusLable.Size = new System.Drawing.Size(82, 15);
             this.statusLable.TabIndex = 0;
             this.statusLable.Text = "程序已就绪";
             // 
             // TryFix
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(215, 262);
+            this.ClientSize = new System.Drawing.Size(287, 328);
             this.Controls.Add(this.statusLable);
             this.Controls.Add(this.stopBtn);
             this.Controls.Add(this.startBtn);
@@ -170,9 +183,12 @@
             this.Controls.Add(this.fishKeyText);
             this.Controls.Add(this.fishKey);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "TryFix";
             this.Text = "TryFix";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TryFix_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TryFix_FormClosed);
             this.Load += new System.EventHandler(this.TryFix_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -10,31 +10,38 @@ Begin VB.Form Form1
    ScaleHeight     =   3840
    ScaleWidth      =   4308
    StartUpPosition =   3  '窗口缺省
+   Begin VB.TextBox alldelayt 
+      Height          =   270
+      Left            =   3600
+      TabIndex        =   44
+      Top             =   600
+      Width           =   615
+   End
    Begin VB.TextBox playtext 
       Height          =   270
-      Left            =   2640
-      TabIndex        =   44
-      Top             =   2880
-      Width           =   735
+      Left            =   3240
+      TabIndex        =   42
+      Top             =   3000
+      Width           =   492
    End
    Begin VB.TextBox ymt 
       Height          =   270
       Left            =   3240
-      TabIndex        =   43
+      TabIndex        =   41
       Top             =   2520
       Width           =   495
    End
    Begin VB.TextBox xmt 
       Height          =   270
       Left            =   2640
-      TabIndex        =   42
+      TabIndex        =   40
       Top             =   2520
       Width           =   495
    End
    Begin VB.TextBox htext 
       Height          =   270
       Left            =   2640
-      TabIndex        =   41
+      TabIndex        =   39
       Top             =   2160
       Width           =   735
    End
@@ -42,21 +49,21 @@ Begin VB.Form Form1
       Caption         =   "move"
       Height          =   255
       Left            =   3480
-      TabIndex        =   40
+      TabIndex        =   38
       Top             =   2160
       Width           =   615
    End
    Begin VB.TextBox mytext 
       Height          =   270
       Left            =   3480
-      TabIndex        =   39
+      TabIndex        =   37
       Top             =   1800
       Width           =   615
    End
    Begin VB.TextBox mxtext 
       Height          =   270
       Left            =   2640
-      TabIndex        =   38
+      TabIndex        =   36
       Top             =   1800
       Width           =   615
    End
@@ -64,7 +71,7 @@ Begin VB.Form Form1
       Caption         =   "Check1"
       Height          =   255
       Left            =   3120
-      TabIndex        =   37
+      TabIndex        =   35
       Top             =   1440
       Width           =   255
    End
@@ -72,7 +79,7 @@ Begin VB.Form Form1
       Enabled         =   0   'False
       Height          =   270
       Left            =   3600
-      TabIndex        =   35
+      TabIndex        =   33
       Top             =   3480
       Width           =   615
    End
@@ -81,7 +88,7 @@ Begin VB.Form Form1
       Height          =   255
       Index           =   7
       Left            =   2040
-      TabIndex        =   34
+      TabIndex        =   32
       Top             =   3000
       Width           =   255
    End
@@ -89,53 +96,53 @@ Begin VB.Form Form1
       Caption         =   "Check1"
       Height          =   255
       Index           =   6
-      Left            =   2040
-      TabIndex        =   33
-      Top             =   2640
-      Width           =   255
-   End
-   Begin VB.CheckBox isc 
-      Caption         =   "Check1"
-      Height          =   255
-      Index           =   5
-      Left            =   2040
-      TabIndex        =   32
-      Top             =   2280
-      Width           =   255
-   End
-   Begin VB.CheckBox isc 
-      Caption         =   "Check1"
-      Height          =   255
-      Index           =   4
       Left            =   2040
       TabIndex        =   31
-      Top             =   1920
+      Top             =   2640
       Width           =   255
    End
    Begin VB.CheckBox isc 
       Caption         =   "Check1"
       Height          =   255
-      Index           =   3
+      Index           =   5
       Left            =   2040
       TabIndex        =   30
-      Top             =   1560
+      Top             =   2280
       Width           =   255
    End
    Begin VB.CheckBox isc 
       Caption         =   "Check1"
       Height          =   255
-      Index           =   2
+      Index           =   4
       Left            =   2040
       TabIndex        =   29
-      Top             =   1200
+      Top             =   1920
       Width           =   255
    End
    Begin VB.CheckBox isc 
       Caption         =   "Check1"
       Height          =   255
-      Index           =   1
+      Index           =   3
       Left            =   2040
       TabIndex        =   28
+      Top             =   1560
+      Width           =   255
+   End
+   Begin VB.CheckBox isc 
+      Caption         =   "Check1"
+      Height          =   255
+      Index           =   2
+      Left            =   2040
+      TabIndex        =   27
+      Top             =   1200
+      Width           =   255
+   End
+   Begin VB.CheckBox isc 
+      Caption         =   "Check1"
+      Height          =   255
+      Index           =   1
+      Left            =   2040
+      TabIndex        =   26
       Top             =   840
       Width           =   255
    End
@@ -144,7 +151,7 @@ Begin VB.Form Form1
       Height          =   255
       Index           =   0
       Left            =   2040
-      TabIndex        =   27
+      TabIndex        =   25
       Top             =   480
       Width           =   255
    End
@@ -152,7 +159,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   7
       Left            =   1080
-      TabIndex        =   26
+      TabIndex        =   24
       Top             =   3000
       Width           =   735
    End
@@ -160,7 +167,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   6
       Left            =   1080
-      TabIndex        =   25
+      TabIndex        =   23
       Top             =   2640
       Width           =   735
    End
@@ -168,7 +175,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   5
       Left            =   1080
-      TabIndex        =   24
+      TabIndex        =   22
       Top             =   2280
       Width           =   735
    End
@@ -176,7 +183,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   4
       Left            =   1080
-      TabIndex        =   23
+      TabIndex        =   21
       Top             =   1920
       Width           =   735
    End
@@ -184,7 +191,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   3
       Left            =   1080
-      TabIndex        =   22
+      TabIndex        =   20
       Top             =   1560
       Width           =   735
    End
@@ -192,7 +199,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   2
       Left            =   1080
-      TabIndex        =   21
+      TabIndex        =   19
       Top             =   1200
       Width           =   735
    End
@@ -200,7 +207,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   1
       Left            =   1080
-      TabIndex        =   20
+      TabIndex        =   18
       Top             =   840
       Width           =   735
    End
@@ -208,7 +215,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   0
       Left            =   1080
-      TabIndex        =   19
+      TabIndex        =   17
       Top             =   480
       Width           =   735
    End
@@ -216,7 +223,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   7
       Left            =   120
-      TabIndex        =   17
+      TabIndex        =   15
       Top             =   3000
       Width           =   735
    End
@@ -224,7 +231,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   6
       Left            =   120
-      TabIndex        =   16
+      TabIndex        =   14
       Top             =   2640
       Width           =   735
    End
@@ -232,7 +239,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   5
       Left            =   120
-      TabIndex        =   15
+      TabIndex        =   13
       Top             =   2280
       Width           =   735
    End
@@ -240,7 +247,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   4
       Left            =   120
-      TabIndex        =   14
+      TabIndex        =   12
       Top             =   1920
       Width           =   735
    End
@@ -248,7 +255,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   3
       Left            =   120
-      TabIndex        =   13
+      TabIndex        =   11
       Top             =   1560
       Width           =   735
    End
@@ -256,7 +263,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   2
       Left            =   120
-      TabIndex        =   12
+      TabIndex        =   10
       Top             =   1200
       Width           =   735
    End
@@ -264,7 +271,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   1
       Left            =   120
-      TabIndex        =   11
+      TabIndex        =   9
       Top             =   840
       Width           =   735
    End
@@ -272,7 +279,7 @@ Begin VB.Form Form1
       Height          =   270
       Index           =   0
       Left            =   120
-      TabIndex        =   9
+      TabIndex        =   7
       Top             =   480
       Width           =   735
    End
@@ -280,16 +287,9 @@ Begin VB.Form Form1
       Caption         =   "Check1"
       Height          =   255
       Left            =   3960
-      TabIndex        =   7
+      TabIndex        =   5
       Top             =   1440
       Width           =   255
-   End
-   Begin VB.TextBox alldelayt 
-      Height          =   270
-      Left            =   3600
-      TabIndex        =   4
-      Top             =   600
-      Width           =   615
    End
    Begin VB.ComboBox bindcb 
       Height          =   300
@@ -320,11 +320,27 @@ Begin VB.Form Form1
       Top             =   960
       Width           =   615
    End
+   Begin VB.Label Label1 
+      Caption         =   "循环间隔(s):"
+      Height          =   270
+      Left            =   2400
+      TabIndex        =   45
+      Top             =   600
+      Width           =   1452
+   End
+   Begin VB.Label Label5 
+      Caption         =   "错误次数："
+      Height          =   270
+      Left            =   2400
+      TabIndex        =   43
+      Top             =   3000
+      Width           =   972
+   End
    Begin VB.Label Label4 
       Caption         =   "mouse:"
       Height          =   255
       Left            =   2520
-      TabIndex        =   36
+      TabIndex        =   34
       Top             =   1440
       Width           =   495
    End
@@ -332,7 +348,7 @@ Begin VB.Form Form1
       Caption         =   "延时ms："
       Height          =   255
       Left            =   1080
-      TabIndex        =   18
+      TabIndex        =   16
       Top             =   120
       Width           =   735
    End
@@ -340,7 +356,7 @@ Begin VB.Form Form1
       Caption         =   "绑定方式："
       Height          =   255
       Left            =   2040
-      TabIndex        =   10
+      TabIndex        =   8
       Top             =   120
       Width           =   975
    End
@@ -348,7 +364,7 @@ Begin VB.Form Form1
       Caption         =   "log:"
       Height          =   255
       Left            =   3480
-      TabIndex        =   8
+      TabIndex        =   6
       Top             =   1440
       Width           =   375
    End
@@ -356,17 +372,9 @@ Begin VB.Form Form1
       Caption         =   "按键："
       Height          =   255
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   4
       Top             =   120
       Width           =   615
-   End
-   Begin VB.Label Label1 
-      Caption         =   "循环(s):"
-      Height          =   255
-      Left            =   2760
-      TabIndex        =   5
-      Top             =   600
-      Width           =   1095
    End
    Begin VB.Label statel 
       Height          =   255
@@ -422,7 +430,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Const LOG_FILE = "key_press_kk_log.log"
-Private Const BEEP_MAX = 100
 
 Private Const REG_SET = "BgPress_kk"
 
@@ -436,6 +443,8 @@ Private MinFlag As Boolean
 Dim dm As dmsoft
 Dim klhnwd As Long, dm_ret As Long, isbusy As Boolean
 
+Dim keyindex As Integer
+
 Private Type NPKEY
     k As String
     d As Long
@@ -443,12 +452,12 @@ Private Type NPKEY
 End Type
 Dim stime
 Dim kcount As Long
-Dim keybuff(0 To 7) As NPKEY, keyindex As Long, alld As Long, numd As Long
+Dim keybuff(0 To 7) As NPKEY, alld As Long, numd As Long
 
 Private Sub Form_Load()
 
     Set dm = CreateObject("dm.dmsoft")
-
+    
     bindcb.AddItem "dx", 0
     bindcb.AddItem "normal", 1
     bindcb.AddItem "gdi", 2
@@ -458,6 +467,8 @@ Private Sub Form_Load()
     bindcb.ListIndex = GetSetting(REG_SET, "Settings", "bind", 0)
     alldelayt.Text = GetSetting(REG_SET, "Settings", "alldelay", "100")
     playtext.Text = GetSetting(REG_SET, "Settings", "play", "100")
+    mxtext.Text = GetSetting(REG_SET, "Settings", "mxtext", "896")
+    mytext.Text = GetSetting(REG_SET, "Settings", "mytext", "778")
     
     logck.Value = GetSetting(REG_SET, "Settings", "log", 1)
     mck.Value = GetSetting(REG_SET, "Settings", "mck", 1)
@@ -478,6 +489,9 @@ Private Sub Form_Load()
     xmt.Text = 0
     ymt.Text = 0
     htext.Text = ""
+    
+    ' dm_ret = dm.Reg("abcd", "")
+    statel.Caption = "dm.Reg ret:" & dm_ret & ", ver:" & dm.Ver()
 End Sub
 Private Sub Form_Unload(Cancel As Integer)
     dm_ret = 1
@@ -490,6 +504,8 @@ Private Sub Form_Unload(Cancel As Integer)
     SaveSetting REG_SET, "Settings", "bind", bindcb.ListIndex
     SaveSetting REG_SET, "Settings", "alldelay", alldelayt.Text
     SaveSetting REG_SET, "Settings", "play", playtext.Text
+    SaveSetting REG_SET, "Settings", "mxtext", mxtext.Text
+    SaveSetting REG_SET, "Settings", "mytext", mytext.Text
     
     SaveSetting REG_SET, "Settings", "log", logck.Value
     SaveSetting REG_SET, "Settings", "mck", mck.Value
@@ -562,13 +578,13 @@ Private Sub runc_Click()
             dm.GetCursorPos x, y
             dm_ret = dm.ScreenToClient(klhwnd, x, y)
 
-            mxtext.Text = x
-            mytext.Text = y
+            If mxtext.Text = "" Then mxtext.Text = x
+            If mytext.Text = "" Then mytext.Text = y
 
         End If
 
         If mck.Value = 1 Then
-            dm_ret = dm.BindWindow(klhwnd, bindcb.Text, "windows2", "windows", 0)
+            dm_ret = dm.BindWindow(klhwnd, bindcb.Text, "normal", "windows", 0)
         Else
             dm_ret = dm.BindWindow(klhwnd, bindcb.Text, "windows", "windows", 0)
         End If
@@ -589,6 +605,9 @@ Private Sub runc_Click()
         play_count = 0
         isbusy = True
         stime = Timer
+        
+        keyindex = 0
+        
         Timer1.Interval = keybuff(keyindex).d
         Timer1.Enabled = True
 
@@ -620,9 +639,7 @@ Private Sub stopc_Click()
         statel.Caption = "停止运行"
         isbusy = False
 
-        If isplay = True Then
-            isplay = False
-        End If
+        isplay = False
 
         Timer1.Enabled = False
 
@@ -633,7 +650,8 @@ Private Sub stopc_Click()
         Next a
         alldelayt.Enabled = True
         bindcb.Enabled = True
-
+        mck.Enabled = True
+        
         dm_ret = dm.UnBindWindow()
         Set dm = CreateObject("dm.dmsoft")
     Else
@@ -648,19 +666,59 @@ Private Sub Timer1_Timer()
         dm_ret = dm.MoveTo(Val(mxtext.Text), Val(mytext.Text))
         If dm_ret = 0 Then statel.Caption = "移动鼠标，发生错误！"
         dm_ret = dm.LeftClick()
-        If dm_ret = 0 Then statel.Caption = "点击鼠标，发生错误！"
+        If dm_ret = 0 Then
+            statel.Caption = "点击鼠标，发生错误！"
+        Else
+            statel.Caption = "点击 x：" & mxtext.Text & ", y:" & mytext.Text
+        End If
     End If
-    dm.KeyPressChar keybuff(keyindex).k
+    
+    dm.GetCursorPos x, y
+    dm_ret = dm.ScreenToClient(klhwnd, x, y)
+    statel.Caption = "当前坐标 x：" & x & ", y:" & y
+
     If kcount > 2100000000 Then kcount = 0
     kcount = kcount + 1
-    keyindex = keybuff(keyindex).nextid
+    
+    isPress = True
+    keyChar = keybuff(keyindex).k
+    statel.Caption = "[" & keyindex & "] 进入 预按键：" & keyChar
+    tmp = keyindex
+    
+    If keyChar = "2" Then
+        keyindex = False
+        dm_ret = dm.FindPic(25, 175, 430, 500, "1.bmp|2.bmp", "000000", 0.9, 0, intX, intY)
+        If intX > 0 And intY > 0 Then
+            statel.Caption = "[" & tmp & "] 找到 坐标 x：" & intX & ", y:" & intY
+        Else
+            statel.Caption = "[" & tmp & "] 没找到，跳过按键：" & keyChar
+            isPress = False
+        End If
+    End If
+    keyindex = tmp
+    
+    If isPress Then
+        dm_ret = dm.KeyPressChar(keyChar)
+        If dm_ret = 0 Then
+            statel.Caption = "[" & keyindex & "] 按键，发生错误！"
+        Else
+            statel.Caption = "[" & keyindex & "] 按键：" & keyChar
+        End If
+    End If
+
+            
     If keyindex = 0 And alld > 0 Then
         Bydelay alld * 1000
     End If
-    If Timer - stime > 300 Then
+    If Timer - stime > 0 Then
         stime = Timer
-        statel.Caption = "按键计数：" & kcount & "，正在运行!"
+        statel.Caption = "[" & keyindex & "] 按键计数：" & kcount & "，正在运行!"
     End If
+    
+    keyindex = keybuff(keyindex).nextid
+    
+    statel.Caption = "[" & keyindex & "] 按键完成 delay：" & keybuff(keyindex).d
+    
     Timer1.Interval = keybuff(keyindex).d
     ntext.Text = kcount
 
@@ -673,10 +731,24 @@ Private Sub Timer1_Timer()
     End If
     
     If isplay = True Then
-        If play_count < BEEP_MAX Then
+        dm_ret = dm.FindPic(110, 40, 250, 67, "3.bmp", "000000", 0.9, 0, intX, intY)
+        If intX > 0 And intY > 0 Then
+            statel.Caption = "[" & keyindex & "] 存活检查 找到 坐标 x：" & intX & ", y:" & intY
+            play_count = 0
+        Else
+            statel.Caption = "[" & keyindex & "] 存活检查 错误次数：" & play_count
             play_count = play_count + 1
-            dm.Beep 800, 200
-            statel.Caption = "超出，BEEP：" & play_count & " max:(" & BEEP_MAX & ")!"
+        End If
+        
+        If play_count > 0 Then
+            If play_count < Val(playtext.Text) Then
+                If play_count > 5 Then dm.Beep 800, 200
+                statel.Caption = "BEEP：" & play_count & " max:(" & playtext.Text & ")!"
+            Else
+                statel.Caption = "ExitOs：" & play_count & " max:(" & playtext.Text & ")!"
+                Bydelay 30 * 1000
+                dm.ExitOs (1)
+            End If
         End If
     End If
 End Sub
@@ -788,7 +860,7 @@ End Sub
 ' 备注      :
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim l
-    l = x \ 15
+    l = x \ Screen.TwipsPerPixelX
     '    Form1.Caption = Button & "  " & Shift & "  " & x & "  " & y & "   " & l
 
     '点击通知栏图标，用鼠标右键时调出弹出菜单

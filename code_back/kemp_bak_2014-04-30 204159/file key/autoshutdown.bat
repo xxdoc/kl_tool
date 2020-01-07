@@ -23,7 +23,10 @@ if /i "%word%"=="9" (%systemroot%\system32\shutdown -f -s -t 540)&&goto :yn
 if /i "%word%"=="h" (%systemroot%\system32\shutdown -f -s -t 1800)&&goto :yn
 if /i "%word%"=="q" (%systemroot%\system32\shutdown -f -s -t 900)&&goto :yn
 if /i "%word%"=="o" (%systemroot%\system32\shutdown -f -s -t 3600)&&goto :yn
-if /i "%word%"=="t" (%systemroot%\system32\shutdown -f -s -t 7200)&&goto :yn
+if /i "%word%"=="d" (%systemroot%\system32\shutdown -f -s -t 7200)&&goto :yn
+if /i "%word%"=="t" (%systemroot%\system32\shutdown -f -s -t 10800)&&goto :yn
+if /i "%word%"=="t" (%systemroot%\system32\shutdown -f -s -t 14400)&&goto :yn
+if /i "%word%"=="t" (%systemroot%\system32\shutdown -f -s -t 18000)&&goto :yn
 if /i "%word%"=="f" (%systemroot%\system32\shutdown -f -s -t 0)&&goto :yn
 if /i "%word%"=="r" (%systemroot%\system32\shutdown -f -r -t 10&&goto :yn) else (cls&&echo 输入有误,重新关机!&&goto :start)
 rem ****************
