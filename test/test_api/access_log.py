@@ -75,7 +75,7 @@ def ip_location(ip):
         ret = IP.find(ip)
     except Exception as ex:
         print 'x',
-        
+
     while("\t\t" in ret):
         ret = ret.replace("\t\t", "\t")
     return ret
@@ -274,7 +274,7 @@ def main():
     print '\n---------------Start-------------------\n'
     url_file = sys.argv[1].strip() if len(sys.argv) >= 2 and sys.argv[1].strip() else os.path.join(os.getcwd(), 'log.txt')
 
-    defult_file = 'hzlog.txt'
+    defult_file = '315_access.log'
     if not os.path.isfile(url_file) and os.path.isfile(os.path.join(os.getcwd(), defult_file)):
         url_file = os.path.join(os.getcwd(), defult_file)
 
@@ -295,7 +295,7 @@ def main():
     agent_set = set((i.get('http_user_agent', '') for i in url_data if i.get('http_user_agent', '')))
     for agent in agent_set:
         print agent
-        
+
     print '\nwrite file', csv_file
     print '\n---------------End--------------------\n'
 

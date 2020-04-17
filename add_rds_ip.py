@@ -35,7 +35,7 @@ def load_json(file_name):
 def copy_json(obj):
     return json.loads(json.dumps(obj))
 
-def get_this_ip(url="http://api.xdysoft.com/api/ApiHub/hello", default="127.0.0.1", f=lambda o, d: o.get("ip", d)):
+def get_this_ip(url="http://api.xunliansoft.com/api/ApiHub/hello", default="127.0.0.1", f=lambda o, d: o.get("ip", d)):
     try:
         res = requests.get(url)
         if res.ok:

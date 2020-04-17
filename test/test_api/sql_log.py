@@ -62,6 +62,9 @@ def _run(sql_file, save_seq, interval, group_path_func):
     '''
         SQL command	execute time	db name	user	client ip	cost time(microsecond)	number of return	thread id
         "update `users` set `ip` = ?, `ip_location` = ?, `updated_at` = ? where `uid` = ?"	2017-12-28 15:30:00	red7_5	hk_wd	10.25.4.234	141	0	13526591
+
+        LOG,DB,TID,USER,USER_IP,SQL_TYPE,FAIL,CHECK_ROWS,UPDATE_ROWS,LATENCY,TS
+        "select * from room_powers where room_id=1001","java_hk8_5",292327,"hk_wd","172.31.101.189","select","0",1,0,235,2020-03-17 15:45:06
     '''
     pass_func = lambda s: s.startswith('log') or s.startswith('use ') or s.startswith('set ')
 
