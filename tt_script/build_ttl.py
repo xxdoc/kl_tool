@@ -11,9 +11,9 @@ def main():
 
     for key, item in cfg.items():
         dump_file(cwd(key+'.ttl'), connect_ttl(key, item))
-        dump_file(cwd('clear_log', key+'_clear.ttl'), clear_log_ttl(key, item))
-        dump_file(cwd('glances', key+'_glances.ttl'), glances_ttl(key, item))
-        dump_file(cwd('update', key+'_update.ttl'), update_ttl(key, item))
+        # dump_file(cwd('clear_log', key+'_clear.ttl'), clear_log_ttl(key, item))
+        # dump_file(cwd('glances', key+'_glances.ttl'), glances_ttl(key, item))
+        # dump_file(cwd('update', key+'_update.ttl'), update_ttl(key, item))
 
 def cwd(*f):
     return os.path.join(os.getcwd(), *f)
