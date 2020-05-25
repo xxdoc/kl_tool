@@ -4,6 +4,7 @@
 import os
 import json
 import requests
+import datetime
 
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkrds.request.v20140815 import CreateDBInstanceRequest
@@ -102,7 +103,11 @@ class Api(object):
         return ret
 
 def main():
-    config = load_json( cwd('rds_config.ignore') )
+    configs = load_json( cwd('rds_config.ignore') )
+    for config in configs:
+        append_rds_ip(config)
+
+def append_rds_ip(config):
     dBInstanceId = config.get("dBInstanceId", "")
     iPArrayName = config.get("iPArrayName", "")
 
@@ -110,47 +115,51 @@ def main():
         not config.get("accessKeyId", "") or \
         not config.get("secretAccessKey", "") or \
         not config.get("regionId", ""):
-        print "config error, config:", repr(config)
+        print _T('error'), "config error, config:", repr(config)
         return
 
     ip = get_this_ip()
-    print "this ip:", ip
+    print _T(), "this ip:", ip
     if not ip or ip == "127.0.0.1":
-        print "get ip error, ip", ip
+        print _T('error'), "get ip, ip", ip
         return
 
-    print "load config:", json.dumps(config, indent=2)
+    print _T(), "load config:", json.dumps(config, indent=2)
     api = Api(config)
 
     info = api.apiDescribeDBInstances(dBInstanceId) if dBInstanceId else None
     attr = api.apiDescribeDBInstanceAttribute(dBInstanceId) if dBInstanceId else None
     if not info or not attr:
-        print "error get rds info dBInstanceId:", dBInstanceId
+        print _T('error'), "get rds info dBInstanceId:", dBInstanceId
         return
 
     info.update(attr)
-    print "rds info:", json.dumps(info, indent=2)
+    print _T(), "rds info:", json.dumps(info, indent=2)
 
     ips = api.apiDescribeDBInstanceIPArrayList(dBInstanceId)
-    print "rds ips:", json.dumps(ips, indent=2)
+    print _T(), "rds ips:", json.dumps(ips, indent=2)
 
     ipa_ = filter(lambda o: o.get("DBInstanceIPArrayName", "") == iPArrayName, ips)
     ipa = ipa_[0] if ipa_ else None
     if not ipa:
-        print "error get rds ipa iPArrayName:", iPArrayName
+        print _T('error'), "get rds ipa iPArrayName:", iPArrayName
         return
 
-    print "rds ipa:", json.dumps(ipa, indent=2)
+    print _T(), "rds ipa:", json.dumps(ipa, indent=2)
     ips = set(ipa.get("SecurityIPList", "").split(","))
 
     if ip in ips:
-        print "skip with this ip:", ip, " in ips:", ",".join(ips)
+        print _T(), "skip with this ip:", ip, " in ips:", ",".join(ips)
         return
 
-    print "try add ip:", ip, " to:", ips
+    print _T(), "try add ip:", ip, " to:", ips
 
     ret = api.apiModifySecurityIpsRequest(dBInstanceId, iPArrayName, ip)
-    print "added ret:", ret
+    print _T(), "added ret:", ret
 
+def _T(tag = 'INFO'):
+    time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+    return '%s [%s] => ' % (time_str, tag.upper())
+        
 if __name__ == '__main__':
     main()
