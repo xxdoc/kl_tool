@@ -1,0 +1,7 @@
+[{
+    "accessKeyId": "xxxx",
+    "secretAccessKey": "xxxx",
+    "regionId": "cn-hangzhou",
+    "iPArrayName": "dev_ip",
+    "dBInstanceId": "rm-xxxx"
+}]
