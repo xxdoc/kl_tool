@@ -22,7 +22,7 @@ _STOCK_LIST = [
     (u'中证500', '1399905')
 ]
 _STOCK_FIELDS = 'TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER'
-_stock_liem = lambda n, c, start='20020104', end='20190304': { \
+_stock_liem = lambda n, c, start='20020104', end='20210113': { \
     'name': n, \
     'code': c[1:], \
     '_code':c, \
