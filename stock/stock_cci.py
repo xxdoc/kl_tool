@@ -7,6 +7,8 @@ import requests
 import datetime
 import time
 
+import talib
+import numpy
 
 def dump_json(out_file, obj):
     with open(out_file, 'w') as wf:
@@ -123,6 +125,27 @@ def load_data(in_file, csv_url, fmt_str = 'date#s,_,_,tclose#f,high#f,low#f,tope
 
         return ret
 
+def cci(candles, period=7, sequential=True, high=lambda row: row['high'], low=lambda row: row['low'], close=lambda row: row['tclose']):
+    """
+    CCI - Commodity Channel Index
+
+    :param candles: np.ndarray
+    :param period: int - default=14
+    :param sequential: bool - default=False
+
+    :return: float | np.ndarray
+    """
+    if not sequential and len(candles) > 240:
+        candles = candles[-240:]
+
+    np = lambda candles, func: numpy.array([func(i) for i in candles])
+    res = talib.CCI(np(candles, high), np(candles, low), np(candles, close), timeperiod=period)
+
+    if sequential:
+        return res
+    else:
+        return None if np.isnan(res[-1]) else res[-1]
+
 def main():
     log('---------------Start-------------------')
 
@@ -136,6 +159,9 @@ def main():
         stock_data = load_json(data_file)
         log('read file %s' % (data_file, ))
 
+    for code, candles in stock_data.iteritems():
+        res = cci(candles)
+        print code, res[-30:], "\n"
 
     log('---------------End--------------------')
 
