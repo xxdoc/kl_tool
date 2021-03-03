@@ -35,7 +35,7 @@ def _load_list(filename):
 _STOCK_LIST = _load_list('sh_50.txt')
 
 _STOCK_FIELDS = 'TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER'
-_stock_liem = lambda n, c, start='20020104', end='20210113': { \
+_stock_liem = lambda n, c, start='20100101', end='20210301': { \
     'name': n, \
     'code': c[1:], \
     '_code':c, \
@@ -160,8 +160,8 @@ def main():
         log('read file %s' % (data_file, ))
 
     for code, candles in stock_data.iteritems():
-        res = cci(candles)
-        print code, res[-30:], "\n"
+        res = cci(candles, 28)
+        print code, STOCK_MAP[code]['name'], res[-30:], "\n"
 
     log('---------------End--------------------')
 
