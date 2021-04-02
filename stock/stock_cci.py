@@ -32,10 +32,10 @@ def _load_list(filename):
 
     return [(i[0].decode('utf-8'), '0' + i[1]) for i in lines if i[0] and i[1]]
 
-_STOCK_LIST = _load_list('sh_50.txt')
+_STOCK_LIST = _load_list('cci_stock.txt')
 
 _STOCK_FIELDS = 'TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER'
-_stock_liem = lambda n, c, start='20100101', end='20210301': { \
+_stock_liem = lambda n, c, start='20100101', end=datetime.datetime.now().strftime('%Y%m%d'): { \
     'name': n, \
     'code': c[1:], \
     '_code':c, \
@@ -146,6 +146,26 @@ def cci(candles, period=7, sequential=True, high=lambda row: row['high'], low=la
     else:
         return None if np.isnan(res[-1]) else res[-1]
 
+def cci_n(candles, period=7, sequential=True, high=lambda row: row['high'], low=lambda row: row['low'], close=lambda row: row['tclose']):
+    ''' CCI（N日）=（TP－MA）÷MD÷0.015
+其中，TP=（最高价+最低价+收盘价）÷3
+MA=近N日收盘价的累计之和÷N
+MD=近N日（MA－收盘价）的绝对值的累计之和÷N
+0.015为计算系数，N为计算周期
+'''
+    def _CCI(highArr, lowArr, closeArr, timeperiod):
+        TP = highArr
+    if not sequential and len(candles) > 240:
+        candles = candles[-240:]
+
+    np = lambda candles, func: [func(i) for i in candles]
+    res = _CCI(np(candles, high), np(candles, low), np(candles, close), timeperiod=period)
+
+    if sequential:
+        return res
+    else:
+        return None if np.isnan(res[-1]) else res[-1]
+
 def main():
     log('---------------Start-------------------')
 
@@ -160,7 +180,7 @@ def main():
         log('read file %s' % (data_file, ))
 
     for code, candles in stock_data.iteritems():
-        res = cci(candles, 28)
+        res = cci(candles[::-1], 28)
         print code, STOCK_MAP[code]['name'], res[-30:], "\n"
 
     log('---------------End--------------------')
