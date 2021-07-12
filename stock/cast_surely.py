@@ -22,7 +22,7 @@ _STOCK_LIST = [
     (u'中证500', '1399905')
 ]
 _STOCK_FIELDS = 'TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER'
-_stock_liem = lambda n, c, start='20020104', end='20210113': { \
+_stock_liem = lambda n, c, start='20020104', end=datetime.datetime.now().strftime('%Y%m%d'): { \
     'name': n, \
     'code': c[1:], \
     '_code':c, \
@@ -52,7 +52,7 @@ def build_item_func(item, cde='gbk'):
     func_map = {
         'i': (lambda v: int(v), lambda v: 0),
         's': (lambda v: v, lambda v: v),
-        'f': (lambda v: float(v), lambda v: 0.0),
+        'f': (lambda v: float(v) if v else 0.0, lambda v: 0.0),
         'a': (parse_value_auto, lambda v: v)
     }
     fmt = 'a' if not fmt else fmt
@@ -179,8 +179,8 @@ def main():
         log('read file %s' % (data_file, ))
 
     start_s = '2016-05-31'
-    end_s = '2019-03-04'
-    step = 3
+    end_s = '2021-03-04'
+    step = 5
     for code, data in stock_data.items():
         # 获取数据集特征  数据标签
         # X, y = build_matrix_data_pre(start_s, end_s, data, step)  ##  前%d天 同一指数 数据预测

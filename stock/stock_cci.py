@@ -139,32 +139,17 @@ def cci(candles, period=7, sequential=True, high=lambda row: row['high'], low=la
         candles = candles[-240:]
 
     np = lambda candles, func: numpy.array([func(i) for i in candles])
-    res = talib.CCI(np(candles, high), np(candles, low), np(candles, close), timeperiod=period)
+
+    res = []
+    try:
+        res = talib.CCI(np(candles, high), np(candles, low), np(candles, close), timeperiod=period)
+    except Exception, e:
+        pass
 
     if sequential:
         return res
     else:
-        return None if np.isnan(res[-1]) else res[-1]
-
-def cci_n(candles, period=7, sequential=True, high=lambda row: row['high'], low=lambda row: row['low'], close=lambda row: row['tclose']):
-    ''' CCI（N日）=（TP－MA）÷MD÷0.015
-其中，TP=（最高价+最低价+收盘价）÷3
-MA=近N日收盘价的累计之和÷N
-MD=近N日（MA－收盘价）的绝对值的累计之和÷N
-0.015为计算系数，N为计算周期
-'''
-    def _CCI(highArr, lowArr, closeArr, timeperiod):
-        TP = highArr
-    if not sequential and len(candles) > 240:
-        candles = candles[-240:]
-
-    np = lambda candles, func: [func(i) for i in candles]
-    res = _CCI(np(candles, high), np(candles, low), np(candles, close), timeperiod=period)
-
-    if sequential:
-        return res
-    else:
-        return None if np.isnan(res[-1]) else res[-1]
+        return res[-1] if res and not np.isnan(res[-1]) else None
 
 def main():
     log('---------------Start-------------------')
